@@ -7,7 +7,7 @@ RUN yum -y install puppetserver && yum clean all -y
 RUN chmod -R 777 /opt/puppetlabs
 
 # create and chown directories
-RUN install --directory --owner=puppet --group=puppet --mode=0777 /var/run/puppetlabs/puppetserver && \
+RUN install --directory --owner=puppet --group=puppet --mode=0755 /var/run/puppetlabs/puppetserver && \
     install --directory --owner=puppet --group=puppet --mode=0777 /srv/puppet/deploy && \
     chown -R puppet:puppet /etc/puppetlabs/puppet /etc/puppetlabs/code /etc/puppetlabs/puppetserver /srv/puppet
 
@@ -21,6 +21,7 @@ RUN install -d -m 0777 -o puppet -g puppet /usr/share/puppet{,server,code}/backu
 
 RUN chmod -R 777 /usr/share/puppet
 RUN chmod -R 777 /etc/puppetlabs
+RUN chmod -R 771 /etc/puppetlabs/puppet/ssl
 # install puppet start script
 ADD scripts/puppetserver.sh /usr/local/bin/start-puppet-server
 RUN chmod 0775 /usr/local/bin/start-puppet-server
