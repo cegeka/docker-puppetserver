@@ -19,6 +19,8 @@ RUN install -d -m 0777 -o puppet -g puppet /usr/share/puppet{,server,code}/backu
     cp -r /etc/puppetlabs/code/* /usr/share/puppetcode/backup/etc/ && \
     chown -R puppet:puppet /usr/share/puppet{,server,code}/backup/etc/
 
+RUN chmod -R 777 /usr/share/puppet
+RUN chmod -R 777 /etc/puppetlabs
 # install puppet start script
 ADD scripts/puppetserver.sh /usr/local/bin/start-puppet-server
 RUN chmod 0775 /usr/local/bin/start-puppet-server
