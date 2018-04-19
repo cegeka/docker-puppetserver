@@ -9,4 +9,5 @@ RUN chmod -R 777 /opt/puppetlabs
 ADD scripts/puppetserver.sh /usr/local/bin/start-puppet-server
 RUN chmod 0775 /usr/local/bin/start-puppet-server
 EXPOSE 8140
-ENTRYPOINT /opt/puppetlabs/bin/puppetserver foreground
+ENTRYPOINT ["/usr/local/bin/start-puppet-server"]
+
