@@ -50,7 +50,8 @@ JAVA_ARGS="${JAVA_ARGS:--Xms2g -Xmx2g}"
 
 INSTALL_DIR="${INSTALL_DIR:-/opt/puppetlabs/server/apps/puppetserver}"
 CONFIG="${CONFIG:-/etc/puppetlabs/puppetserver/conf.d}"
-BOOTSTRAP_CONFIG="${BOOTSTRAP_CONFIG:-/etc/puppetlabs/puppetserver/bootstrap.cfg}"
+#BOOTSTRAP_CONFIG="${BOOTSTRAP_CONFIG:-/etc/puppetlabs/puppetserver/bootstrap.cfg}"
+BOOTSTRAP_CONFIG="/etc/puppetlabs/puppetserver/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"
 
 # copied from SystemD unit provided by puppet server
 exec /usr/bin/java $JAVA_ARGS \
