@@ -22,16 +22,17 @@ RUN yum -y install puppetserver && yum clean all -y
 
 #RUN chmod -R 777 /usr/share/puppet
 #RUN chmod -R 777 /etc/puppetlabs
-RUN mkdir -p /etc/puppetlabs/puppet/ssl/public_keys
-RUN mkdir -p /etc/puppetlabs/puppet/ssl/certs
-RUN mkdir -p /etc/puppetlabs/puppet/ssl/certificate_requests
-RUN mkdir -p /etc/puppetlabs/puppet/ssl/private_keys
-RUN chmod -R 771 /etc/puppetlabs/puppet/ssl/public_keys
-RUN chmod -R 750 /var/log/puppetlabs/puppetserver
-RUN chmod -R 750 /etc/puppetlabs/puppetserver/conf.d/
+#RUN mkdir -p /etc/puppetlabs/puppet/ssl/public_keys
+#RUN mkdir -p /etc/puppetlabs/puppet/ssl/certs
+#RUN mkdir -p /etc/puppetlabs/puppet/ssl/certificate_requests
+#RUN mkdir -p /etc/puppetlabs/puppet/ssl/private_keys
+#RUN chmod -R 771 /etc/puppetlabs/puppet/ssl/public_keys
+#RUN chmod -R 750 /var/log/puppetlabs/puppetserver
+#RUN chmod -R 750 /etc/puppetlabs/puppetserver/conf.d/
 # install puppet start script
 ADD scripts/puppetserver.sh /usr/local/bin/start-puppet-server
 RUN chmod 0775 /usr/local/bin/start-puppet-server
 EXPOSE 8140
+USER 8140
 ENTRYPOINT ["/usr/local/bin/start-puppet-server"]
 
