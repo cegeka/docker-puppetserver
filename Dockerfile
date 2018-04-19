@@ -28,7 +28,7 @@ RUN mkdir -p /etc/puppetlabs/puppet/ssl/certificate_requests
 RUN mkdir -p /etc/puppetlabs/puppet/ssl/private_keys
 RUN chmod -R 771 /etc/puppetlabs/puppet/ssl/public_keys
 RUN chmod -R 750 /var/log/puppetlabs/puppetserver
-
+RUN chmod -R 750 /etc/puppetlabs/puppetserver/conf.d/
 # install puppet start script
 ADD scripts/puppetserver.sh /usr/local/bin/start-puppet-server
 RUN chmod 0775 /usr/local/bin/start-puppet-server
