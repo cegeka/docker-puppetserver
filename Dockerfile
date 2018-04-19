@@ -3,7 +3,10 @@ ENV PUPPET_SERVER_VERSION="5.3.0" DUMB_INIT_VERSION="1.2.1" PUPPETSERVER_JAVA_AR
 
 RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet
 RUN yum-config-manager --add-repo https://yum.puppetlabs.com/el/7/PC1/x86_64/
-RUN yum -y install puppetserver && yum clean all -y
+RUN yum -y install puppetserver && \
+  yum clean all -y
+RUN wget -O /usr/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.1/dumb-init_1.2.1_amd64
+RUN chmod +x /usr/bin/dumb-init
 
 #RUN apt-get update && \
 #    apt-get install -y wget=1.17.1-1ubuntu1 && \
