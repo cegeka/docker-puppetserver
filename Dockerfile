@@ -28,6 +28,7 @@ RUN chmod +x /usr/bin/dumb-init
 #RUN puppet config set autosign true --section master
 
 COPY docker-entrypoint.sh /
+RUN chmod +x /docker-entrypoint.sh
 
 EXPOSE 8140
 
