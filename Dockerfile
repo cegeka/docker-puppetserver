@@ -13,6 +13,6 @@ RUN chmod +x /usr/local/bin/start-puppet-server
 EXPOSE 8140
 # switch user only at this point
 USER puppet
-CMD ["/usr/local/bin/start-puppet-server"]
+CMD ["/sbin/init"]
 #ENTRYPOINT ["/sbin/init"]
 
