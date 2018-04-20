@@ -13,6 +13,6 @@ RUN echo '%puppet ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 EXPOSE 8140
 # switch user only at this point
 USER puppet
-#ENTRYPOINT ["/usr/local/bin/start-puppet-server"]
-ENTRYPOINT ["/sbin/init"]
+ENTRYPOINT ["/usr/local/bin/start-puppet-server"]
+#ENTRYPOINT ["/sbin/init"]
 
