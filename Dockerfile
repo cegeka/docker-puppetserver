@@ -13,13 +13,13 @@ RUN chgrp -R 0 /etc/puppetlabs/puppetserver/
 #RUN chmod -R 775 /etc/puppetlabs/puppetserver/
 #
 #RUN touch /var/log/puppetlabs/puppetserver/masterhttp.log
-#RUN chgrp -R 0 /var/log/puppetlabs/puppetserver
+RUN chgrp -R 0 /var/log/puppetlabs
 #RUN chmod -R 750 /var/log/puppetlabs/puppetserver
 #
 #RUN chmod 660 /var/log/puppetlabs/puppetserver/masterhttp.log
 #RUN chgrp 0 /var/log/puppetlabs/puppetserver/masterhttp.log
 #
-#RUN chgrp -R 0 /opt/puppetlabs/
+RUN chgrp -R 0 /opt/puppetlabs/
 #RUN chmod -R 775 /opt/puppetlabs/
 #
 #RUN chgrp -R 0 /etc/puppetlabs/puppet/ssl
