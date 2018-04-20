@@ -6,7 +6,7 @@ RUN yum -y install puppetserver && yum clean all -y
 
 ADD scripts/puppetserver.sh /usr/local/bin/start-puppet-server
 ADD conf/ca.cfg /etc/puppetlabs/puppetserver/services.d/ca.cfg
-#ADD conf/webserver.conf /etc/puppetlabs/puppetserver/conf.d/webserver.conf
+ADD conf/webserver.conf /etc/puppetlabs/puppetserver/conf.d/webserver.conf
 
 RUN chmod +x /usr/local/bin/start-puppet-server
 
