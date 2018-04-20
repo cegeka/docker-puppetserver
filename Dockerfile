@@ -20,6 +20,9 @@ RUN chmod 750 /var/log/puppetlabs/puppetserver
 RUN touch /var/log/puppetlabs/puppetserver/masterhttp.log
 RUN chmod 660 /var/log/puppetlabs/puppetserver/masterhttp.log
 
+
+RUN chgrp -R 0 /secret
+
 EXPOSE 8140
 CMD ["/usr/local/bin/start-puppet-server"]
 
