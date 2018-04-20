@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: cegeka-puppetmaster
+  annotations:
+    description: "Cegeka Puppetmaster template"
+    iconClass: "icon-openshift"
+    tags: "cegeka,puppet,puppetmaster"
+    openshift.io/provider-display-name: "Cegeka nv"
+    openshift.io/documentation-url: "https://github.com/cegeka/docker-puppetserver"
+    openshift.io/support-url: "https://openshift-documentation.cegeka.com"
+objects:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    name: puppetmaster
+    labels:
+      app: puppetmaster
+  spec:
+    source:
+      git:
+        ref: thomas
+        uri: 'https://github.com/cegeka/docker-puppetserver.git'
+      type: Git
+    strategy:
+        type: Docker
+
+## Something is missing in the values below which prevents the creation of a new project based on this template
+
+
+##- apiVersion: v1
+##  kind: DeploymentConfig
+##  metadata:
+##    name: puppetmaster
+##    labels:
+##      app: puppetmaster
+##  spec:
+##    replicas: 1
+##    selector:
+##      app: puppetmaster
+##      deploymentconfig: puppetmaster
+##    template:
+##      metadata:
+##        labels:
+##          app: puppetmaster
+##          deploymentconfig: puppetmaster
+##    triggers:
+##        - type: ConfigChange
+##        - imageChangeParams:
+##            automatic: true
+##            containerNames:
+##              - docker-puppetserver
+##            from:
+##              kind: ImageStreamTag
+##              name: 'docker-puppetserver:latest'
+##- apiVersion: v1
+##  kind: Pod
+##  labels:
+##    app: puppetmaster
+##    deployment: puppetmaster
+##    deploymentconfig: puppetmaster
+##
+##
+##
+##
+##
+##
+##
+##
+##- apiVersion: v1
+##  kind: DeploymentConfig
+##  metadata:
+##    name: puppetmaster
+##    labels:
+##      app: puppetmaster
+##  spec:
+##    selector:
+##      app: puppetmaster
+##      deploymentconfig: puppetmaster
+##    template:
+##      metadata:
+##        labels:
+##          app: puppetmaster
+##          deploymentconfig: puppetmaster
+##    triggers:
+##        - type: ConfigChange
+##        - imageChangeParams:
+##            automatic: true
+##            containerNames:
+##              - docker-puppetserver
+##            from:
+##              kind: ImageStreamTag
+##              name: 'docker-puppetserver:latest'
+##
+##
