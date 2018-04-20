@@ -32,5 +32,5 @@ RUN yum -y install puppetserver && yum clean all -y
 ADD scripts/puppetserver.sh /usr/local/bin/start-puppet-server
 RUN chmod 0775 /usr/local/bin/start-puppet-server
 EXPOSE 8140
-#ENTRYPOINT ["/usr/local/bin/start-puppet-server"]
+ENTRYPOINT ["bash"]
 
