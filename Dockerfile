@@ -8,7 +8,7 @@ RUN yum -y install puppetserver && yum clean all -y
 
 
 ADD scripts/puppetserver.sh /usr/local/bin/start-puppet-server
-RUN chown puppet:puppet /usr/local/bin/start-puppet-server
+RUN chmod 0775 /usr/local/bin/start-puppet-server
 EXPOSE 8140
 # switch user only at this point
 USER puppet
