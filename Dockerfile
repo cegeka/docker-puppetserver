@@ -20,6 +20,8 @@ RUN chmod 750 /var/log/puppetlabs/puppetserver
 RUN touch /var/log/puppetlabs/puppetserver/masterhttp.log
 RUN chmod 660 /var/log/puppetlabs/puppetserver/masterhttp.log
 
+RUN mkdir -p /var/run/puppetlabs/puppetserver
+RUN chgrp -R 0 /var/run/puppetlabs
 
 EXPOSE 8140
 CMD ["/sbin/init"]
