@@ -19,6 +19,7 @@ RUN chgrp -R 0 /var/log/puppetlabs/puppetserver
 RUN chmod -R 750 /var/log/puppetlabs/puppetserver
 
 RUN chmod 660 /var/log/puppetlabs/puppetserver/masterhttp.log
+RUN chown puppet:0 /var/log/puppetlabs/puppetserver/masterhttp.log
 
 RUN chgrp -R 0 /opt/puppetlabs/
 RUN chmod -R 775 /opt/puppetlabs/
