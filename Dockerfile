@@ -15,11 +15,15 @@ RUN chgrp -R 0 /etc/puppetlabs/puppetserver/
 RUN chmod -R 775 /etc/puppetlabs/puppetserver/
 
 RUN chgrp -R 0 /var/log/puppetlabs/puppetserver
-RUN chmod -R 775 /var/log/puppetlabs/puppetserver
+RUN chmod -R 750 /var/log/puppetlabs/puppetserver
 
 
 RUN chgrp -R 0 /opt/puppetlabs/
 RUN chmod -R 775 /opt/puppetlabs/
+
+RUN chgrp -R 0 /etc/puppetlabs/puppet/ssl
+RUN chmod -R 771 /etc/puppetlabs/puppet/ssl
+
 EXPOSE 8140
 # switch user only at this point
 USER 998
