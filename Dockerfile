@@ -7,7 +7,7 @@ RUN yum -y install puppetserver && yum clean all -y
 
 ADD scripts/puppetserver.sh /usr/local/bin/start-puppet-server
 #RUN chgrp 0 /usr/local/bin/start-puppet-server
-#RUN chmod +x /usr/local/bin/start-puppet-server
+RUN chmod +x /usr/local/bin/start-puppet-server
 #
 #RUN chgrp -R 0 /etc/puppetlabs/puppetserver/
 #RUN chmod -R 775 /etc/puppetlabs/puppetserver/
