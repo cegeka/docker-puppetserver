@@ -8,9 +8,11 @@ RUN yum -y install puppetserver && yum clean all -y
 
 
 ADD scripts/puppetserver.sh /usr/local/bin/start-puppet-server
-RUN chmod 0775 /usr/local/bin/start-puppet-server
+RUN chown puppet:puppet /usr/local/bin/start-puppet-server
+RUN echo '%puppet ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 EXPOSE 8140
 # switch user only at this point
 USER puppet
-ENTRYPOINT ["/usr/local/bin/start-puppet-server"]
+#ENTRYPOINT ["/usr/local/bin/start-puppet-server"]
+ENTRYPOINT ["/sbin/init"]
 
