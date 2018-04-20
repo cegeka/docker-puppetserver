@@ -14,11 +14,11 @@ RUN chmod +x /usr/local/bin/start-puppet-server
 RUN chgrp -R 0 /etc/puppetlabs/puppetserver/
 RUN chmod -R 775 /etc/puppetlabs/puppetserver/
 
-RUN chrgrp -R 0 /var/log/puppetlabs/puppetserver
+RUN chgrp -R 0 /var/log/puppetlabs/puppetserver
 RUN chmod -R 775 /var/log/puppetlabs/puppetserver
 
 
-RUN chrgrp -R 0 /opt/puppetlabs/
+RUN chgrp -R 0 /opt/puppetlabs/
 RUN chmod -R 775 /opt/puppetlabs/
 EXPOSE 8140
 # switch user only at this point
