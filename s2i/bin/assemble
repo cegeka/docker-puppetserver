@@ -20,4 +20,4 @@ if [ "$(ls /tmp/artifacts/ 2>/dev/null)" ]; then
 fi
 
 echo "---> Copying source HTML files to web server root..."
-#cp -Rf /tmp/src/. /opt/rh/rh-nginx18/root/usr/share/nginx/html/
+cp -Rf /tmp/src/. /etc/puppetlabs/code/
