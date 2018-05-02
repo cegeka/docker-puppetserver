@@ -35,8 +35,11 @@ RUN chmod +x /usr/local/bin/start-puppet-server
 
 RUN chgrp -R 0 /opt/puppetlabs/
 
+
 RUN chgrp -R 0 /etc/puppetlabs
 RUN chmod -R 771 /etc/puppetlabs/puppet/ssl
+RUN mkdir -p /etc/puppetlabs/code
+RUN chmod -R 775 /etc/puppetlabs/code
 
 RUN chgrp -R 0 /var/log/puppetlabs
 RUN chmod 750 /var/log/puppetlabs/puppetserver
