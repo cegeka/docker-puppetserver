@@ -47,7 +47,7 @@ RUN chmod 750 /var/log/puppetlabs/puppetserver
 RUN touch /var/log/puppetlabs/puppetserver/masterhttp.log
 RUN chmod 660 /var/log/puppetlabs/puppetserver/masterhttp.log
 
-ONBUILD COPY src/ /etc/puppetlabs/code/
+ONBUILD COPY /tmp/src/ /etc/puppetlabs/code/
 
 
 # TODO: Copy the S2I scripts to /usr/libexec/s2i, since openshift/base-centos7 image
