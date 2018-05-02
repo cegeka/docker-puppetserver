@@ -14,6 +14,9 @@ LABEL io.k8s.description="Platform for building Puppet Server images" \
 #      io.openshift.tags="builder,x.y.z,etc."
 
 
+# Add the s2i scripts.
+LABEL io.openshift.s2i.scripts-url=image:///usr/libexec/s2i
+COPY ./.s2i/bin/ /usr/libexec/s2i
 
 RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet
 RUN yum-config-manager --add-repo https://yum.puppetlabs.com/el/7/PC1/x86_64/
