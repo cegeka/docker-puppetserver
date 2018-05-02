@@ -50,6 +50,9 @@ ONBUILD COPY src/ /etc/puppetlabs/code/
 # sets io.openshift.s2i.scripts-url label that way, or update that label
 COPY ./s2i/bin/ /usr/libexec/s2i
 
+USER puppet
+
+
 EXPOSE 8140
 
 CMD ["/usr/libexec/s2i/usage"]
