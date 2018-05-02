@@ -1,6 +1,5 @@
 # puppetserver
-#FROM registry.redhat.io/rhel7:latest
-#FROM registry.redhat.io/rhel7:latest
+FROM registry.redhat.io/rhel7:latest
 FROM registry.access.redhat.com/rhscl/s2i-base-rhel7:latest
 
 # TODO: Put the maintainer name in the image metadata
