@@ -19,5 +19,5 @@ if [ "$(ls /tmp/artifacts/ 2>/dev/null)" ]; then
 #  mv /tmp/artifacts/. ./
 fi
 
-echo "---> Copying source HTML files to web server root..."
+echo "---> Copying puppet code to puppetserver code-dir"
 cp -Rf /tmp/src/. /etc/puppetlabs/code/
