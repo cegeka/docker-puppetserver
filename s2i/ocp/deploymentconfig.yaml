@@ -20,6 +20,12 @@ items:
           name: latest
           referencePolicy:
             type: Source
+  - apiVersion: v1
+    kind: ImageStream
+    metadata:
+      labels:
+        app: build-puppetserver-docker-image
+      name: puppetserver
 
 ## BUILDCONFIG ##
   - apiVersion: v1
@@ -39,11 +45,11 @@ items:
           uri: 'https://github.com/cegeka/docker-puppetserver.git'
         type: Git
       strategy:
-        dockerStrategy:
+        sourceStrategy:
           from:
-            kind: ImageStreamTag
-            name: 'rhel7:latest'
-        type: Docker
+            kind: "ImageStreamTag"
+            name: "docker-puppetserver:latest"
+
 ## DEPLOYMENTCONFIG ##
   - apiVersion: v1
     kind: DeploymentConfig
