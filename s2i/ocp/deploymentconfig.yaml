@@ -48,7 +48,7 @@ items:
         sourceStrategy:
           from:
             kind: "ImageStreamTag"
-            name: "docker-puppetserver:latest"
+            name: "rhel7:latest"
 
 ## DEPLOYMENTCONFIG ##
   - apiVersion: v1
