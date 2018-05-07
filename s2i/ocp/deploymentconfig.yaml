@@ -69,7 +69,9 @@ items:
           name: 'puppetserver-code:latest'
       source:
         git:
-          uri: 'https://github.com/cegeka/docker-puppetserver-code.git'
+          uri: 'git@github.com:cegeka/puppet-monorepo.git'
+        sourceSecret:
+          name: github-deploykey
         type: Git
       strategy:
         sourceStrategy:
