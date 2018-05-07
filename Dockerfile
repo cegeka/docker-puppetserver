@@ -30,7 +30,7 @@ COPY ./s2i/scripts/puppetserver.sh /usr/local/bin/start-puppet-server
 COPY ./s2i/scripts/ca.cfg /etc/puppetlabs/puppetserver/services.d/ca.cfg
 COPY ./s2i/scripts/webserver.conf /etc/puppetlabs/puppetserver/conf.d/webserver.conf
 COPY ./s2i/scripts/hiera.yaml /etc/puppetlabs/code/environments/prd/hiera.yaml
-
+COPY ./s2i/scripts/hiera.yaml /etc/puppetlabs/puppet/hiera.yaml
 
 RUN chmod +x /usr/local/bin/start-puppet-server
 
