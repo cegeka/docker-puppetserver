@@ -26,7 +26,12 @@ items:
       labels:
         app: build-puppetserver-docker-image
       name: puppetserver
-
+  - apiVersion: v1
+    kind: ImageStream
+    metadata:
+      labels:
+        app: build-puppetserver-code
+      name: puppetserver-code
 ## BUILDCONFIG ##
   - apiVersion: v1
     kind: BuildConfig
@@ -45,32 +50,55 @@ items:
           uri: 'https://github.com/cegeka/docker-puppetserver.git'
         type: Git
       strategy:
+        dockerStrategy:
+          from:
+            kind: ImageStreamTag
+            name: 'rhel7:latest'
+        type: Docker
+## BUILDCONFIG code ##
+  - apiVersion: v1
+    kind: BuildConfig
+    metadata:
+      labels:
+        app: build-puppetserver-code
+      name: build-puppetserver-code
+    spec:
+      output:
+        to:
+          kind: ImageStreamTag
+          name: 'puppetserver-code:latest'
+      source:
+        git:
+          uri: 'https://github.com/cegeka/docker-puppetserver-code.git'
+        type: Git
+      strategy:
         sourceStrategy:
           from:
-            kind: "ImageStreamTag"
-            name: "rhel7:latest"
-
+            kind: ImageStreamTag
+            name: 'puppetserver:latest'
+        type: Source
 ## DEPLOYMENTCONFIG ##
   - apiVersion: v1
     kind: DeploymentConfig
     metadata:
       labels:
-        app: puppetserver
-      name: puppetserver
+        app: puppetserver-code
+      name: puppetserver-code
     spec:
       replicas: 1
       selector:
-        app: puppetserver
-        deploymentconfig: puppetserver
+        app: puppetserver-code
+        deploymentconfig: puppetserver-code
       template:
         metadata:
           labels:
-            app: puppetserver
-            deploymentconfig: puppetserver
+            app: puppetserver-code
+            deploymentconfig: puppetserver-code
         spec:
           containers:
             - imagePullPolicy: Always
-              name: puppetserver
+              image: 'puppetserver-code:latest'
+              name: puppetserver-code
               ports:
                 - containerPort: 8140
                   protocol: TCP
@@ -88,18 +116,19 @@ items:
         - imageChangeParams:
             automatic: true
             containerNames:
-              - puppetserver
+              - puppetserver-code
             from:
               kind: ImageStreamTag
-              name: 'puppetserver:latest'
+              name: 'puppetserver-code:latest'
           type: ImageChange
+
 ## SERVICE ##
   - apiVersion: v1
     kind: Service
     metadata:
       labels:
-        app: puppetserver
-      name: puppetserver
+        app: puppetserver-code
+      name: puppetserver-code
     spec:
       ports:
         - name: 443-tcp
@@ -107,14 +136,14 @@ items:
           protocol: TCP
           targetPort: 8140
       selector:
-        deploymentconfig: puppetserver
+        deploymentconfig: puppetserver-code
 ## ROUTE ##
   - apiVersion: v1
     kind: Route
     metadata:
       labels:
-        app: puppetserver
-      name: puppetserver
+        app: puppetserver-code
+      name: puppetserver-code
     spec:
       port:
         targetPort: 443-tcp
@@ -122,4 +151,4 @@ items:
         termination: passthrough
       to:
         kind: Service
-        name: puppetserver
+        name: puppetserver-code
