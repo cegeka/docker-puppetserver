@@ -77,6 +77,9 @@ items:
             kind: ImageStreamTag
             name: 'puppetserver:latest'
         type: Source
+      triggers:
+        - imageChange:
+          type: ImageChange
 ## DEPLOYMENTCONFIG ##
   - apiVersion: v1
     kind: DeploymentConfig
