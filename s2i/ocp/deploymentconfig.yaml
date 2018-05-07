@@ -150,6 +150,7 @@ items:
         app: puppetserver-code
       name: puppetserver-code
     spec:
+      host: openshift-puppetmaster.cegeka.be
       port:
         targetPort: 443-tcp
       tls:
