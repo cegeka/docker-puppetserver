@@ -20,4 +20,4 @@ if [ "$(ls /tmp/artifacts/ 2>/dev/null)" ]; then
 fi
 
 echo "---> Copying puppet code to puppetserver code-dir"
-cp -Rf /tmp/src/. /etc/puppetlabs/code/environments/production/
+cp -Rf /tmp/src/. /etc/puppetlabs/code/environments/prd/
