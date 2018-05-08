@@ -1,0 +1,23 @@
+---
+version: 5
+defaults:
+  datadir: "/etc/puppetlabs/code/environments/prd/hiera-data"
+  data_hash: yaml_data
+
+hierarchy:
+  - name: "Vagrant only level"
+    path: "99_vagrant.yaml"
+  - name: "Node level"
+    path: "0_nodes/%{trusted.certname}.yaml"
+  - name: "Customer - Environment - Application level"
+    path: "1_customer_env_client/%{facts.customer}/%{facts.customerenv}/%{facts.customerappl}.yaml"
+  - name: "Customer - Environment level"
+    path: "2_customer_env/%{facts.customer}/%{facts.customerenv}.yaml"
+  - name: "Customer level"
+    path: "3_customer/%{facts.customer}.yaml"
+  - name: "Global role level"
+    path: "4_role/%{facts.customerappl}.yaml"
+  - name: "Operating system level"
+    path: "5_os/%{facts.operatingsystem}/%{facts.operatingsystemmajrelease}.yaml"
+  - name: "Global level"
+    path: "6_common.yaml"

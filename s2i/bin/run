@@ -1,0 +1,5 @@
+#!/bin/bash -e
+#
+# S2I run script for the 'puppetserver' image.
+
+exec /usr/local/bin/start-puppet-server
