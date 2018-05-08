@@ -1,4 +1,4 @@
-# puppetserver
+# Puppetserver docker file
 FROM registry.redhat.io/rhel7:latest
 
 LABEL maintainer="Thomas Meeus <thomas.meeus@cegeka.com>"
@@ -17,15 +17,15 @@ LABEL io.k8s.description="Platform for building Puppet Server images" \
 LABEL io.openshift.s2i.scripts-url=image:///usr/libexec/s2i
 COPY ./s2i/bin/ /usr/libexec/s2i
 
+## Install Puppetserver & create Puppet code directory
+
 RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet
-RUN yum-config-manager --add-repo https://yum.puppetlabs.com/el/7/PC1/x86_64/
-RUN yum -y install puppetserver && yum clean all -y
-
-## Create Puppet code directory
-
-RUN mkdir -p /etc/puppetlabs/code
-RUN mkdir -p /etc/puppetlabs/code/environments/prd/manifests
-RUN touch /var/log/puppetlabs/puppetserver/masterhttp.log
+    && yum-config-manager --add-repo https://yum.puppetlabs.com/el/7/PC1/x86_64/
+    && yum -y install puppetserver
+    && yum clean all -y
+    && mkdir -p /etc/puppetlabs/code
+    && mkdir -p /etc/puppetlabs/code/environments/prd/manifests
+    && touch /var/log/puppetlabs/puppetserver/masterhttp.log
 
 ## Copy all required config files
 COPY ./s2i/scripts/puppetserver.sh /usr/local/bin/start-puppet-server
@@ -36,13 +36,13 @@ COPY ./s2i/scripts/site.pp /etc/puppetlabs/code/environments/prd/manifests/site.
 
 ## Set correct permissions
 RUN chmod +x /usr/local/bin/start-puppet-server
-RUN chgrp -R 0 /opt/puppetlabs
-RUN chgrp -R 0 /etc/puppetlabs
-RUN chmod -R 771 /etc/puppetlabs/puppet/ssl
-RUN chmod -R 775 /etc/puppetlabs/code
-RUN chgrp -R 0 /var/log/puppetlabs
-RUN chmod 750 /var/log/puppetlabs/puppetserver
-RUN chmod 660 /var/log/puppetlabs/puppetserver/masterhttp.log
+    && chgrp -R 0 /opt/puppetlabs
+    && chgrp -R 0 /etc/puppetlabs
+    && chmod -R 771 /etc/puppetlabs/puppet/ssl
+    && chmod -R 775 /etc/puppetlabs/code
+    && chgrp -R 0 /var/log/puppetlabs
+    && chmod 750 /var/log/puppetlabs/puppetserver
+    && chmod 660 /var/log/puppetlabs/puppetserver/masterhttp.log
 
 ## Copy over /etc/puppetlabs/code/ for the next builds
 ONBUILD COPY /tmp/src/ /etc/puppetlabs/code/
