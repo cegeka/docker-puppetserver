@@ -19,12 +19,12 @@ COPY ./s2i/bin/ /usr/libexec/s2i
 
 ## Install Puppetserver & create Puppet code directory
 
-RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet
-    && yum-config-manager --add-repo https://yum.puppetlabs.com/el/7/PC1/x86_64/
-    && yum -y install puppetserver
-    && yum clean all -y
-    && mkdir -p /etc/puppetlabs/code
-    && mkdir -p /etc/puppetlabs/code/environments/prd/manifests
+RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet \
+    && yum-config-manager --add-repo https://yum.puppetlabs.com/el/7/PC1/x86_64/ \
+    && yum -y install puppetserver \
+    && yum clean all -y \
+    && mkdir -p /etc/puppetlabs/code \
+    && mkdir -p /etc/puppetlabs/code/environments/prd/manifests \
     && touch /var/log/puppetlabs/puppetserver/masterhttp.log
 
 ## Copy all required config files
@@ -35,13 +35,13 @@ COPY ./s2i/config/hiera.yaml /etc/puppetlabs/code/environments/prd/hiera.yaml
 COPY ./s2i/config/site.pp /etc/puppetlabs/code/environments/prd/manifests/site.pp
 
 ## Set correct permissions
-RUN chmod +x /usr/local/bin/start-puppet-server
-    && chgrp -R 0 /opt/puppetlabs
-    && chgrp -R 0 /etc/puppetlabs
-    && chmod -R 771 /etc/puppetlabs/puppet/ssl
-    && chmod -R 775 /etc/puppetlabs/code
-    && chgrp -R 0 /var/log/puppetlabs
-    && chmod 750 /var/log/puppetlabs/puppetserver
+RUN chmod +x /usr/local/bin/start-puppet-server \
+    && chgrp -R 0 /opt/puppetlabs \
+    && chgrp -R 0 /etc/puppetlabs \
+    && chmod -R 771 /etc/puppetlabs/puppet/ssl \
+    && chmod -R 775 /etc/puppetlabs/code \
+    && chgrp -R 0 /var/log/puppetlabs \
+    && chmod 750 /var/log/puppetlabs/puppetserver \
     && chmod 660 /var/log/puppetlabs/puppetserver/masterhttp.log
 
 ## Copy over /etc/puppetlabs/code/ for the next builds
