@@ -112,6 +112,23 @@ items:
                 - mountPath: /certs
                   name: cert-volume
                   readOnly: true
+              readinessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /status/v1/services
+                  port: 8140
+                  scheme: HTTPS
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 10
+              livenessProbe:
+                failureThreshold: 3
+                initialDelaySeconds: 10
+                periodSeconds: 10
+                successThreshold: 1
+                tcpSocket:
+                  port: 8140
+                timeoutSeconds: 1
           volumes:
             - name: cert-volume
               secret:
