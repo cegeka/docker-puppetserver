@@ -1,82 +1,47 @@
+# Puppetserver on Openshift
 
-# Creating a basic S2I builder image  
+## Goal
 
-## Getting started  
+Having a Puppetserver running as a container on Openshift. Using autoscaling the Puppetserver can dynamically adapt to differences in load.
 
-### Files and Directories  
-| File                   | Required? | Description                                                  |
-|------------------------|-----------|--------------------------------------------------------------|
-| Dockerfile             | Yes       | Defines the base builder image                               |
-| s2i/bin/assemble       | Yes       | Script that builds the application                           |
-| s2i/bin/usage          | No        | Script that prints the usage of the builder                  |
-| s2i/bin/run            | Yes       | Script that runs the application                             |
-| s2i/bin/save-artifacts | No        | Script for incremental builds that saves the built artifacts |
-| test/run               | No        | Test script for the builder image                            |
-| test/test-app          | Yes       | Test application source code                                 |
+Todo: create a build-pipeline with promotion towards different environments.
 
-#### Dockerfile
-Create a *Dockerfile* that installs all of the necessary tools and libraries that are needed to build and run our application.  This file will also handle copying the s2i scripts into the created image.
+## Usage
 
-#### S2I scripts
+* Copy ocp/secrets.template to ocp/secrets.yaml and configure your certificates & deploy key in the base64 format. The certificates are used to configure the Puppetserver CA. The public key of the deploy key should be added to the git-repo containing all the puppet code.
 
-##### assemble
-Create an *assemble* script that will build our application, e.g.:
-- build python modules
-- bundle install ruby gems
-- setup application specific configuration
+* Deploy the secrets
 
-The script can also specify a way to restore any saved artifacts from the previous image.   
-
-##### run
-Create a *run* script that will start the application. 
-
-##### save-artifacts (optional)
-Create a *save-artifacts* script which allows a new build to reuse content from a previous version of the application image.
-
-##### usage (optional) 
-Create a *usage* script that will print out instructions on how to use the image.
-
-##### Make the scripts executable 
-Make sure that all of the scripts are executable by running *chmod +x s2i/bin/**
-
-#### Create the builder image
-The following command will create a builder image named puppetserver based on the Dockerfile that was created previously.
 ```
-docker build -t puppetserver .
+oc create -f ocp/secrets.yaml
 ```
-The builder image can also be created by using the *make* command since a *Makefile* is included.
 
-Once the image has finished building, the command *s2i usage puppetserver* will print out the help info that was defined in the *usage* script.
+* Deploy the template
 
-#### Testing the builder image
-The builder image can be tested using the following commands:
 ```
-docker build -t puppetserver-candidate .
-IMAGE_NAME=puppetserver-candidate test/run
+oc create -f ocp/deploymentconfig.yaml
 ```
-The builder image can also be tested by using the *make test* command since a *Makefile* is included.
 
-#### Creating the application image
-The application image combines the builder image with your applications source code, which is served using whatever application is installed via the *Dockerfile*, compiled using the *assemble* script, and run using the *run* script.
-The following command will create the application image:
-```
-s2i build test/test-app puppetserver puppetserver-app
----> Building and installing application from source...
-```
-Using the logic defined in the *assemble* script, s2i will now create an application image using the builder image as a base and including the source code from the test/test-app directory. 
 
-#### Running the application image
-Running the application image is as simple as invoking the docker run command:
-```
-docker run -d -p 8080:8080 puppetserver-app
-```
-The application, which consists of a simple static web page, should now be accessible at  [http://localhost:8080](http://localhost:8080).
+## Contents
 
-#### Using the saved artifacts script
-Rebuilding the application using the saved artifacts can be accomplished using the following command:
-```
-s2i build --incremental=true test/test-app nginx-centos7 nginx-app
----> Restoring build artifacts...
----> Building and installing application from source...
-```
-This will run the *save-artifacts* script which includes the custom code to backup the currently running application source, rebuild the application image, and then re-deploy the previously saved source using the *assemble* script.
+The following modules will be configured within your Openshift project:
+
+* Imagestreams for:
+    - The RHEL7 base image
+    - The puppetserver base image
+    - All subsequent puppetserver images containing puppet code
+
+* Buildconfig for:
+    - Building the puppetserver image
+    - S2I build from the repository containing your puppet code
+
+* DeploymentConfig for:
+    - Deploying the puppet server image
+    - Healthchecks to see if the puppetserver is up & running
+
+* Service for:
+    - Portforwarding the public port 443 towards 8140 in the container
+
+* Route for:
+    - Exposing the service to the internet with a custom hostname
