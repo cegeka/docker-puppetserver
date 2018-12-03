@@ -45,3 +45,8 @@ The following modules will be configured within your Openshift project:
 
 * Route for:
     - Exposing the service to the internet with a custom hostname
+    
+## Tips
+
+Deployment pipelines can be created in openshift itself, see this video for more information on how to do this:
+[![Using OpenShift Pipelines with Webhook Triggers](http://img.youtube.com/vi/kY6227QxqOA/0.jpg)](http://www.youtube.com/watch?v=kY6227QxqOA)
