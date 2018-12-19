@@ -120,7 +120,7 @@ items:
                   scheme: HTTPS
                 periodSeconds: 10
                 timeoutSeconds: 5
-                initialDelaySeconds: 60
+                initialDelaySeconds: 120
               livenessProbe:
                 tcpSocket:
                   port: 8140
