@@ -11,3 +11,4 @@ fi
 echo "---> Copying puppet code to puppetserver code-dir"
 rm -rf /tmp/src/.git
 mv /tmp/src/ /etc/puppetlabs/code/environments/prd/
+rm -rf /tmp/*
