@@ -9,5 +9,5 @@ fi
 
 # Copy the Puppet code from the cloned repository towards the puppet code dir.
 echo "---> Copying puppet code to puppetserver code-dir"
-rm -rf /tmp/src/.git
-ln /tmp/src/ /etc/puppetlabs/code/environments/prd/
+#rm -rf /tmp/src/.git
+#ln /tmp/src/ /etc/puppetlabs/code/environments/prd/
