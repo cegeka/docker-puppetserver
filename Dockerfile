@@ -45,7 +45,7 @@ RUN chmod +x /usr/local/bin/start-puppet-server \
     && chmod 660 /var/log/puppetlabs/puppetserver/masterhttp.log
 
 ## Copy over /etc/puppetlabs/code/ for the next builds
-ONBUILD COPY /tmp/src/ /etc/puppetlabs/code/
+#ONBUILD COPY /tmp/src/ /etc/puppetlabs/code/
 
 USER 1001
 
