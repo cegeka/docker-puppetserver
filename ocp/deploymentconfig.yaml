@@ -3,7 +3,7 @@ kind: List
 metadata:
   name: puppetserver
 items:
-## IMAGESTREAM ##
+  ## IMAGESTREAM ##
   - apiVersion: v1
     kind: ImageStream
     metadata:
@@ -32,7 +32,7 @@ items:
       labels:
         app: build-puppetserver-code
       name: puppetserver-code
-## BUILDCONFIG ##
+  ## BUILDCONFIG ##
   - apiVersion: v1
     kind: BuildConfig
     metadata:
@@ -55,7 +55,7 @@ items:
             kind: ImageStreamTag
             name: 'rhel7:latest'
         type: Docker
-## BUILDCONFIG code ##
+  ## BUILDCONFIG code ##
   - apiVersion: v1
     kind: BuildConfig
     metadata:
@@ -80,10 +80,7 @@ items:
             kind: ImageStreamTag
             name: 'puppetserver:latest'
         type: Source
-      triggers:
-        - imageChange:
-          type: ImageChange
-## DEPLOYMENTCONFIG ##
+  ## DEPLOYMENTCONFIG ##
   - apiVersion: v1
     kind: DeploymentConfig
     metadata:
@@ -143,8 +140,7 @@ items:
               kind: ImageStreamTag
               name: 'puppetserver-code:latest'
           type: ImageChange
-
-## SERVICE ##
+  ## SERVICE ##
   - apiVersion: v1
     kind: Service
     metadata:
@@ -159,7 +155,7 @@ items:
           targetPort: 8140
       selector:
         deploymentconfig: puppetserver-code
-## ROUTE ##
+  ## ROUTE ##
   - apiVersion: v1
     kind: Route
     metadata:
