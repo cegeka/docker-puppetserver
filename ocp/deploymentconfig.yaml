@@ -14,7 +14,7 @@ items:
       tags:
         - from:
             kind: DockerImage
-            name: 'registry.redhat.io/rhel7:latest'
+            name: 'registry.access.redhat.com/rhel7'
           generation: 2
           importPolicy: {}
           name: latest
