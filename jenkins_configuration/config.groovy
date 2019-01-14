@@ -32,10 +32,9 @@ try {
     navigator.traits = [
         // Too many repos to scan everything. This trims to a svelte 265 repos at the time of writing.
         new jenkins.scm.impl.trait.WildcardSCMSourceFilterTrait('puppet-monorepo', ''),
-        // We have a ton of old branches so try to limit to just master and PRs for now.
-        new jenkins.scm.impl.trait.RegexSCMHeadFilterTrait('^(master|PR-.*)'),
-        new BranchDiscoveryTrait(1), // Exclude branches that are also filed as PRs.
-        new OriginPullRequestDiscoveryTrait(1), // Merging the pull request with the current target branch revision.
+        new jenkins.scm.impl.trait.RegexSCMHeadFilterTrait('^PR-.*'), // we're only interested in PR branches, nothing else
+        new BranchDiscoveryTrait(2), // only branches that are also filed as PR
+        new OriginPullRequestDiscoveryTrait(2), // Take only head
     ]
 
     folder.navigators.replace(navigator)
