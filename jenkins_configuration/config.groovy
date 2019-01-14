@@ -24,7 +24,7 @@ try {
     // Configure Github Branch Source plugin
     println '--> Creating organization folder'
     // Create the top-level item if it doesn't exist already.
-    def folder = jenkins.items.isEmpty() ? jenkins.createProject(OrganizationFolder, 'MyName') : jenkins.items[0]
+    def folder = jenkins.items.isEmpty() ? jenkins.createProject(OrganizationFolder, 'Cegeka') : jenkins.items[0]
     // Set up GitHub source.
     def navigator = new GitHubSCMNavigator(githubOrg)
     navigator.credentialsId = 'ci00053160-puppetserver-github-credentials' // Loaded above in the GitHub section.
