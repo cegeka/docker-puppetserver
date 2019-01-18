@@ -1,9 +1,11 @@
 import static jenkins.model.Jenkins.instance as jenkins
+import jenkins.model.JenkinsLocationConfiguration
 
 import jenkins.branch.OrganizationFolder
 import org.jenkinsci.plugins.github_branch_source.BranchDiscoveryTrait
 import org.jenkinsci.plugins.github_branch_source.GitHubSCMNavigator
 import org.jenkinsci.plugins.github_branch_source.OriginPullRequestDiscoveryTrait
+
 try {
 
     def githubOrg = 'cegeka'
@@ -38,6 +40,12 @@ try {
     ]
 
     folder.navigators.replace(navigator)
+
+
+    def jenkinsLocationConfiguration = JenkinsLocationConfiguration.get()
+    jenkinsLocationConfiguration.setUrl("https://jenkins-ci00053160-puppetserver.apps.openshift.cegeka.com")
+    jenkinsLocationConfiguration.save()
+
 
     println '--> Saving Jenkins config'
     jenkins.save()

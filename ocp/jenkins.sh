@@ -10,7 +10,10 @@ oc new-build -D $'FROM jenkins-2-rhel7:latest \n
       USER 1001' --name=puppet-jenkins
 
 ## Define Jenkins customization in config map
-oc create configmap jenkins-configuration --from-file=casc_jenkins.yaml=../jenkins_configuration/casc_jenkins.yaml --from-file=config.groovy=../jenkins_configuration/config.groovy
+oc create configmap jenkins-configuration \
+    --from-file=casc_jenkins.yaml=../jenkins_configuration/casc_jenkins.yaml \
+    --from-file=config.groovy=../jenkins_configuration/config.groovy \
+    --from-file=yamllint.conf=../jenkins_configuration/yamllint.conf
 
 ## Set of additional plugins to install. Github branch source plugin is installed by default
 JENKINS_PLUGINS="configuration-as-code"
@@ -28,7 +31,16 @@ oc set env dc/jenkins MEMORY_LIMIT=1Gi
 oc set env dc/jenkins DISABLE_ADMINISTRATIVE_MONITORS=true
 oc set env dc/jenkins INSTALL_PLUGINS="${JENKINS_PLUGINS}"
 oc set env dc/jenkins CASC_JENKINS_CONFIG="/var/lib/jenkins/init.groovy.d/casc_jenkins.yaml"
-oc set volumes dc/jenkins --add --configmap-name=jenkins-configuration --mount-path='/var/lib/jenkins/init.groovy.d/'
+oc set volumes dc/jenkins --add --configmap-name=jenkins-configuration --mount-path='/var/lib/jenkins/init.groovy.d/' --name "jenkins-config"
+oc set volumes dc/jenkins --add --configmap-name=jenkins-configuration --mount-path='/var/lib/jenkins/.config/yamllint' --name "yamllint-config"
+oc patch dc jenkins -p '{"spec":{"template":{"spec":{"volumes":[{"configMap":{"items":[{"key":"yamllint.conf","path":"config"}],"name":"jenkins-configuration"},"name":"yamllint-config"}]}}}}'
+
+
+            items:
+              - key: yamllint.conf
+                path: config
+
+
 
 oc rollout resume dc jenkins
 oc expose svc/jenkins
