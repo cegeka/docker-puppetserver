@@ -6,6 +6,9 @@ LABEL maintainer="Thomas Meeus <thomas.meeus@cegeka.com>"
 # TODO: Rename the builder environment variable to inform users about application you provide them
 ENV BUILDER_VERSION 1.0
 
+ENV PUPPET_ENV=${PUPPET_ENV:-dev}
+
+
 # TODO: Set labels used in OpenShift to describe the builder image
 LABEL io.k8s.description="Platform for building Puppet Server images" \
       io.k8s.display-name="Openshift-puppetserver-image-builder" \
@@ -24,15 +27,16 @@ RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet \
     && yum -y install puppetserver \
     && yum clean all -y \
     && mkdir -p /etc/puppetlabs/code \
-    && mkdir -p /etc/puppetlabs/code/environments/prd/manifests \
+    && mkdir -p /etc/puppetlabs/code/environments/${PUPPET_ENV}/manifests \
     && touch /var/log/puppetlabs/puppetserver/masterhttp.log
 
 ## Copy all required config files
 COPY ./s2i/config/puppetserver.sh /usr/local/bin/start-puppet-server
 COPY ./s2i/config/ca.cfg /etc/puppetlabs/puppetserver/services.d/ca.cfg
 COPY ./s2i/config/webserver.conf /etc/puppetlabs/puppetserver/conf.d/webserver.conf
-COPY ./s2i/config/hiera.yaml /etc/puppetlabs/code/environments/prd/hiera.yaml
-COPY ./s2i/config/site.pp /etc/puppetlabs/code/environments/prd/manifests/site.pp
+COPY ./s2i/config/hiera.yaml /etc/puppetlabs/code/environments/${PUPPET_ENV}/hiera.yaml
+COPY ./s2i/config/site.pp /etc/puppetlabs/code/environments/${PUPPET_ENV}/manifests/site.pp
+RUN sed -i "s/PUPPET_ENV/${PUPPET_ENV}/g" /etc/puppetlabs/code/environments/${PUPPET_ENV}/hiera.yaml
 
 ## Set correct permissions
 RUN chmod +x /usr/local/bin/start-puppet-server \

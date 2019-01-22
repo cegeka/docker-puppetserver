@@ -2,7 +2,7 @@
 
 
 ## Use latest Jenkins container to fix credential-sync-plugin
-oc import-image jenkins-2-rhel7 --from=registry.access.redhat.com/openshift3/jenkins-2-rhel7:v3.11.51-2 --confirm
+oc import-image jenkins-2-rhel7 --from=registry.access.redhat.com/openshift3/jenkins-2-rhel7:v3.11.59-2 --confirm
 
 ## Customize the the image imported above with all the build tools we need
 oc new-build -D $'FROM jenkins-2-rhel7:latest \n
@@ -16,7 +16,7 @@ oc create configmap jenkins-configuration \
     --from-file=yamllint.conf=../jenkins_configuration/yamllint.conf
 
 ## Set of additional plugins to install. Github branch source plugin is installed by default
-JENKINS_PLUGINS="configuration-as-code"
+JENKINS_PLUGINS="configuration-as-code:1.4"
 
 ## Deploy the Openshift built-in Jenkins template with the newly build image.
 oc process openshift//jenkins-ephemeral -p JENKINS_IMAGE_STREAM_TAG=puppet-jenkins:latest NAMESPACE=ci00053160-puppetserver | oc create -f -

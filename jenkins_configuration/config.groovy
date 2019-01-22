@@ -5,6 +5,20 @@ import jenkins.branch.OrganizationFolder
 import org.jenkinsci.plugins.github_branch_source.BranchDiscoveryTrait
 import org.jenkinsci.plugins.github_branch_source.GitHubSCMNavigator
 import org.jenkinsci.plugins.github_branch_source.OriginPullRequestDiscoveryTrait
+import org.jenkinsci.plugins.scriptsecurity.scripts.*
+
+
+
+
+
+
+
+
+// APPROVALS
+
+import org.jenkinsci.plugins.scriptsecurity.scripts.*
+toApprove = ScriptApproval.get().getPendingScripts().collect()
+toApprove.each {pending -> ScriptApproval.get().approveScript(pending.getHash())}
 
 try {
 
