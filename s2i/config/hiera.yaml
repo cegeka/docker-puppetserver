@@ -1,7 +1,7 @@
 ---
 version: 5
 defaults:
-  datadir: "/etc/puppetlabs/code/hiera-data"
+  datadir: "/etc/puppetlabs/code/environments/production/hiera-data"
   data_hash: yaml_data
 
 hierarchy:

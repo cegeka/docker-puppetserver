@@ -16,6 +16,9 @@ rm -rf /tmp/src/.git
 echo "---> Removing code dir contents"
 rm -rf /etc/puppetlabs/code/*
 
+echo "---> Creating production dir"
+mkdir -p /etc/puppetlabs/code/environments/production
+
 echo "---> Symlinking code to all environments"
 
-ln -sf /tmp/src/* /etc/puppetlabs/code/
+ln -sf /tmp/src/* /etc/puppetlabs/code/environments/production
