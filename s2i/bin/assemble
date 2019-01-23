@@ -13,6 +13,9 @@ fi
 echo "---> Copying puppet code to puppetserver code-dir"
 rm -rf /tmp/src/.git
 
+echo "---> Removing code dir contents"
+rm -rf /etc/puppetlabs/code/*
+
 echo "---> Symlinking code to all environments"
 
 ln -sf /tmp/src/* /etc/puppetlabs/code/
