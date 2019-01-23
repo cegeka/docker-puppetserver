@@ -25,14 +25,15 @@ RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet \
     && yum clean all -y \
     && mkdir -p /etc/puppetlabs/code \
     && mkdir -p /etc/puppetlabs/code/environments/production/manifests \
-    && touch /var/log/puppetlabs/puppetserver/masterhttp.log
+    && touch /var/log/puppetlabs/puppetserver/masterhttp.log \
+    && mkdir -p /etc/puppetlabs/code/environments/production/manifests/
 
 ## Copy all required config files
 COPY ./s2i/config/puppetserver.sh /usr/local/bin/start-puppet-server
 COPY ./s2i/config/ca.cfg /etc/puppetlabs/puppetserver/services.d/ca.cfg
 COPY ./s2i/config/webserver.conf /etc/puppetlabs/puppetserver/conf.d/webserver.conf
 COPY ./s2i/config/hiera.yaml /etc/puppetlabs/puppet/hiera.yaml
-COPY ./s2i/config/site.pp /etc/puppetlabs/code/manifests/site.pp
+COPY ./s2i/config/site.pp /etc/puppetlabs/code/environments/production/manifests/site.pp
 
 ## Set correct permissions
 RUN chmod +x /usr/local/bin/start-puppet-server \
