@@ -9,6 +9,18 @@ fi
 
 
 # Copy the Puppet code from the cloned repository towards the puppet code dir.
+
 echo "---> Copying puppet code to puppetserver code-dir"
 rm -rf /tmp/src/.git
-mv /tmp/src/* /etc/puppetlabs/code/environments/production/
+
+echo "---> Symlinking code to all environments"
+
+ln -s /etc/puppetlabs/code/environments/production/manifests/site.pp /etc/puppetlabs/code/environments/dev/manifests/site.pp
+ln -s /etc/puppetlabs/code/environments/production/manifests/site.pp /etc/puppetlabs/code/environments/acc/manifests/site.pp
+ln -s /etc/puppetlabs/code/environments/production/manifests/site.pp /etc/puppetlabs/code/environments/prd/manifests/site.pp
+ln -s /etc/puppetlabs/code/environments/production/manifests/site.pp /etc/puppetlabs/code/environments/drp/manifests/site.pp
+
+ln -s /tmp/src/ /etc/puppetlabs/code/environments/dev
+ln -s /tmp/src/ /etc/puppetlabs/code/environments/acc
+ln -s /tmp/src/ /etc/puppetlabs/code/environments/prd
+ln -s /tmp/src/ /etc/puppetlabs/code/environments/drp
