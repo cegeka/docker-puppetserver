@@ -18,7 +18,9 @@ rm -rf /etc/puppetlabs/code/*
 
 echo "---> Creating production dir"
 mkdir -p /etc/puppetlabs/code/environments/production
+mkdir -p /etc/puppetlabs/code/environments/production/manifests/
 
+echo "hiera_include(classes)" > /etc/puppetlabs/code/environments/production/manifests/site.pp
 echo "---> Symlinking code to all environments"
 
 ln -sf /tmp/src/* /etc/puppetlabs/code/environments/production
