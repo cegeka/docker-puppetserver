@@ -15,7 +15,7 @@ rm -rf /tmp/src/.git
 
 echo "---> Symlinking code to all environments"
 
-ln -s /tmp/src/ /etc/puppetlabs/code/environments/dev
-ln -s /tmp/src/ /etc/puppetlabs/code/environments/acc
-ln -s /tmp/src/ /etc/puppetlabs/code/environments/prd
-ln -s /tmp/src/ /etc/puppetlabs/code/environments/drp
+ln -sf /tmp/src/ /etc/puppetlabs/
+ln -sf /tmp/src/ /etc/puppetlabs/
+ln -sf /tmp/src/ /etc/puppetlabs/
+ln -sf /tmp/src/ /etc/puppetlabs/
