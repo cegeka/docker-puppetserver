@@ -12,6 +12,7 @@ items:
         env: acc
       name: puppetserver-code-acc
     spec:
+      replicas: 1
       selector:
         app: puppetserver-code-acc
         deploymentconfig: puppetserver-code-acc
@@ -24,7 +25,7 @@ items:
         spec:
           containers:
             - imagePullPolicy: Always
-              image: 'puppetserver-code:acc'
+              image: 'puppetserver-code-acc:latest'
               name: puppetserver-code-acc
               ports:
                 - containerPort: 8140
@@ -33,36 +34,37 @@ items:
                 - mountPath: /certs
                   name: cert-volume
                   readOnly: true
-              readinessProbe:
-                failureThreshold: 3
-                exec:
-                  command:
-                    - 'curl -vkl https://localhost:8140/status/v1/services'
-                periodSeconds: 10
-                timeoutSeconds: 5
-                initialDelaySeconds: 120
-              livenessProbe:
-                tcpSocket:
-                  port: 8140
-                failureThreshold: 3
-                periodSeconds: 10
-                timeoutSeconds: 5
-                initialDelaySeconds: 30
+#              readinessProbe:
+#                failureThreshold: 6
+#                exec:
+#                  command:
+#                    - 'curl -vkl https://localhost:8140/status/v1/services'
+#                periodSeconds: 10
+#                timeoutSeconds: 5
+#                initialDelaySeconds: 120
+#              livenessProbe:
+#                tcpSocket:
+#                  port: 8140
+#                failureThreshold: 6
+#                periodSeconds: 10
+#                timeoutSeconds: 5
+#                initialDelaySeconds: 30
           volumes:
             - name: cert-volume
               secret:
                 defaultMode: 420
                 secretName: puppetmaster-certificates
       triggers:
-        - type: ConfigChange
         - imageChangeParams:
             automatic: true
             containerNames:
               - puppetserver-code-acc
             from:
               kind: ImageStreamTag
-              name: 'puppetserver-code:acc'
+              name: 'puppetserver-code-acc:latest'
+              namespace: ci00053160-puppetserver
           type: ImageChange
+        - type: ConfigChange
   ## SERVICE ##
   - apiVersion: v1
     kind: Service
@@ -94,3 +96,4 @@ items:
       to:
         kind: Service
         name: puppetserver-code-acc
+
