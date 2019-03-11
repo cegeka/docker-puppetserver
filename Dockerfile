@@ -46,7 +46,7 @@ RUN chmod +x /usr/local/bin/start-puppet-server \
     && chmod 660 /var/log/puppetlabs/puppetserver/masterhttp.log
 
 ## Install dependencies for puppet-thycotic module
-RUN /opt/puppetlabs/server/bin/puppetserver gem install soap4r-ruby1.9 \
+RUN /opt/puppetlabs/server/bin/puppetserver gem install soap4r-ng \
     && /opt/puppetlabs/server/bin/puppetserver gem install parseconfig \
     && /opt/puppetlabs/server/bin/puppetserver gem install filecache \
     && /opt/puppetlabs/server/bin/puppetserver gem install httpclient -v '>= 2.4.0'
