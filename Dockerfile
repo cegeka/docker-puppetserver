@@ -54,6 +54,9 @@ RUN /opt/puppetlabs/server/bin/puppetserver gem install soap4r-ng \
 ## Copy over /etc/puppetlabs/code/ for the next builds
 #ONBUILD COPY /tmp/src/ /etc/puppetlabs/code/
 
+## Make /etc/passwd writable for root to be able to adjust the puppet userid. Required for Thycotic module
+RUN chmod g+w /etc/passwd
+
 USER 1001
 
 EXPOSE 8140
