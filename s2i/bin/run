@@ -2,4 +2,12 @@
 #
 # S2I run script for the 'puppetserver' image.
 
+
+if [ `id -u` -ge 10000 ]; then
+    grep -v puppet /etc/passwd > /tmp/passwd
+    echo "puppet:x:`id -u`:`id -g`:puppetserver daemon:/opt/puppetlabs/server/data/puppetserver:/sbin/nologin" >> /tmp/passwd
+    cat /tmp/passwd > /etc/passwd
+    rm /tmp/passwd
+fi
+
 exec /usr/local/bin/start-puppet-server

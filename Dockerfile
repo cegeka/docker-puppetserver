@@ -20,7 +20,7 @@ COPY ./s2i/bin/ /usr/libexec/s2i
 ## Install Puppetserver & create Puppet code directory
 
 RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet \
-    && yum-config-manager --add-repo https://yum.puppetlabs.com/el/7/PC1/x86_64/ \
+    && yum-config-manager --add-repo https://yum.puppet.com/puppet5/el/7/x86_64/ \
     && yum -y install puppetserver \
     && yum clean all -y \
     && mkdir -p /etc/puppetlabs/code \
@@ -45,8 +45,17 @@ RUN chmod +x /usr/local/bin/start-puppet-server \
     && chmod 750 /var/log/puppetlabs/puppetserver \
     && chmod 660 /var/log/puppetlabs/puppetserver/masterhttp.log
 
+## Install dependencies for puppet-thycotic module
+RUN /opt/puppetlabs/server/bin/puppetserver gem install soap4r-ng \
+    && /opt/puppetlabs/server/bin/puppetserver gem install parseconfig \
+    && /opt/puppetlabs/server/bin/puppetserver gem install filecache \
+    && /opt/puppetlabs/server/bin/puppetserver gem install httpclient -v '>= 2.4.0'
+
 ## Copy over /etc/puppetlabs/code/ for the next builds
 #ONBUILD COPY /tmp/src/ /etc/puppetlabs/code/
+
+## Make /etc/passwd writable for root to be able to adjust the puppet userid. Required for Thycotic module
+RUN chmod g+w /etc/passwd
 
 USER 1001
 
