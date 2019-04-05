@@ -46,8 +46,7 @@ RUN chmod +x /usr/local/bin/start-puppet-server \
     && chmod -R 775 /etc/puppetlabs/code \
     && chgrp -R 0 /var/log/puppetlabs \
     && chmod 750 /var/log/puppetlabs/puppetserver \
-    && chmod 660 /var/log/puppetlabs/puppetserver/masterhttp.log \
-    && chmod 755 /opt/puppetlabs/server/data/puppetserver/yaml
+    && chmod 660 /var/log/puppetlabs/puppetserver/masterhttp.log
 
 ## Install dependencies for puppet-thycotic module
 RUN /opt/puppetlabs/server/bin/puppetserver gem install soap4r-ng \
