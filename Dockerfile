@@ -35,7 +35,7 @@ COPY ./s2i/config/webserver.conf /etc/puppetlabs/puppetserver/conf.d/webserver.c
 COPY ./s2i/config/hiera.yaml /etc/puppetlabs/puppet/hiera.yaml
 COPY ./s2i/config/site.pp /etc/puppetlabs/code/environments/production/manifests/site.pp
 COPY ./s2i/config/foreman.rb /opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet/reports/foreman.rb
-COPY ./s2i/config/external_node_v2.rb /opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet/reports/external_node_v2.rb
+COPY ./s2i/config/external_node_v2.rb /usr/local/bin/external_node_v2.rb
 COPY ./s2i/config/puppet.conf /etc/puppetlabs/puppet/puppet.conf
 
 ## Set correct permissions
