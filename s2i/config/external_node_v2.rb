@@ -344,20 +344,6 @@ end
 # Actual code starts here
 
 if __FILE__ == $0 then
-  # Setuid to puppet user if we can
-  begin
-    Process::GID.change_privilege(Etc.getgrnam(puppetuser).gid) unless Etc.getpwuid.name == puppetuser
-    Process::UID.change_privilege(Etc.getpwnam(puppetuser).uid) unless Etc.getpwuid.name == puppetuser
-    # Facter (in thread_count) tries to read from $HOME, which is still /root after the UID change
-    ENV['HOME'] = Etc.getpwnam(puppetuser).dir
-    # Change CWD to the determined home directory before continuing to make
-    # sure we don't reside in /root or anywhere else we don't have access
-    # permissions
-    Dir.chdir ENV['HOME']
-  rescue
-    $stderr.puts "cannot switch to user #{puppetuser}, continuing as '#{Etc.getpwuid.name}'"
-  end
-
   begin
     no_env = ARGV.delete("--no-environment")
     watch = ARGV.delete("--watch-facts")
