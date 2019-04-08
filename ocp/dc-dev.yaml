@@ -23,37 +23,76 @@ items:
             deploymentconfig: puppetserver-code-dev
             env: dev
         spec:
-          containers:
-            - imagePullPolicy: Always
-              image: 'puppetserver-code-dev:latest'
-              name: puppetserver-code-dev
-              ports:
-                - containerPort: 8140
-                  protocol: TCP
-              volumeMounts:
-                - mountPath: /certs
-                  name: cert-volume
-                  readOnly: true
-#              readinessProbe:
-#                failureThreshold: 6
-#                exec:
-#                  command:
-#                    - 'curl -vkl https://localhost:8140/status/v1/services'
-#                periodSeconds: 10
-#                timeoutSeconds: 5
-#                initialDelaySeconds: 120
-#              livenessProbe:
-#                tcpSocket:
-#                  port: 8140
-#                failureThreshold: 6
-#                periodSeconds: 10
-#                timeoutSeconds: 5
-#                initialDelaySeconds: 30
-          volumes:
-            - name: cert-volume
-              secret:
-                defaultMode: 420
-                secretName: puppetmaster-certificates
+        containers:
+        - image: 'puppetserver-code-dev:latest'
+          imagePullPolicy: Always
+          name: puppetserver-code-dev
+          ports:
+          - containerPort: 8140
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /thycotic
+            name: thycotic
+          - mountPath: /certs
+            name: cert-volume
+            readOnly: true
+          - mountPath: /etc/puppet/
+            name: puppet
+          - mountPath: /opt/puppetlabs/server/data/puppetserver/yaml/facts
+            name: facts
+          - mountPath: /opt/puppetlabs/server/data/puppetserver/yaml/foreman
+            name: foreman
+        - command:
+          - /bin/sh
+          - -c
+          - sleep 30 && while true; do echo 'Pushing facts to foreman' && date && /opt/puppetlabs/bin/puppetserver
+            ruby /usr/local/bin/external_node_v2.rb --push-facts-parallel && sleep 1800;
+            done
+          image: 'puppetserver-code-dev:latest'
+          imagePullPolicy: Always
+          name: facts-to-foreman
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/puppet/
+            name: puppet
+          - mountPath: /opt/puppetlabs/server/data/puppetserver/yaml/facts
+            name: facts
+          - mountPath: /opt/puppetlabs/server/data/puppetserver/yaml/foreman
+            name: foreman
+          - mountPath: /certs
+            name: cert-volume
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: thycotic
+        - emptyDir: {}
+          name: facts
+        - emptyDir: {}
+          name: foreman
+        - name: cert-volume
+          secret:
+            defaultMode: 420
+            secretName: puppetmaster-certificates
+        - configMap:
+            defaultMode: 420
+            items:
+            - key: thycotic.conf
+              path: thycotic.conf
+            - key: foreman
+              path: foreman.yaml
+            - key: puppet.conf
+              path: puppet.conf
+            name: puppetserver-configuration
+          name: puppet
       triggers:
         - imageChangeParams:
             automatic: true
