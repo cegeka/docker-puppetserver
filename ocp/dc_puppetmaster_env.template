@@ -14,7 +14,6 @@ objects:
       app: puppetserver-code
       env: ${ENVIRONMENT}
     name: puppetserver-code-${ENVIRONMENT}
-    selfLink: /apis/apps.openshift.io/v1/namespaces/ci00053160-puppetserver/deploymentconfigs/puppetserver-code-${ENVIRONMENT}
   spec:
     replicas: 1
     revisionHistoryLimit: 10
@@ -40,7 +39,7 @@ objects:
           env: ${ENVIRONMENT}
       spec:
         containers:
-        - image: docker-registry.default.svc:5000/ci00053160-puppetserver/puppetserver-code:latest
+        - image: docker-registry.default.svc:5000/puppetserver-code:latest
           imagePullPolicy: Always
           name: puppetserver-code-${ENVIRONMENT}
           ports:
@@ -67,7 +66,7 @@ objects:
           - sleep 30 && while true; do echo 'Pushing facts to foreman' && date && /opt/puppetlabs/bin/puppetserver
             ruby /usr/local/bin/external_node_v2.rb --push-facts-parallel && sleep 1800;
             done
-          image: docker-registry.default.svc:5000/ci00053160-puppetserver/puppetserver-code:latest
+          image: docker-registry.default.svc:5000/puppetserver-code:latest
           imagePullPolicy: Always
           name: facts-to-foreman
           resources: {}
@@ -118,7 +117,6 @@ objects:
         from:
           kind: ImageStreamTag
           name: puppetserver-code:latest
-          namespace: ci00053160-puppetserver
       type: ImageChange
     - type: ConfigChange
   status:
