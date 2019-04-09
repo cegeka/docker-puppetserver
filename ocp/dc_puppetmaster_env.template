@@ -39,7 +39,7 @@ objects:
           env: ${ENVIRONMENT}
       spec:
         containers:
-        - image: docker-registry.default.svc:5000/puppetserver-code:latest
+        - image: docker-registry.default.svc:5000/${PROJECT}/puppetserver-code:latest
           imagePullPolicy: Always
           name: puppetserver-code-${ENVIRONMENT}
           ports:
@@ -66,7 +66,7 @@ objects:
           - sleep 30 && while true; do echo 'Pushing facts to foreman' && date && /opt/puppetlabs/bin/puppetserver
             ruby /usr/local/bin/external_node_v2.rb --push-facts-parallel && sleep 1800;
             done
-          image: docker-registry.default.svc:5000/puppetserver-code:latest
+          image: docker-registry.default.svc:5000/${PROJECT}/puppetserver-code:latest
           imagePullPolicy: Always
           name: facts-to-foreman
           resources: {}
@@ -102,7 +102,7 @@ objects:
             items:
             - key: thycotic.conf
               path: thycotic.conf
-            - key: foreman
+            - key: foreman.yaml
               path: foreman.yaml
             - key: puppet.conf
               path: puppet.conf
@@ -129,3 +129,5 @@ objects:
 parameters:
 - description: Puppetmaster Environment
   name: ENVIRONMENT
+- description: Project for imagestream
+  name: PROJECT
