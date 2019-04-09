@@ -40,12 +40,5 @@ oc set volumes dc/jenkins --add --configmap-name=jenkins-configuration --mount-p
 oc set volumes dc/jenkins --add --configmap-name=jenkins-configuration --mount-path='/var/lib/jenkins/.config/yamllint' --name "yamllint-config"
 oc patch dc jenkins -p '{"spec":{"template":{"spec":{"volumes":[{"configMap":{"items":[{"key":"yamllint.conf","path":"config"}],"name":"jenkins-configuration"},"name":"yamllint-config"}]}}}}'
 
-
-            items:
-              - key: yamllint.conf
-                path: config
-
-
-
 oc rollout resume dc jenkins
 oc expose svc/jenkins
