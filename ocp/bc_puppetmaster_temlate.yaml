@@ -31,7 +31,7 @@ objects:
       dockerStrategy:
         from:
           kind: ImageStreamTag
-          name: rhel7:latest
+          name: registry.access.redhat.com/rhel7:latest
       type: Docker
     successfulBuildsHistoryLimit: 5
     triggers: []
