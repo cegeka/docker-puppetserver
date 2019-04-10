@@ -13,15 +13,20 @@ Todo: create a build-pipeline with promotion towards different environments.
 * Deploy the secrets
 
 ```
-oc create -f ocp/secrets.yaml
+oc create -f ocp/config/secrets.template
 ```
 
-* Deploy the template
+* Setup environments
 
 ```
-oc create -f ocp/deploymentconfig.yaml
+cd ocp; ./setup_environment.sh $PROJECT $ENVIRONMENT $CUSTOMER $DOCKERREPO $MONOREPO
 ```
 
+* Setup Jenkins
+
+```
+cd ocp; ./jenkins.sh $PROJECT
+```
 
 ## Contents
 

@@ -13,12 +13,12 @@ fi
 
 #Prerequisites:
 # Files:
-# foreman.yaml
-# thycotic.conf
-# secrets.template
+# opc/config/foreman.yaml
+# ocp/config/thycotic.conf
+# ocp/config/secrets.template
 #
 
-oc create configmap puppetserver-configuration --from-file=puppet.conf=puppet.conf --from-file=foreman.yaml=foreman.yaml --from-file=thycotic.conf=thycotic.conf -n ${PROJECT}
+oc create configmap puppetserver-configuration --from-file=puppet.conf=./config/puppet.conf --from-file=foreman.yaml=./config/foreman.yaml --from-file=thycotic.conf=./config/thycotic.conf -n ${PROJECT}
 
 #Create ImageStreams
 oc create is puppetserver -n ${PROJECT}
