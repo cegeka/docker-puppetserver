@@ -26,9 +26,10 @@ oc create configmap jenkins-configuration \
 import jenkins.model.JenkinsLocationConfiguration
 
 import jenkins.branch.OrganizationFolder
-import org.jenkinsci.plugins.github_branch_source.BranchDiscoveryTrait
 import org.jenkinsci.plugins.github_branch_source.GitHubSCMNavigator
+import org.jenkinsci.plugins.github_branch_source.BranchDiscoveryTrait
 import org.jenkinsci.plugins.github_branch_source.OriginPullRequestDiscoveryTrait
+import org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait
 
 try {
 
@@ -59,9 +60,9 @@ try {
         // Too many repos to scan everything. This trims to a svelte 265 repos at the time of writing.
         new jenkins.scm.impl.trait.WildcardSCMSourceFilterTrait('puppet-monorepo', ''),
         new jenkins.scm.impl.trait.RegexSCMHeadFilterTrait('(^PR-.*)|master'), // we're only interested in PR branches, nothing else
-        new BranchDiscoveryTrait(2), // only branches that are also filed as PR
-        new ForkPullRequestDiscoveryTrait(2), // discover PR from forks // to check
-        new OriginPullRequestDiscoveryTrait(2), // Take only head
+        new BranchDiscoveryTrait(3),
+        new ForkPullRequestDiscoveryTrait(2,new ForkPullRequestDiscoveryTrait.TrustContributors()),
+        new OriginPullRequestDiscoveryTrait(2) // Take only head
     ]
 
     folder.navigators.replace(navigator)
