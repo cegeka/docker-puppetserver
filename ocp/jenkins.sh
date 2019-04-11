@@ -17,8 +17,8 @@ oc new-build -D $'FROM jenkins-2-rhel7:latest \n
 
 ## Define Jenkins customization in config map
 oc create configmap jenkins-configuration \
-    --from-literal=casc_jenkins.yaml=`cat config/jenkins_configuration/casc_jenkins.yaml |sed -e "s/\${PROJECT}/${PROJECT}/g"` \
-    --from-literal=config.groovy=`cat config/jenkins_configuration/config.groovy |sed -e "s/\${PROJECT}/${PROJECT}/g" -e "s/\${GITHUBORG}/${GITHUBORG}/g"` \
+    --from-literal=casc_jenkins.yaml="`cat config/jenkins_configuration/casc_jenkins.yaml |sed -e "s/\\${PROJECT}/${PROJECT}/g"`" \
+    --from-literal=config.groovy="`cat config/jenkins_configuration/config.groovy |sed -e "s/\\${PROJECT}/${PROJECT}/g" -e "s/\\${GITHUBORG}/${GITHUBORG}/g"`" \
     --from-file=yamllint.conf=config/jenkins_configuration/yamllint.conf
 
 ## Set of additional plugins to install. Github branch source plugin is installed by default
