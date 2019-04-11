@@ -27,52 +27,15 @@ oc create is puppetserver-code -n ${PROJECT}
 oc create is puppetserver-code-${ENVIRONMENT} -n ${PROJECT}
 
 #Create Build Configs
-oc process -f bc_puppetmaster_temlate.yaml -p DOCKERREPO=${DOCKERREPO} -p MONOREPO=${MONOREPO} | oc create -f -
+oc process -f config/bc_puppetmaster.template -p DOCKERREPO=${DOCKERREPO} -p MONOREPO=${MONOREPO} | oc create -f -
 # Create DeploymentConfig
-oc process -f dc_puppetmaster_env.template -p ENVIRONMENT=${ENVIRONMENT} -p PROJECT=${PROJECT}| oc create -f - -n ${PROJECT}
+oc process -f config/dc_puppetmaster_env.template -p ENVIRONMENT=${ENVIRONMENT} -p PROJECT=${PROJECT}| oc create -f - -n ${PROJECT}
 
 #Create Service
-
-echo "apiVersion: v1
-kind: Service
-metadata:
-  creationTimestamp: null
-  labels:
-    app: puppetserver-code-${ENVIRONMENT}
-  name: puppetserver-code-${ENVIRONMENT}
-spec:
-  ports:
-  - name: 443-tcp
-    port: 443
-    protocol: TCP
-    targetPort: 8140
-  selector:
-    deploymentconfig: puppetserver-code-${ENVIRONMENT}
-  sessionAffinity: None
-  type: ClusterIP
-status:
-  loadBalancer: {}" | oc create -f - -n ${PROJECT}
+oc process -f config/service.template -p ENVIRONMENT=${ENVIRONMENT} | oc create -f - -n ${PROJECT}
 
 #Create Route
-echo "apiVersion: route.openshift.io/v1
-kind: Route
-metadata:
-  annotations:
-  labels:
-    app: puppetserver-code-${ENVIRONMENT}
-  name: puppetserver-code-${ENVIRONMENT}
-  namespace: ${PROJECT}
-spec:
-  host: ${ENVIRONMENT}-${CUSTOMER}.openshift-puppetmaster.cegeka.be
-  port:
-    targetPort: 443-tcp
-  tls:
-    termination: passthrough
-  to:
-    kind: Service
-    name: puppetserver-code-${ENVIRONMENT}
-    weight: 100
-  wildcardPolicy: None" | oc create -f - -n ${PROJECT}
+oc process -f config/route.template -p ENVIRONMENT=${ENVIRONMENT} -p CUSTOMER=${CUSTOMER} | oc create -f - -n ${PROJECT}
 
 echo "Create a DNS records for ${ENVIRONMENT}-${CUSTOMER}.openshift-puppetmaster.cegeka.be"
 
