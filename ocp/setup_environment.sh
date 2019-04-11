@@ -1,13 +1,12 @@
 #!/bin/bash
 
 PROJECT=$1
-ENVIRONMENT=$2
-CUSTOMER=$3
-DOCKERREPO=$4
-MONOREPO=$5
-if [ $# -ne 5 ]
+CUSTOMER=$2
+DOCKERREPO=$3
+MONOREPO=$4
+if [ $# -ne 4 ]
 then
-  echo "5 parameters - > project should be \$1, environment \$2, customer \$3, docker puppetserver repo \$4, monorepo \$5"
+  echo "4 parameters - > project should be \$1, customer \$2, docker puppetserver repo \$3, monorepo \$4"
   exit 100
 fi
 
@@ -26,18 +25,11 @@ oc create configmap puppetserver-configuration --from-file=puppet.conf=./config/
 oc create is puppetserver -n ${PROJECT}
 oc create is puppetserver-code -n ${PROJECT}
 
-oc create is puppetserver-code-${ENVIRONMENT} -n ${PROJECT}
+ENVIRONMENTS='dev acc prd drp'
+for environment in $ENVIRONMENTS
+do
+  oc create is puppetserver-code-${environment} -n ${PROJECT}
 
-#Create Build Configs
-oc process -f config/templates/bc_puppetmaster.template -p DOCKERREPO=${DOCKERREPO} -p MONOREPO=${MONOREPO} | oc create -f -
-# Create DeploymentConfig
-oc process -f config/templates/dc_puppetmaster_env.template -p ENVIRONMENT=${ENVIRONMENT} -p PROJECT=${PROJECT}| oc create -f - -n ${PROJECT}
-
-#Create Service
-oc process -f config/templates/service.template -p ENVIRONMENT=${ENVIRONMENT} | oc create -f - -n ${PROJECT}
-
-#Create Route
-oc process -f config/templates/route.template -p ENVIRONMENT=${ENVIRONMENT} -p CUSTOMER=${CUSTOMER} | oc create -f - -n ${PROJECT}
-
-echo "Create a DNS records for ${ENVIRONMENT}-${CUSTOMER}.openshift-puppetmaster.cegeka.be"
-
+  oc process -f config/templates/puppetmaster.template -p ENVIRONMENT=${environment} -p CUSTOMER=${CUSTOMER} -p PROJECT=${PROJECT} -p DOCKERREPO=${DOCKERREPO} -p MONOREPO=${MONOREPO} | oc create -f - -n ${PROJECT}
+  echo "Create a DNS records for ${environment}-${CUSTOMER}.openshift-puppetmaster.cegeka.be"
+done
