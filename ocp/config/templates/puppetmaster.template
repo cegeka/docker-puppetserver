@@ -134,7 +134,7 @@ objects:
       app: puppetserver-code-${ENVIRONMENT}
     name: puppetserver-code-${ENVIRONMENT}
   spec:
-    host: ${ENVIRONMENT}-${CUSTOMER}.openshift-puppetmaster.cegeka.be
+    host: ${ENVIRONMENT}.${ZONE}
     port:
       targetPort: 443-tcp
     tls:
@@ -164,8 +164,8 @@ objects:
   status:
     loadBalancer: {}
 parameters:
-- description: Puppetmaster CUSTOMER
-  name: CUSTOMER
+- description: Puppetmaster DNS ZONE
+  name: ZONE
 - description: Puppetmaster Code Repo git@github.com
   name: MONOREPO
 - description:  Docker Puppetmaster Code Repo git@github.com

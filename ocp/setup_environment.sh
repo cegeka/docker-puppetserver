@@ -1,12 +1,12 @@
 #!/bin/bash
 
 PROJECT=$1
-CUSTOMER=$2
+ZONE=$2
 DOCKERREPO=$3
 MONOREPO=$4
 if [ $# -ne 4 ]
 then
-  echo "4 parameters - > project should be \$1, customer \$2, docker puppetserver repo \$3, monorepo \$4"
+  echo "4 parameters - > project should be \$1, DNS Zone \$2, docker puppetserver repo \$3, monorepo \$4"
   exit 100
 fi
 
@@ -25,11 +25,13 @@ oc create configmap puppetserver-configuration --from-file=puppet.conf=./config/
 oc create is puppetserver -n ${PROJECT}
 oc create is puppetserver-code -n ${PROJECT}
 
+oc process -f config/templates/bc_puppetmaster.template -p DOCKERREPO=${DOCKERREPO} -p MONOREPO=${MONOREPO} | oc create -f - -n ${PROJECT}
+
 ENVIRONMENTS='dev acc prd drp'
 for environment in $ENVIRONMENTS
 do
   oc create is puppetserver-code-${environment} -n ${PROJECT}
 
-  oc process -f config/templates/puppetmaster.template -p ENVIRONMENT=${environment} -p CUSTOMER=${CUSTOMER} -p PROJECT=${PROJECT} -p DOCKERREPO=${DOCKERREPO} -p MONOREPO=${MONOREPO} | oc create -f - -n ${PROJECT}
+  oc process -f config/templates/puppetmaster.template -p ENVIRONMENT=${environment} -p ZONE=${ZONE} -p PROJECT=${PROJECT} -p DOCKERREPO=${DOCKERREPO} -p MONOREPO=${MONOREPO} | oc create -f - -n ${PROJECT}
   echo "Create a DNS records for ${environment}-${CUSTOMER}.openshift-puppetmaster.cegeka.be"
 done
