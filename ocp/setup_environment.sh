@@ -19,7 +19,9 @@ fi
 
 oc create -f config/templates/secrets.template
 
-oc create configmap puppetserver-configuration --from-file=puppet.conf=./config/puppet.conf --from-file=foreman.yaml=./config/foreman.yaml --from-file=thycotic.conf=./config/thycotic.conf -n ${PROJECT}
+oc create configmap foreman.yaml --from-file=foreman.yaml=./config/foreman.yaml -n ${PROJECT}
+oc create configmap thycotic.conf --from-file=thycotic.conf=./config/thycotic.conf -n ${PROJECT}
+oc create configmap hiera.yaml --from-file=hiera.yaml=./config/hiera.yaml-n ${PROJECT}
 
 #Create ImageStreams
 oc create is puppetserver -n ${PROJECT}
@@ -30,6 +32,11 @@ oc process -f config/templates/bc_puppetmaster.template -p DOCKERREPO=${DOCKERRE
 ENVIRONMENTS='dev acc prd drp'
 for environment in $ENVIRONMENTS
 do
+  oc create configmap puppet-conf-${environment} \
+    --from-literal=puppet.conf="`cat config/puppet.conf |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" -n ${PROJECT}
+  oc create configmap fileserver-${environment} \
+    --from-literal=fileserver.conf="`cat config/fileserver.conf |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" -n ${PROJECT}
+
   oc create is puppetserver-code-${environment} -n ${PROJECT}
 
   oc process -f config/templates/puppetmaster.template -p ENVIRONMENT=${environment} -p ZONE=${ZONE} -p PROJECT=${PROJECT} -p DOCKERREPO=${DOCKERREPO} -p MONOREPO=${MONOREPO} | oc create -f - -n ${PROJECT}
