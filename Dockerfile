@@ -24,6 +24,7 @@ RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet \
     && yum -y install puppetserver \
     && yum clean all -y \
     && mkdir -p /etc/puppetlabs/code \
+    && mkdir -p /etc/puppetlabs/ssl \
     && mkdir -p /etc/puppetlabs/code/environments/production/manifests \
     && touch /var/log/puppetlabs/puppetserver/masterhttp.log \
     && mkdir -p /etc/puppetlabs/code/environments/production/manifests/
@@ -33,10 +34,8 @@ COPY ./s2i/config/puppetserver.sh /usr/local/bin/start-puppet-server
 COPY ./s2i/config/ca.cfg /etc/puppetlabs/puppetserver/services.d/ca.cfg
 COPY ./s2i/config/webserver.conf /etc/puppetlabs/puppetserver/conf.d/webserver.conf
 COPY ./s2i/config/hiera.yaml /etc/puppetlabs/puppet/hiera.yaml
-COPY ./s2i/config/site.pp /etc/puppetlabs/code/environments/production/manifests/site.pp
 COPY ./s2i/config/foreman.rb /opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet/reports/foreman.rb
 COPY ./s2i/config/external_node_v2.rb /usr/local/bin/external_node_v2.rb
-COPY ./s2i/config/puppet.conf /etc/puppetlabs/puppet/puppet.conf
 
 ## Set correct permissions
 RUN chmod +x /usr/local/bin/start-puppet-server \
