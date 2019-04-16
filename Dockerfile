@@ -25,6 +25,7 @@ RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet \
     && yum clean all -y \
     && mkdir -p /etc/puppetlabs/code \
     && mkdir -p /etc/puppetlabs/ssl \
+    && chmod -R 0771 /etc/puppetlabs/ssl \
     && mkdir -p /etc/puppetlabs/code/environments/production/manifests \
     && touch /var/log/puppetlabs/puppetserver/masterhttp.log \
     && mkdir -p /etc/puppetlabs/code/environments/production/manifests/
