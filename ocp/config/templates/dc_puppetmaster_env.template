@@ -60,6 +60,8 @@ objects:
             name: facts
           - mountPath: /opt/puppetlabs/server/data/puppetserver/yaml/foreman
             name: foreman
+          - mountPath: /etc/puppetlabs/puppet
+            name: configuration-volume
         - command:
           - /bin/sh
           - -c
@@ -97,17 +99,35 @@ objects:
           secret:
             defaultMode: 420
             secretName: puppetmaster-certificates
-        - configMap:
+        - name: configuration-volume
+          projected:
             defaultMode: 420
-            items:
-            - key: thycotic.conf
-              path: thycotic.conf
-            - key: foreman.yaml
-              path: foreman.yaml
-            - key: puppet.conf
-              path: puppet.conf
-            name: puppetserver-configuration
-          name: puppet
+            sources:
+            - configMap:
+                items:
+                - key: thycotic.conf
+                  path: thycotic.conf
+                name: thycotic
+            - configMap:
+                items:
+                - key: fileserver.conf
+                  path: fileserver.conf
+                name: fileserver-${ENVIRONMENT}
+            - configMap:
+                items:
+                - key: puppet.conf
+                  path: puppet.conf
+                name: puppet-conf-${ENVIRONMENT}
+            - configMap:
+                items:
+                - key: foreman.yaml
+                  path: foreman.yaml
+                name: foreman.yaml
+            - configMap:
+                items:
+                - key: hiera.yaml
+                  path: hiera.yaml
+                name: hiera.yaml
     test: false
     triggers:
     - imageChangeParams:
