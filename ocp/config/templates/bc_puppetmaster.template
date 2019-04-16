@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: puppetmaster-build-configs-template
+  annotations:
+    description: "Docker Puppetmaster template code builds"
+objects:
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: build-puppetserver-docker-image
+    name: build-puppetserver-docker-image
+  spec:
+    failedBuildsHistoryLimit: 5
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: puppetserver:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      git:
+        ref: master
+        uri: ${DOCKERREPO}
+      type: Git
+    strategy:
+      dockerStrategy:
+        from:
+          kind: DockerImage
+          name: registry.access.redhat.com/rhel7:latest
+      type: Docker
+    successfulBuildsHistoryLimit: 5
+    triggers: []
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: build-puppetserver-code
+    name: build-puppetserver-code
+  spec:
+    failedBuildsHistoryLimit: 5
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: puppetserver-code:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      git:
+        ref: master
+        uri: ${MONOREPO}
+      sourceSecret:
+        name: github-deploy-key
+      type: Git
+    strategy:
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: puppetserver:latest
+      type: Source
+    successfulBuildsHistoryLimit: 5
+    triggers: []
+parameters:
+- description: Puppetmaster Code Repo
+  name: MONOREPO
+- description:  Docker Puppetmaster Code Repo
+  name: DOCKERREPO

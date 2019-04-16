@@ -1,6 +1,6 @@
 unclassified:
   gitHubPluginConfig:
     configs:
-      - credentialsId: "ci00053160-puppetserver-github-api-token"
+      - credentialsId: "${PROJECT}-github-api-token"
         manageHooks: false
         name: "Github"
