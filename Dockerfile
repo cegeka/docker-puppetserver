@@ -26,7 +26,6 @@ RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet \
     && mkdir -p /etc/puppetlabs/code \
     && mkdir -p /etc/puppetlabs/code/environments/production/manifests \
     && touch /var/log/puppetlabs/puppetserver/masterhttp.log \
-    && mkdir -p /etc/puppetlabs/code/environments/production/manifests/
 
 ## Copy all required config files
 COPY ./s2i/config/puppetserver.sh /usr/local/bin/start-puppet-server
@@ -46,7 +45,6 @@ RUN chmod +x /usr/local/bin/start-puppet-server \
     && chmod -R 775 /etc/puppetlabs/code \
     && chgrp -R 0 /var/log/puppetlabs \
     && chmod 750 /var/log/puppetlabs/puppetserver \
-    && chmod 660 /var/log/puppetlabs/puppetserver/masterhttp.log \
     && chmod 660 /var/log/puppetlabs/puppetserver/masterhttp.log \
     && mkdir /opt/puppetlabs/server/data/puppetserver/yaml \
     && chmod 750 /opt/puppetlabs/server/data/puppetserver/yaml
