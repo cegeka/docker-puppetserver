@@ -40,5 +40,5 @@ do
   oc create is puppetserver-code-${environment} -n ${PROJECT}
 
   oc process -f config/templates/puppetmaster.template -p ENVIRONMENT=${environment} -p ZONE=${ZONE} -p PROJECT=${PROJECT} -p DOCKERREPO=${DOCKERREPO} -p MONOREPO=${MONOREPO} | oc create -f - -n ${PROJECT}
-  echo "Create a DNS records for ${environment}-${CUSTOMER}.openshift-puppetmaster.cegeka.be"
+  echo "Create a DNS records for ${environment}.${ZONE}"
 done

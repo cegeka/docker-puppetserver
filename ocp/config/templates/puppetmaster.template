@@ -49,17 +49,15 @@ objects:
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
-          - mountPath: /thycotic
-            name: thycotic
           - mountPath: /certs
             name: cert-volume
             readOnly: true
-          - mountPath: /etc/puppet/
-            name: puppet
           - mountPath: /opt/puppetlabs/server/data/puppetserver/yaml/facts
             name: facts
           - mountPath: /opt/puppetlabs/server/data/puppetserver/yaml/foreman
             name: foreman
+          - mountPath: /etc/puppetlabs/puppet
+            name: configuration-volume
         - command:
           - /bin/sh
           - -c
@@ -73,8 +71,6 @@ objects:
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
-          - mountPath: /etc/puppet/
-            name: puppet
           - mountPath: /opt/puppetlabs/server/data/puppetserver/yaml/facts
             name: facts
           - mountPath: /opt/puppetlabs/server/data/puppetserver/yaml/foreman
@@ -88,8 +84,6 @@ objects:
         terminationGracePeriodSeconds: 30
         volumes:
         - emptyDir: {}
-          name: thycotic
-        - emptyDir: {}
           name: facts
         - emptyDir: {}
           name: foreman
@@ -97,17 +91,35 @@ objects:
           secret:
             defaultMode: 420
             secretName: puppetmaster-certificates
-        - configMap:
+        - name: configuration-volume
+          projected:
             defaultMode: 420
-            items:
-            - key: thycotic.conf
-              path: thycotic.conf
-            - key: foreman.yaml
-              path: foreman.yaml
-            - key: puppet.conf
-              path: puppet.conf
-            name: puppetserver-configuration
-          name: puppet
+            sources:
+            - configMap:
+                items:
+                - key: thycotic.conf
+                  path: thycotic.conf
+                name: thycotic
+            - configMap:
+                items:
+                - key: fileserver.conf
+                  path: fileserver.conf
+                name: fileserver-${ENVIRONMENT}
+            - configMap:
+                items:
+                - key: puppet.conf
+                  path: puppet.conf
+                name: puppet-conf-${ENVIRONMENT}
+            - configMap:
+                items:
+                - key: foreman.yaml
+                  path: foreman.yaml
+                name: foreman.yaml
+            - configMap:
+                items:
+                - key: hiera.yaml
+                  path: hiera.yaml
+                name: hiera.yaml
     test: false
     triggers:
     - imageChangeParams:
