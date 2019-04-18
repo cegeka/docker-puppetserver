@@ -6,6 +6,7 @@ import org.jenkinsci.plugins.github_branch_source.GitHubSCMNavigator
 import org.jenkinsci.plugins.github_branch_source.BranchDiscoveryTrait
 import org.jenkinsci.plugins.github_branch_source.OriginPullRequestDiscoveryTrait
 import org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait
+import jenkins.plugins.git.traits.RefSpecsSCMSourceTrait
 
 try {
 
@@ -38,7 +39,8 @@ try {
         new jenkins.scm.impl.trait.RegexSCMHeadFilterTrait('(^PR-.*)|master'), // we're only interested in PR branches, nothing else
         new BranchDiscoveryTrait(3),
         new ForkPullRequestDiscoveryTrait(2,new ForkPullRequestDiscoveryTrait.TrustContributors()),
-        new OriginPullRequestDiscoveryTrait(2) // Take only head
+        new OriginPullRequestDiscoveryTrait(2), // Take only head
+        new RefSpecsSCMSourceTrait('+master:+refs/remotes/origin/master')
     ]
 
     folder.navigators.replace(navigator)
