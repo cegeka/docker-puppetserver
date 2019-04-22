@@ -16,7 +16,8 @@ oc new-build -D $'FROM jenkins-2-rhel7:latest\n
       RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet && yum-config-manager --add-repo https://yum.puppet.com/puppet5/el/7/x86_64/ && yum -y install puppet-agent && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && yum install -y python-setuptools rubygem-puppet-lint gcc zlib-devel gcc-c++ && yum install -y http://mirror.centos.org/centos/7/updates/x86_64/Packages/ruby-devel-2.0.0.648-34.el7_6.x86_64.rpm && yum clean all && easy_install pip && pip install yamllint\n
       USER root\n
       RUN gem install bundler -v '1.17.3' --source 'https://rubygems.org/'  &&  gem install json -v '1.8.6' --source 'https://rubygems.org/'\n
-      USER 1001' --name=puppet-jenkins
+      USER jenkins\n\
+      WORKDIR /var/lib/jenkins' --name=puppet-jenkins
 
 ## Define Jenkins customization in config map
 oc create configmap jenkins-configuration \
