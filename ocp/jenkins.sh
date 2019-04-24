@@ -25,6 +25,10 @@ oc create configmap jenkins-configuration \
     --from-literal=config.groovy="`cat config/jenkins_configuration/config.groovy |sed -e "s/\\${PROJECT}/${PROJECT}/g" -e "s/\\${GITHUBORG}/${GITHUBORG}/g"`" \
     --from-file=yamllint.conf=config/jenkins_configuration/yamllint.conf
 
+oc create secret generic jenkins-ci-github-key \
+    --from-file=ssh-privatekey=config/jenkins_configuration/.ssh/id_rsa \
+    --type=kubernetes.io/ssh-auth
+
 ## Set of additional plugins to install. Github branch source plugin is installed by default
 JENKINS_PLUGINS=`cat config/jenkins_configuration/jenkins.plugins`
 
@@ -43,6 +47,9 @@ oc set env dc/jenkins INSTALL_PLUGINS="${JENKINS_PLUGINS}"
 oc set env dc/jenkins CASC_JENKINS_CONFIG="/var/lib/jenkins/init.groovy.d/casc_jenkins.yaml"
 oc set volumes dc/jenkins --add --configmap-name=jenkins-configuration --mount-path='/var/lib/jenkins/init.groovy.d/' --name "jenkins-config"
 oc set volumes dc/jenkins --add --configmap-name=jenkins-configuration --mount-path='/var/lib/jenkins/.config/yamllint' --name "yamllint-config"
+oc set volumes dc/jenkins --add --secret-name=jenkins-ci-github-key --mount-path='/var/lib/jenkins/.ssh/id_rsa' --name "jenkins-ci-github-key" --read-only=true
+
 oc patch dc jenkins -p '{"spec":{"template":{"spec":{"volumes":[{"configMap":{"items":[{"key":"yamllint.conf","path":"config"}],"name":"jenkins-configuration"},"name":"yamllint-config"}]}}}}'
+oc patch dc jenkins -p '{"spec":{"template":{"spec":{"volumes":[{"secret":{"items":[{"key":"ssh-privatekey","path":"id_rsa"}],"defaultMode": 420,"secretName":"jenkins-ci-github-key"},"name":"jenkins-ci-github-key"}]}}}}'
 
 oc rollout resume dc jenkins
