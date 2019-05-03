@@ -7,6 +7,7 @@ import org.jenkinsci.plugins.github_branch_source.BranchDiscoveryTrait
 import org.jenkinsci.plugins.github_branch_source.OriginPullRequestDiscoveryTrait
 import org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait
 import jenkins.plugins.git.traits.RefSpecsSCMSourceTrait
+import hudson.model.*
 
 try {
 
@@ -61,6 +62,10 @@ try {
         println '--> Running GitHub organization scan'
         folder.scheduleBuild()
     }
+    // Initial number of executors is 1, let's increase the number of executors to 2
+    Hudson hudson = Hudson.getInstance()
+    hudson.setNumExecutors(10)
+    hudson.save()
 
     println '--> Configuration of jenkins is done'
 }
