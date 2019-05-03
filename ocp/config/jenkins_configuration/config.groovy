@@ -8,6 +8,7 @@ import org.jenkinsci.plugins.github_branch_source.OriginPullRequestDiscoveryTrai
 import org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait
 import jenkins.plugins.git.traits.RefSpecsSCMSourceTrait
 import hudson.model.*
+import org.jenkinsci.plugins.scriptsecurity.scripts.*
 
 try {
 
@@ -66,6 +67,9 @@ try {
     Hudson hudson = Hudson.getInstance()
     hudson.setNumExecutors(10)
     hudson.save()
+
+    toApprove=['method hudson.model.Job getBuilds', 'method hudson.model.Run getNumber','method hudson.model.Run isBuilding','method java.io.File exists','method java.io.File mkdirs','method jenkins.model.Jenkins getItemByFullName java.lang.String','new java.io.File java.lang.String','staticMethod jenkins.model.Jenkins getInstance','staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods take java.util.List int']
+    toApprove.each {pending -> ScriptApproval.get().approveScript(pending)}
 
     println '--> Configuration of jenkins is done'
 }
