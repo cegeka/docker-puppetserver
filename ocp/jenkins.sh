@@ -13,7 +13,7 @@ oc import-image jenkins-2-rhel7 --from=registry.access.redhat.com/openshift3/jen
 ## Customize the the image imported above with all the build tools we need
 oc new-build -D $'FROM jenkins-2-rhel7:latest\n
       USER root\n
-      RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet && yum-config-manager --add-repo https://yum.puppet.com/puppet5/el/7/x86_64/ && yum -y install puppet-agent && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && yum install -y python-setuptools rubygem-puppet-lint gcc zlib-devel gcc-c++ && yum-config-manager --enable rhel-7-server-optional-rpms && yum install -y ruby-devel-2.0.0.648-34.el7_6.x86_64 && yum clean all && easy_install pip && pip install yamllint && gem install --no-ri --no-rdoc bundler -v '2.0.1' --source 'https://rubygems.org/'  &&  gem install --no-ri --no-rdoc json -v '1.8.6' --source 'https://rubygems.org/'\n
+      RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet && yum-config-manager --add-repo https://yum.puppet.com/puppet5/el/7/x86_64/ && yum -y install puppet-agent && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && yum install -y python-setuptools gcc zlib-devel gcc-c++ && yum-config-manager --enable rhel-server-rhscl-7-rpms  && yum install -y rh-ruby25-ruby-devel-2.5.3-6.el7.x86_64 && yum clean all && easy_install pip && pip install yamllint && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rh/rh-ruby25/root/usr/lib64 && /opt/rh/rh-ruby25/root/usr/bin/gem install --no-ri --no-rdoc bundler -v '2.0.1' --source 'https://rubygems.org/'  &&  /opt/rh/rh-ruby25/root/usr/bin/gem install json --no-ri --no-rdoc json --source 'https://rubygems.org/' &&  /opt/rh/rh-ruby25/root/usr/bin/gem install --no-ri --no-rdoc puppet-lint --source 'https://rubygems.org/'
       USER jenkins\n\
       WORKDIR /var/lib/jenkins' --name=puppet-jenkins
 
@@ -27,7 +27,7 @@ oc create configmap jenkins-configuration \
 JENKINS_PLUGINS=`cat config/jenkins_configuration/jenkins.plugins`
 
 ## Deploy the Openshift built-in Jenkins template with the newly build image.
-oc process openshift//jenkins-persistent -p JENKINS_IMAGE_STREAM_TAG=puppet-jenkins:latest NAMESPACE=${PROJECT} =p VOLUME_CAPACITY=10Gi | oc create -f -
+oc process openshift//jenkins-persistent -p JENKINS_IMAGE_STREAM_TAG=puppet-jenkins:latest NAMESPACE=${PROJECT} -p VOLUME_CAPACITY=10Gi | oc create -f -
 
 ## Pause rollouts to proceed with additional configuration
 oc rollout pause dc jenkins
