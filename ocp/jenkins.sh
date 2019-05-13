@@ -13,9 +13,9 @@ oc import-image jenkins-2-rhel7 --from=registry.access.redhat.com/openshift3/jen
 ## Customize the the image imported above with all the build tools we need
 oc new-build -D $'FROM jenkins-2-rhel7:latest\n
       USER root\n
-      RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet && yum-config-manager --add-repo https://yum.puppet.com/puppet5/el/7/x86_64/ && yum -y install puppet-agent && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && yum install -y python-setuptools gcc zlib-devel gcc-c++ && yum-config-manager --enable rhel-server-rhscl-7-rpms  && yum install -y rh-ruby25-ruby-devel-2.5.3-6.el7.x86_64 && yum clean all && easy_install pip && pip install yamllint && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rh/rh-ruby25/root/usr/lib64 && /opt/rh/rh-ruby25/root/usr/bin/gem install --no-ri --no-rdoc bundler -v '2.0.1' --source 'https://rubygems.org/'  &&  /opt/rh/rh-ruby25/root/usr/bin/gem install json --no-ri --no-rdoc json --source 'https://rubygems.org/' &&  /opt/rh/rh-ruby25/root/usr/bin/gem install --no-ri --no-rdoc puppet-lint --source 'https://rubygems.org/'
+      RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet && yum-config-manager --add-repo https://yum.puppet.com/puppet5/el/7/x86_64/ && yum -y install puppet-agent && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && yum install -y python-setuptools gcc zlib-devel gcc-c++ && yum-config-manager --enable rhel-server-rhscl-7-rpms  && yum install -y rh-ruby25-ruby-devel && yum clean all && easy_install pip && pip install yamllint && h-ruby25/root/usr/lib64 && gem install --no-ri --no-rdoc bundler -v '2.0.1' --source 'https://rubygems.org/'  &&  gem install json --no-ri --no-rdoc json --source 'https://rubygems.org/' &&  gem install --no-ri --no-rdoc puppet-lint --source 'https://rubygems.org/'
       USER jenkins\n\
-      WORKDIR /var/lib/jenkins' --name=puppet-jenkins
+      WORKDIR /var/lib/jenkins' --name=puppet-jenkins -e=PATH=\$PATH:/opt/rh/rh-ruby25/root/usr/bin -e=LD_LIBRARY_PATH=/opt/rh/rh-ruby25/root/usr/lib64
 
 ## Define Jenkins customization in config map
 oc create configmap jenkins-configuration \
