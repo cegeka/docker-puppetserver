@@ -62,7 +62,7 @@ objects:
           - /bin/sh
           - -c
           - sleep 30 && while true; do echo 'Pushing facts to foreman' && date && /opt/puppetlabs/bin/puppetserver
-            ruby /usr/local/bin/external_node_v2.rb --push-facts-parallel && sleep 1800;
+            ruby /usr/local/bin/external_node_v2.rb --push-facts-parallel && sleep 86400;
             done
           image: docker-registry.default.svc:5000/${PROJECT}/puppetserver-code-${ENVIRONMENT}:latest
           imagePullPolicy: Always
