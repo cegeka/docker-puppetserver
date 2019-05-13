@@ -13,7 +13,7 @@ oc import-image jenkins-2-rhel7 --from=registry.access.redhat.com/openshift3/jen
 ## Customize the the image imported above with all the build tools we need
 oc new-build -D $'FROM jenkins-2-rhel7:latest\n
       USER root\n
-      RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet && yum-config-manager --add-repo https://yum.puppet.com/puppet5/el/7/x86_64/ && yum -y install puppet-agent && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && yum install -y python-setuptools rubygem-puppet-lint gcc zlib-devel gcc-c++ && yum-config-manager --enable rhel-7-server-optional-rpms && yum install -y ruby-devel-2.0.0.648-34.el7_6.x86_64 && yum clean all && easy_install pip && pip install yamllint && gem install --no-ri --no-rdoc bundler -v '1.17.3' --source 'https://rubygems.org/'  &&  gem install --no-ri --no-rdoc json -v '1.8.6' --source 'https://rubygems.org/'\n
+      RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet && yum-config-manager --add-repo https://yum.puppet.com/puppet5/el/7/x86_64/ && yum -y install puppet-agent && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && yum install -y python-setuptools rubygem-puppet-lint gcc zlib-devel gcc-c++ && yum-config-manager --enable rhel-7-server-optional-rpms && yum install -y ruby-devel-2.0.0.648-34.el7_6.x86_64 && yum clean all && easy_install pip && pip install yamllint && gem install --no-ri --no-rdoc bundler -v '2.0.1' --source 'https://rubygems.org/'  &&  gem install --no-ri --no-rdoc json -v '1.8.6' --source 'https://rubygems.org/'\n
       USER jenkins\n\
       WORKDIR /var/lib/jenkins' --name=puppet-jenkins
 
@@ -39,6 +39,9 @@ oc set env dc/jenkins MEMORY_LIMIT=1Gi
 oc set env dc/jenkins DISABLE_ADMINISTRATIVE_MONITORS=true
 oc set env dc/jenkins INSTALL_PLUGINS="${JENKINS_PLUGINS}"
 oc set env dc/jenkins CASC_JENKINS_CONFIG="/var/lib/jenkins/init.groovy.d/casc_jenkins.yaml"
+oc set env dc/jenkins PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/rh/rh-ruby25/root/usr/bin:/opt/rh/rh-ruby25/root/usr/local/bin"
+oc set env dc/jenkins LD_LIBRARY_PATH="/opt/rh/rh-ruby25/root/usr/lib64"
+
 oc set volumes dc/jenkins --add --configmap-name=jenkins-configuration --mount-path='/var/lib/jenkins/init.groovy.d/' --name "jenkins-config"
 oc set volumes dc/jenkins --add --configmap-name=jenkins-configuration --mount-path='/var/lib/jenkins/.config/yamllint' --name "yamllint-config"
 
