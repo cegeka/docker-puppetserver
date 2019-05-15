@@ -11,9 +11,14 @@ fi
 oc import-image jenkins-2-rhel7 --from=registry.access.redhat.com/openshift3/jenkins-2-rhel7:v3.11.82-4 --confirm
 
 ## Customize the the image imported above with all the build tools we need
-oc new-build -D $'FROM jenkins-2-rhel7:latest \n
-      USER root\nRUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && yum install -y python-setuptools puppet rubygem-puppet-lint && yum clean all && easy_install pip && pip install yamllint\n
-      USER 1001' --name=puppet-jenkins
+oc new-build -D $'FROM jenkins-2-rhel7:latest\n
+      USER root\n
+      RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet && yum-config-manager --add-repo https://yum.puppet.com/puppet5/el/7/x86_64/ && yum -y install puppet-agent && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && yum install -y python-setuptools gcc zlib-devel gcc-c++ && yum-config-manager --enable rhel-server-rhscl-7-rpms  && yum install -y rh-ruby25-ruby-devel && yum clean all && easy_install pip && pip install yamllint && h-ruby25/root/usr/lib64 && gem install --no-ri --no-rdoc bundler -v '2.0.1' --source 'https://rubygems.org/'  &&  gem install json --no-ri --no-rdoc json --source 'https://rubygems.org/' &&  gem install --no-ri --no-rdoc puppet-lint --source 'https://rubygems.org/'
+      USER jenkins\n\
+      WORKDIR /var/lib/jenkins' --name=puppet-jenkins -e=PATH=\$PATH:/opt/rh/rh-ruby25/root/usr/bin -e=LD_LIBRARY_PATH=/opt/rh/rh-ruby25/root/usr/lib64
+
+oc set env bc/puppet-jenkins PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/rh/rh-ruby25/root/usr/bin"
+oc set env bc/puppet-jenkins LD_LIBRARY_PATH="/opt/rh/rh-ruby25/root/usr/lib64"
 
 ## Define Jenkins customization in config map
 oc create configmap jenkins-configuration \
@@ -25,7 +30,7 @@ oc create configmap jenkins-configuration \
 JENKINS_PLUGINS=`cat config/jenkins_configuration/jenkins.plugins`
 
 ## Deploy the Openshift built-in Jenkins template with the newly build image.
-oc process openshift//jenkins-ephemeral -p JENKINS_IMAGE_STREAM_TAG=puppet-jenkins:latest NAMESPACE=${PROJECT} | oc create -f -
+oc process openshift//jenkins-persistent -p JENKINS_IMAGE_STREAM_TAG=puppet-jenkins:latest NAMESPACE=${PROJECT} -p VOLUME_CAPACITY=10Gi | oc create -f -
 
 ## Pause rollouts to proceed with additional configuration
 oc rollout pause dc jenkins
@@ -37,8 +42,12 @@ oc set env dc/jenkins MEMORY_LIMIT=1Gi
 oc set env dc/jenkins DISABLE_ADMINISTRATIVE_MONITORS=true
 oc set env dc/jenkins INSTALL_PLUGINS="${JENKINS_PLUGINS}"
 oc set env dc/jenkins CASC_JENKINS_CONFIG="/var/lib/jenkins/init.groovy.d/casc_jenkins.yaml"
+oc set env dc/jenkins PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/rh/rh-ruby25/root/usr/bin:/opt/rh/rh-ruby25/root/usr/local/bin"
+oc set env dc/jenkins LD_LIBRARY_PATH="/opt/rh/rh-ruby25/root/usr/lib64"
+
 oc set volumes dc/jenkins --add --configmap-name=jenkins-configuration --mount-path='/var/lib/jenkins/init.groovy.d/' --name "jenkins-config"
 oc set volumes dc/jenkins --add --configmap-name=jenkins-configuration --mount-path='/var/lib/jenkins/.config/yamllint' --name "yamllint-config"
+
 oc patch dc jenkins -p '{"spec":{"template":{"spec":{"volumes":[{"configMap":{"items":[{"key":"yamllint.conf","path":"config"}],"name":"jenkins-configuration"},"name":"yamllint-config"}]}}}}'
 
 oc rollout resume dc jenkins
