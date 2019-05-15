@@ -17,6 +17,9 @@ oc new-build -D $'FROM jenkins-2-rhel7:latest\n
       USER jenkins\n\
       WORKDIR /var/lib/jenkins' --name=puppet-jenkins -e=PATH=\$PATH:/opt/rh/rh-ruby25/root/usr/bin -e=LD_LIBRARY_PATH=/opt/rh/rh-ruby25/root/usr/lib64
 
+oc set env bc/puppet-jenkins PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/rh/rh-ruby25/root/usr/bin"
+oc set env bc/puppet-jenkins LD_LIBRARY_PATH="/opt/rh/rh-ruby25/root/usr/lib64"
+
 ## Define Jenkins customization in config map
 oc create configmap jenkins-configuration \
     --from-literal=casc_jenkins.yaml="`cat config/jenkins_configuration/casc_jenkins.yaml |sed -e "s/\\${PROJECT}/${PROJECT}/g"`" \
