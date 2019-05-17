@@ -16,7 +16,7 @@ objects:
     name: puppetserver-code-${ENVIRONMENT}
   spec:
     replicas: 1
-    revisionHistoryLimit: 10
+    revisionHistoryLimit: 2
     selector:
       app: puppetserver-code-${ENVIRONMENT}
       deploymentconfig: puppetserver-code-${ENVIRONMENT}
