@@ -77,6 +77,8 @@ objects:
             name: foreman
           - mountPath: /certs
             name: cert-volume
+          - mountPath: /etc/puppet
+            name: foreman-config
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         schedulerName: default-scheduler
@@ -120,6 +122,15 @@ objects:
                 - key: hiera.yaml
                   path: hiera.yaml
                 name: hiera.yaml
+        - name: foreman-config
+          projected:
+            defaultMode: 420
+            sources:
+            - configMap:
+                items:
+                - key: foreman.yaml
+                  path: foreman.yaml
+                name: foreman.yaml
     test: false
     triggers:
     - imageChangeParams:
