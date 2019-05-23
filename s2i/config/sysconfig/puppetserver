@@ -6,7 +6,7 @@
 JAVA_BIN="/usr/bin/java"
 
 # Modify this if you'd like to change the memory allocation, enable JMX, etc
-JAVA_ARGS="-Xms2560m -Xmx2560m -Djruby.logger.class=com.puppetlabs.jruby_utils.jruby.Slf4jLoggeri -XX:ReservedCodeCacheSize=512m"
+JAVA_ARGS="-Xms3g -Xmx3g -Djruby.logger.class=com.puppetlabs.jruby_utils.jruby.Slf4jLoggeri -Djruby.invokedynamic.invocation=false"
 
 # Modify this as you would JAVA_ARGS but for non-service related subcommands
 JAVA_ARGS_CLI="${JAVA_ARGS_CLI:-}"
