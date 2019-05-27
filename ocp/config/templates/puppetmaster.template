@@ -50,7 +50,7 @@ objects:
             httpGet:
               path: /status/v1/services
               port: 8140
-              scheme: HTTP
+              scheme: HTTPS
             initialDelaySeconds: 120
             periodSeconds: 10
             successThreshold: 1
