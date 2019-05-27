@@ -33,8 +33,10 @@ RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet \
 COPY ./s2i/config/puppetserver.sh /usr/local/bin/start-puppet-server
 COPY ./s2i/config/ca.cfg /etc/puppetlabs/puppetserver/services.d/ca.cfg
 COPY ./s2i/config/webserver.conf /etc/puppetlabs/puppetserver/conf.d/webserver.conf
+COPY ./s2i/config/puppetserver.conf /etc/puppetlabs/puppetserver/conf.d/puppetserver.conf
 COPY ./s2i/config/foreman.rb /opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet/reports/foreman.rb
 COPY ./s2i/config/external_node_v2.rb /usr/local/bin/external_node_v2.rb
+COPY ./s2i/config/sysconfig/puppetserver /etc/sysconfig/puppetserver
 
 ## Set correct permissions
 RUN chmod +x /usr/local/bin/start-puppet-server \
@@ -46,7 +48,8 @@ RUN chmod +x /usr/local/bin/start-puppet-server \
     && chmod 750 /var/log/puppetlabs/puppetserver \
     && chmod 660 /var/log/puppetlabs/puppetserver/masterhttp.log \
     && mkdir /opt/puppetlabs/server/data/puppetserver/yaml \
-    && chmod 750 /opt/puppetlabs/server/data/puppetserver/yaml
+    && chmod 750 /opt/puppetlabs/server/data/puppetserver/yaml \
+    && mkdir /opt/puppetlabs/puppet/cache/facts.d
 
 ## Install dependencies for puppet-thycotic module
 RUN /opt/puppetlabs/server/bin/puppetserver gem install soap4r-ng \
