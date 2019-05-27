@@ -45,7 +45,22 @@ objects:
           ports:
           - containerPort: 8140
             protocol: TCP
-          resources: {}
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /status/v1/services
+              port: 8140
+              scheme: HTTP
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: '1'
+              memory: 4500M
+            requests:
+              memory: 64Mi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
@@ -183,7 +198,7 @@ objects:
     selector:
       deploymentconfig: puppetserver-code-${ENVIRONMENT}
     sessionAffinity: None
-    type: ClusterIP
+    type: LoadBalancer
   status:
     loadBalancer: {}
 parameters:
