@@ -73,6 +73,8 @@ objects:
             name: foreman
           - mountPath: /etc/puppetlabs/puppet
             name: configuration-volume
+          - mountPath: /etc/puppetlabs/puppetserver/conf.d/
+            name: puppetserver-configuration-${ENVIRONMENT}
         - command:
           - /bin/sh
           - -c
@@ -146,6 +148,10 @@ objects:
                 - key: foreman.yaml
                   path: foreman.yaml
                 name: foreman.yaml
+        - configMap:
+            defaultMode: 755
+            name: puppetserver-configuration-${ENVIRONMENT}
+          name: puppetserver-configuration-${ENVIRONMENT}
     test: false
     triggers:
     - imageChangeParams:

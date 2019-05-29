@@ -37,6 +37,15 @@ do
   oc create configmap fileserver-${environment} \
     --from-literal=fileserver.conf="`cat config/fileserver.conf |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" -n ${PROJECT}
 
+oc create configmap puppetserver-configuration-${ENVIRONMENT} \
+    --from-literal=metrics.conf="`cat config/puppetserver/metrics.conf |sed -e "s/\\${ENVIRONMENT}/${ENVIRONMENT}/g"`" \
+    --from-file=web-routes.conf=config/puppetserver/web-routes.conf \
+    --from-file=global.conf=config/puppetserver/global.conf \
+    --from-file=ca.conf=config/puppetserver/ca.conf \
+    --from-file=webserver.conf=config/puppetserver/webserver.conf \
+    --from-file=puppetserver.conf=config/puppetserver/puppetserver.conf \
+    --from-file=auth.conf=config/puppetserver/auth.conf
+
   oc create is puppetserver-code-${environment} -n ${PROJECT}
 
   oc process -f config/templates/puppetmaster.template -p ENVIRONMENT=${environment} -p ZONE=${ZONE} -p PROJECT=${PROJECT} -p DOCKERREPO=${DOCKERREPO} -p MONOREPO=${MONOREPO} | oc create -f - -n ${PROJECT}
