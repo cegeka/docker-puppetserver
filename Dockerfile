@@ -47,15 +47,15 @@ RUN chmod +x /usr/local/bin/start-puppet-server \
     && chmod 660 /var/log/puppetlabs/puppetserver/masterhttp.log \
     && mkdir /opt/puppetlabs/server/data/puppetserver/yaml \
     && chmod 750 /opt/puppetlabs/server/data/puppetserver/yaml \
-    && mkdir /opt/puppetlabs/puppet/cache/facts.d \
-    && rm /etc/puppetlabs/puppetserver/conf.d/* \
-    && chmod og+w /etc/puppetlabs/puppetserver/conf.d
+    && mkdir /opt/puppetlabs/puppet/cache/facts.d
 
 ## Install dependencies for puppet-thycotic module
 RUN /opt/puppetlabs/server/bin/puppetserver gem install soap4r-ng \
     && /opt/puppetlabs/server/bin/puppetserver gem install parseconfig \
     && /opt/puppetlabs/server/bin/puppetserver gem install filecache \
-    && /opt/puppetlabs/server/bin/puppetserver gem install httpclient -v '>= 2.4.0'
+    && /opt/puppetlabs/server/bin/puppetserver gem install httpclient -v '>= 2.4.0' \
+    && rm /etc/puppetlabs/puppetserver/conf.d/* \
+    && chmod og+w /etc/puppetlabs/puppetserver/conf.d
 
 ## Copy over /etc/puppetlabs/code/ for the next builds
 #ONBUILD COPY /tmp/src/ /etc/puppetlabs/code/
