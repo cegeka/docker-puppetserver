@@ -6,7 +6,7 @@
 JAVA_BIN="/usr/bin/java"
 
 # Modify this if you'd like to change the memory allocation, enable JMX, etc
-JAVA_ARGS="-Xms3584m -Xmx3584m -XX:MaxRAM=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes) -Djruby.logger.class=com.puppetlabs.jruby_utils.jruby.Slf4jLoggeri -Djruby.invokedynamic.invocation=false"
+JAVA_ARGS="-Xms2048m -Xmx2048m -XX:MaxRAM=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes) -Djruby.logger.class=com.puppetlabs.jruby_utils.jruby.Slf4jLoggeri -Djruby.invokedynamic.invocation=false"
 
 # Modify this as you would JAVA_ARGS but for non-service related subcommands
 JAVA_ARGS_CLI="${JAVA_ARGS_CLI:-}"
