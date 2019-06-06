@@ -21,7 +21,8 @@ oc create -f config/templates/secrets.template
 
 oc create configmap foreman.yaml --from-file=foreman.yaml=./config/foreman.yaml -n ${PROJECT}
 oc create configmap thycotic.conf --from-file=thycotic.conf=./config/thycotic.conf -n ${PROJECT}
-oc create configmap hiera.yaml --from-file=hiera.yaml=./config/hiera.yaml-n ${PROJECT}
+oc create configmap hiera.yaml --from-file=hiera.yaml=./config/hiera.yaml -n ${PROJECT}
+cat ./config/templates/thycotic_pvc.yaml | oc create -f -n ${PROJECT}
 
 #Create ImageStreams
 oc create is puppetserver -n ${PROJECT}
