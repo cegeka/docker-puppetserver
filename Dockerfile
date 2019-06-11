@@ -32,8 +32,6 @@ RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet \
 ## Copy all required config files
 COPY ./s2i/config/puppetserver.sh /usr/local/bin/start-puppet-server
 COPY ./s2i/config/ca.cfg /etc/puppetlabs/puppetserver/services.d/ca.cfg
-COPY ./s2i/config/webserver.conf /etc/puppetlabs/puppetserver/conf.d/webserver.conf
-COPY ./s2i/config/puppetserver.conf /etc/puppetlabs/puppetserver/conf.d/puppetserver.conf
 COPY ./s2i/config/foreman.rb /opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet/reports/foreman.rb
 COPY ./s2i/config/external_node_v2.rb /usr/local/bin/external_node_v2.rb
 COPY ./s2i/config/sysconfig/puppetserver /etc/sysconfig/puppetserver
@@ -49,13 +47,18 @@ RUN chmod +x /usr/local/bin/start-puppet-server \
     && chmod 660 /var/log/puppetlabs/puppetserver/masterhttp.log \
     && mkdir /opt/puppetlabs/server/data/puppetserver/yaml \
     && chmod 750 /opt/puppetlabs/server/data/puppetserver/yaml \
-    && mkdir /opt/puppetlabs/puppet/cache/facts.d
+    && mkdir /opt/puppetlabs/puppet/cache/facts.d \
+    && mkdir /tmp/thycotic
 
 ## Install dependencies for puppet-thycotic module
 RUN /opt/puppetlabs/server/bin/puppetserver gem install soap4r-ng \
     && /opt/puppetlabs/server/bin/puppetserver gem install parseconfig \
     && /opt/puppetlabs/server/bin/puppetserver gem install filecache \
-    && /opt/puppetlabs/server/bin/puppetserver gem install httpclient -v '>= 2.4.0'
+    && /opt/puppetlabs/server/bin/puppetserver gem install msgpack \
+    && /opt/puppetlabs/server/bin/puppetserver gem install CFPropertyList \
+    && /opt/puppetlabs/server/bin/puppetserver gem install httpclient -v '>= 2.4.0' \
+    && rm /etc/puppetlabs/puppetserver/conf.d/* \
+    && chmod og+w /etc/puppetlabs/puppetserver/conf.d
 
 ## Copy over /etc/puppetlabs/code/ for the next builds
 #ONBUILD COPY /tmp/src/ /etc/puppetlabs/code/

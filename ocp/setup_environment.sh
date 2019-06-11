@@ -21,7 +21,8 @@ oc create -f config/templates/secrets.template
 
 oc create configmap foreman.yaml --from-file=foreman.yaml=./config/foreman.yaml -n ${PROJECT}
 oc create configmap thycotic.conf --from-file=thycotic.conf=./config/thycotic.conf -n ${PROJECT}
-oc create configmap hiera.yaml --from-file=hiera.yaml=./config/hiera.yaml-n ${PROJECT}
+oc create configmap hiera.yaml --from-file=hiera.yaml=./config/hiera.yaml -n ${PROJECT}
+cat ./config/templates/thycotic_pvc.yaml | oc create -f -n ${PROJECT}
 
 #Create ImageStreams
 oc create is puppetserver -n ${PROJECT}
@@ -36,6 +37,15 @@ do
     --from-literal=puppet.conf="`cat config/puppet.conf |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" -n ${PROJECT}
   oc create configmap fileserver-${environment} \
     --from-literal=fileserver.conf="`cat config/fileserver.conf |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" -n ${PROJECT}
+
+oc create configmap puppetserver-configuration-${ENVIRONMENT} \
+    --from-literal=metrics.conf="`cat config/puppetserver/metrics.conf |sed -e "s/\\${ENVIRONMENT}/${ENVIRONMENT}/g"`" \
+    --from-file=web-routes.conf=config/puppetserver/web-routes.conf \
+    --from-file=global.conf=config/puppetserver/global.conf \
+    --from-file=ca.conf=config/puppetserver/ca.conf \
+    --from-file=webserver.conf=config/puppetserver/webserver.conf \
+    --from-file=puppetserver.conf=config/puppetserver/puppetserver.conf \
+    --from-file=auth.conf=config/puppetserver/auth.conf
 
   oc create is puppetserver-code-${environment} -n ${PROJECT}
 
