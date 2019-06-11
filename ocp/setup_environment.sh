@@ -45,10 +45,11 @@ oc create configmap puppetserver-configuration-${ENVIRONMENT} \
     --from-file=ca.conf=config/puppetserver/ca.conf \
     --from-file=webserver.conf=config/puppetserver/webserver.conf \
     --from-file=puppetserver.conf=config/puppetserver/puppetserver.conf \
-    --from-file=auth.conf=config/puppetserver/auth.conf
+    --from-file=auth.conf=config/puppetserver/auth.conf \
+    --from-file=logback.xml=config/puppetserver/logback.xml
 
   oc create is puppetserver-code-${environment} -n ${PROJECT}
 
-  oc process -f config/templates/puppetmaster.template -p ENVIRONMENT=${environment} -p ZONE=${ZONE} -p PROJECT=${PROJECT} -p DOCKERREPO=${DOCKERREPO} -p MONOREPO=${MONOREPO} | oc create -f - -n ${PROJECT}
+  oc process -f config/templates/puppetmaster.template -p ENVIRONMENT=${environment} -p ZONE=${ZONE} -p PROJECT=${PROJECT} | oc create -f - -n ${PROJECT}
   echo "Create a DNS records for ${environment}.${ZONE}"
 done
