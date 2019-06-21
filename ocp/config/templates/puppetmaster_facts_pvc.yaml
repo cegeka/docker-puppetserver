@@ -5,7 +5,7 @@ metadata:
     volume.beta.kubernetes.io/storage-class: trident-persistent-storage
     volume.beta.kubernetes.io/storage-provisioner: netapp.io/trident
   creationTimestamp: null
-  name: thycotic-cache
+  name: puppetserver-foreman-facts
 spec:
   accessModes:
   - ReadWriteOnce

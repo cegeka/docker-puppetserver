@@ -71,39 +71,12 @@ objects:
             name: cert-volume
             readOnly: true
           - mountPath: /opt/puppetlabs/server/data/puppetserver/yaml/facts
-            name: facts
+            name: puppetserver-foreman-facts
           - mountPath: /opt/puppetlabs/server/data/puppetserver/yaml/foreman
             name: foreman
           - mountPath: /etc/puppetlabs/puppet
             name: configuration-volume
           - mountPath: /tmp/scripts/
-            name: puppetserver-configuration-${ENVIRONMENT}
-        - command:
-          - /bin/sh
-          - -c
-          - sleep 30 && while true; do echo 'Pushing facts to foreman' && date && /opt/puppetlabs/bin/puppetserver
-            ruby /usr/local/bin/external_node_v2.rb --push-facts-parallel && sleep 86400;
-            done
-          image: docker-registry.default.svc:5000/${PROJECT}/puppetserver-code-${ENVIRONMENT}:latest
-          imagePullPolicy: Always
-          name: facts-to-foreman
-          resources:
-            limits:
-              cpu: 500m
-            requests:
-              cpu: 100m
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
-          volumeMounts:
-          - mountPath: /opt/puppetlabs/server/data/puppetserver/yaml/facts
-            name: facts
-          - mountPath: /opt/puppetlabs/server/data/puppetserver/yaml/foreman
-            name: foreman
-          - mountPath: /certs
-            name: cert-volume
-          - mountPath: /etc/puppet
-            name: foreman-config
-          - mountPath: /etc/puppetlabs/puppetserver/conf.d
             name: puppetserver-configuration-${ENVIRONMENT}
         dnsPolicy: ClusterFirst
         restartPolicy: Always
@@ -114,8 +87,9 @@ objects:
         - name: thycotic-cache
           persistentVolumeClaim:
             claimName: thycotic-cache
-        - emptyDir: {}
-          name: facts
+        - name: puppetserver-foreman-facts
+          persistentVolumeClaim:
+            claimName: puppetserver-foreman-facts
         - emptyDir: {}
           name: foreman
         - name: cert-volume
