@@ -29,6 +29,9 @@ spec:
             terminationMessagePath: /dev/termination-log
             terminationMessagePolicy: File
             volumeMounts:
+            - mountPath: /certs
+              name: cert-volume
+              readOnly: true
             - mountPath: /opt/puppetlabs/server/data/puppetserver/yaml/facts
               name: puppetserver-foreman-facts
             - mountPath: /opt/puppetlabs/server/data/puppetserver/yaml/foreman
@@ -41,6 +44,10 @@ spec:
           - name: puppetserver-foreman-facts
             persistentVolumeClaim:
               claimName: puppetserver-foreman-facts
+          - name: cert-volume
+            secret:
+              defaultMode: 420
+              secretName: puppetmaster-certificates
           - emptyDir: {}
             name: foreman
           - name: foreman-config
