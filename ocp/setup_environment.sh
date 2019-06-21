@@ -23,6 +23,7 @@ oc create configmap foreman.yaml --from-file=foreman.yaml=./config/foreman.yaml 
 oc create configmap thycotic.conf --from-file=thycotic.conf=./config/thycotic.conf -n ${PROJECT}
 oc create configmap hiera.yaml --from-file=hiera.yaml=./config/hiera.yaml -n ${PROJECT}
 cat ./config/templates/thycotic_pvc.yaml | oc create -f -n ${PROJECT}
+cat ./config/templates/puppetmaster_facts_pvc.yaml | oc create -f -n ${PROJECT}
 
 #Create ImageStreams
 oc create is puppetserver -n ${PROJECT}
@@ -53,3 +54,8 @@ oc create configmap puppetserver-configuration-${ENVIRONMENT} \
   oc process -f config/templates/puppetmaster.template -p ENVIRONMENT=${environment} -p ZONE=${ZONE} -p PROJECT=${PROJECT} | oc create -f - -n ${PROJECT}
   echo "Create a DNS records for ${environment}.${ZONE}"
 done
+
+#Create cronjob to push facts
+
+
+oc create -f config/templates/batch.template -n ${PROJECT}
