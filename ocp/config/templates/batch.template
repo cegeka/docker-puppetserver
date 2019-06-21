@@ -33,7 +33,7 @@ spec:
             - mountPath: /opt/puppetlabs/server/data/puppetserver/yaml/facts
               name: puppetserver-foreman-facts
             - mountPath: /opt/puppetlabs/server/data/puppetserver/yaml/foreman
-              name: puppetserver-foreman-facts
+              name: facts
             - mountPath: /etc/puppet
               name: foreman-config
             - mountPath: /etc/puppetlabs/puppetserver/conf.d
@@ -42,6 +42,8 @@ spec:
           - name: puppetserver-foreman-facts
             persistentVolumeClaim:
               claimName: puppetserver-foreman-facts
+          - emptyDir: {}
+            name: foreman
           - name: foreman-config
             projected:
               defaultMode: 420
