@@ -18,7 +18,7 @@ spec:
             - /bin/sh
             - -c
             - sleep 30 && echo 'Pushing facts to foreman' && date && /opt/puppetlabs/bin/puppetserver
-              ruby /usr/local/bin/external_node_v2.rb --push-facts-parallel && echo
+              ruby /usr/local/bin/external_node_v2.rb --push-facts-parallel && date && echo
               'Facts were pushed'
             image: docker-registry.default.svc:5000/ci00053160-puppetserver/puppetserver-code:latest
             name: facts-to-foreman
