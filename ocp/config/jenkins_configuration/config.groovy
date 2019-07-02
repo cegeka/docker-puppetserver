@@ -49,7 +49,7 @@ try {
 
 
     def jenkinsLocationConfiguration = JenkinsLocationConfiguration.get()
-    jenkinsLocationConfiguration.setUrl('https://jenkins-${PROJECT}.apps.openshift.cegeka.com')
+    jenkinsLocationConfiguration.setUrl('https://puppetserver-jenkins.apps.openshift.cegeka.com')
     jenkinsLocationConfiguration.save()
 
 
