@@ -13,8 +13,17 @@ oc import-image jenkins-2-rhel7 --from=registry.access.redhat.com/openshift3/jen
 ## Customize the the image imported above with all the build tools we need
 oc new-build -D $'FROM jenkins-2-rhel7:latest\n
       USER root\n
-      RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet && yum-config-manager --add-repo https://yum.puppet.com/puppet5/el/7/x86_64/ && yum -y install puppet-agent && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && yum install -y python-setuptools gcc zlib-devel gcc-c++ && yum-config-manager --enable rhel-server-rhscl-7-rpms  && yum install -y rh-ruby25-ruby-devel && yum clean all && easy_install pip && pip install yamllint && h-ruby25/root/usr/lib64 && gem install --no-ri --no-rdoc bundler -v '2.0.1' --source 'https://rubygems.org/'  &&  gem install json --no-ri --no-rdoc json --source 'https://rubygems.org/' &&  gem install --no-ri --no-rdoc puppet-lint --source 'https://rubygems.org/'
-      USER jenkins\n\
+      RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet \
+        && yum-config-manager --add-repo https://yum.puppet.com/puppet5/el/7/x86_64/ \
+        && yum-config-manager --enable rhel-server-rhscl-7-rpms \
+        && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
+        && yum -y install puppet-agent gcc zlib-devel gcc-c++ rh-ruby25-ruby-devel python36-pip \
+        && yum clean all \
+        && pip3 install yamllint \
+        && gem install --no-ri --no-rdoc bundler -v "2.0.1" --source "https://rubygems.org" \
+        && gem install json --no-ri --no-rdoc json --source "https://rubygems.org" \
+        && gem install --no-ri --no-rdoc puppet-lint --source "https://rubygems.org"
+      USER jenkins\n
       WORKDIR /var/lib/jenkins' --name=puppet-jenkins -e=PATH=\$PATH:/opt/rh/rh-ruby25/root/usr/bin -e=LD_LIBRARY_PATH=/opt/rh/rh-ruby25/root/usr/lib64
 
 oc set env bc/puppet-jenkins PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/rh/rh-ruby25/root/usr/bin"
