@@ -20,9 +20,7 @@ oc new-build -D $'FROM jenkins-2-rhel7:latest\n
         && yum -y install puppet-agent gcc zlib-devel gcc-c++ rh-ruby25-ruby-devel python36-pip \
         && yum clean all \
         && pip3 install yamllint \
-        && gem install --no-ri --no-rdoc bundler -v "2.0.1" --source "https://rubygems.org" \
-        && gem install json --no-ri --no-rdoc json --source "https://rubygems.org" \
-        && gem install --no-ri --no-rdoc puppet-lint --source "https://rubygems.org"
+        && gem install --source "https://rubygems.org" --no-ri --no-rdoc bundler:2.0.1 json puppet-lint
       USER jenkins\n
       WORKDIR /var/lib/jenkins' --name=puppet-jenkins -e=PATH=\$PATH:/opt/rh/rh-ruby25/root/usr/bin -e=LD_LIBRARY_PATH=/opt/rh/rh-ruby25/root/usr/lib64
 
