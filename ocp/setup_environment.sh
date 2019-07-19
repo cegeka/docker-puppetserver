@@ -39,8 +39,8 @@ do
   oc create configmap fileserver-${environment} \
     --from-literal=fileserver.conf="`cat config/fileserver.conf |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" -n ${PROJECT}
 
-oc create configmap puppetserver-configuration-${ENVIRONMENT} \
-    --from-literal=metrics.conf="`cat config/puppetserver/metrics.conf |sed -e "s/\\${ENVIRONMENT}/${ENVIRONMENT}/g"`" \
+oc create configmap puppetserver-configuration-${environment} \
+    --from-literal=metrics.conf="`cat config/puppetserver/metrics.conf |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" \
     --from-file=web-routes.conf=config/puppetserver/web-routes.conf \
     --from-file=global.conf=config/puppetserver/global.conf \
     --from-file=ca.conf=config/puppetserver/ca.conf \
