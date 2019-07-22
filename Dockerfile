@@ -24,7 +24,7 @@ RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet \
     && yum -y install puppetserver \
     && yum clean all -y \
     && mkdir -p /etc/puppetlabs/code \
-    && mkdir -p /tmp/scripts \
+#    && mkdir -p /tmp/scripts \
     && mkdir -p /tmp/ca-certs \
     && mkdir -p /etc/puppetlabs/ssl \
     && chmod -R 0771 /etc/puppetlabs/ssl \
