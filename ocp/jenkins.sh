@@ -17,7 +17,7 @@ oc new-build -D $'FROM jenkins-2-rhel7:latest\n
         && yum-config-manager --add-repo https://yum.puppet.com/puppet5/el/7/x86_64/ \
         && yum-config-manager --enable rhel-server-rhscl-7-rpms \
         && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
-        && yum -y install puppet-agent gcc zlib-devel gcc-c++ rh-ruby25-ruby-devel python36-pip \
+        && yum -y install puppet-agent gcc zlib-devel gcc-c++ rh-ruby25-ruby-devel rh-git29 python36-pip \
         && yum clean all \
         && pip3 install yamllint \
         && gem install --source "https://rubygems.org" --no-ri --no-rdoc bundler:2.0.1 json puppet-lint
@@ -49,7 +49,7 @@ oc set env dc/jenkins MEMORY_LIMIT=1Gi
 oc set env dc/jenkins DISABLE_ADMINISTRATIVE_MONITORS=true
 oc set env dc/jenkins INSTALL_PLUGINS="${JENKINS_PLUGINS}"
 oc set env dc/jenkins CASC_JENKINS_CONFIG="/var/lib/jenkins/init.groovy.d/casc_jenkins.yaml"
-oc set env dc/jenkins PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/rh/rh-ruby25/root/usr/bin:/opt/rh/rh-ruby25/root/usr/local/bin"
+oc set env dc/jenkins PATH="/opt/rh/rh-git29/root/usr/bin:/opt/rh/rh-ruby25/root/usr/local/bin:/opt/rh/rh-ruby25/root/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 oc set env dc/jenkins LD_LIBRARY_PATH="/opt/rh/rh-ruby25/root/usr/lib64"
 
 oc set volumes dc/jenkins --add --configmap-name=jenkins-configuration --mount-path='/var/lib/jenkins/init.groovy.d/' --name "jenkins-config"
