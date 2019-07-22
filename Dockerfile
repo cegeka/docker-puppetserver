@@ -27,7 +27,6 @@ RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet \
 #    && mkdir -p /tmp/scripts \
     && mkdir -p /tmp/ca-certs \
     && mkdir -p /etc/puppetlabs/ssl \
-    && chmod -R 0771 /etc/puppetlabs/ssl \
     && mkdir -p /etc/puppetlabs/ssl/ca \
     && mkdir -p /etc/puppetlabs/code/environments/production/manifests \
     && touch /var/log/puppetlabs/puppetserver/masterhttp.log
@@ -53,6 +52,8 @@ RUN chmod +x /usr/local/bin/start-puppet-server \
     && chmod 750 /opt/puppetlabs/server/data/puppetserver/yaml \
     && mkdir /opt/puppetlabs/puppet/cache/facts.d \
     && mkdir /tmp/thycotic \
+    && chmod 0775 /etc/puppetlabs/ssl/ca \
+    && chmod -R 0771 /etc/puppetlabs/ssl \
     && chmod 750 /usr/local/bin/cloud_registration.rb
 
 ## Install dependencies for puppet-thycotic module
