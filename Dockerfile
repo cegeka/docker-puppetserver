@@ -24,8 +24,11 @@ RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet \
     && yum -y install puppetserver \
     && yum clean all -y \
     && mkdir -p /etc/puppetlabs/code \
+    && mkdir -p /tmp/scripts \
+    && mkdir -p /tmp/ca-certs \
     && mkdir -p /etc/puppetlabs/ssl \
     && chmod -R 0771 /etc/puppetlabs/ssl \
+    && mkdir -p /etc/puppetlabs/ssl/ca \
     && mkdir -p /etc/puppetlabs/code/environments/production/manifests \
     && touch /var/log/puppetlabs/puppetserver/masterhttp.log
 
@@ -34,6 +37,7 @@ COPY ./s2i/config/puppetserver.sh /usr/local/bin/start-puppet-server
 COPY ./s2i/config/ca.cfg /etc/puppetlabs/puppetserver/services.d/ca.cfg
 COPY ./s2i/config/foreman.rb /opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet/reports/foreman.rb
 COPY ./s2i/config/external_node_v2.rb /usr/local/bin/external_node_v2.rb
+COPY ./s2i/config/cloud_registration.rb /usr/local/bin/cloud_registration.rb
 COPY ./s2i/config/sysconfig/puppetserver /etc/sysconfig/puppetserver
 
 ## Set correct permissions
@@ -48,7 +52,8 @@ RUN chmod +x /usr/local/bin/start-puppet-server \
     && mkdir /opt/puppetlabs/server/data/puppetserver/yaml \
     && chmod 750 /opt/puppetlabs/server/data/puppetserver/yaml \
     && mkdir /opt/puppetlabs/puppet/cache/facts.d \
-    && mkdir /tmp/thycotic
+    && mkdir /tmp/thycotic \
+    && chmod 750 /usr/local/bin/cloud_registration.rb
 
 ## Install dependencies for puppet-thycotic module
 RUN /opt/puppetlabs/server/bin/puppetserver gem install soap4r-ng \
