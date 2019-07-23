@@ -51,7 +51,7 @@ objects:
               path: /status/v1/services
               port: 8140
               scheme: HTTPS
-            initialDelaySeconds: 120
+            initialDelaySeconds: 60
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 30
@@ -78,6 +78,8 @@ objects:
             name: configuration-volume
           - mountPath: /tmp/puppet-scripts/
             name: puppetserver-configuration-${ENVIRONMENT}
+          - mountPath: /etc/puppetlabs/puppetserver/services.d
+            name: puppet-ca
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         schedulerName: default-scheduler

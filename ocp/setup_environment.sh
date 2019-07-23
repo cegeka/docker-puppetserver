@@ -20,6 +20,7 @@ fi
 oc create -f config/templates/secrets.template
 
 oc create configmap foreman.yaml --from-file=foreman.yaml=./config/foreman.yaml -n ${PROJECT}
+oc create configmap puppet-ca --from-file=ca.cfg=./config/ca.cfg -n ${PROJECT}
 oc create configmap thycotic.conf --from-file=thycotic.conf=./config/thycotic.conf -n ${PROJECT}
 oc create configmap hiera.yaml --from-file=hiera.yaml=./config/hiera.yaml -n ${PROJECT}
 cat ./config/templates/thycotic_pvc.yaml | oc create -f -n ${PROJECT}
@@ -31,27 +32,51 @@ oc create is puppetserver-code -n ${PROJECT}
 
 oc process -f config/templates/bc_puppetmaster.template -p DOCKERREPO=${DOCKERREPO} -p MONOREPO=${MONOREPO} | oc create -f - -n ${PROJECT}
 
-ENVIRONMENTS='dev acc prd drp'
+ENVIRONMENTS='dev acc prd drp cloud'
 for environment in $ENVIRONMENTS
 do
-  oc create configmap puppet-conf-${environment} \
-    --from-literal=puppet.conf="`cat config/puppet.conf |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" -n ${PROJECT}
+  oc create is puppetserver-code-${environment} -n ${PROJECT}
+
   oc create configmap fileserver-${environment} \
     --from-literal=fileserver.conf="`cat config/fileserver.conf |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" -n ${PROJECT}
 
-oc create configmap puppetserver-configuration-${environment} \
-    --from-literal=metrics.conf="`cat config/puppetserver/metrics.conf |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" \
-    --from-file=web-routes.conf=config/puppetserver/web-routes.conf \
-    --from-file=global.conf=config/puppetserver/global.conf \
-    --from-file=ca.conf=config/puppetserver/ca.conf \
-    --from-file=webserver.conf=config/puppetserver/webserver.conf \
-    --from-file=puppetserver.conf=config/puppetserver/puppetserver.conf \
-    --from-file=auth.conf=config/puppetserver/auth.conf \
-    --from-file=logback.xml=config/puppetserver/logback.xml
+  if ${environment} != 'cloud'
+  then
+    oc create configmap puppet-conf-${environment} \
+    --from-literal=puppet.conf="`cat config/puppet.conf |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" -n ${PROJECT}
 
-  oc create is puppetserver-code-${environment} -n ${PROJECT}
+    oc create configmap puppetserver-configuration-${environment} \
+      --from-literal=metrics.conf="`cat config/puppetserver/metrics.conf |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" \
+      --from-file=web-routes.conf=config/puppetserver/web-routes.conf \
+      --from-file=global.conf=config/puppetserver/global.conf \
+      --from-file=ca.conf=config/puppetserver/ca.conf \
+      --from-file=webserver.conf=config/puppetserver/webserver.conf \
+      --from-file=puppetserver.conf=config/puppetserver/puppetserver.conf \
+      --from-file=auth.conf=config/puppetserver/auth.conf \
+      --from-file=logback.xml=config/puppetserver/logback.xml
 
-  oc process -f config/templates/puppetmaster.template -p ENVIRONMENT=${environment} -p ZONE=${ZONE} -p PROJECT=${PROJECT} | oc create -f - -n ${PROJECT}
+
+    oc process -f config/templates/puppetmaster.template -p ENVIRONMENT=${environment} -p ZONE=${ZONE} -p PROJECT=${PROJECT} | oc create -f - -n ${PROJECT}
+  else
+      oc create configmap puppet-conf-${environment} \
+    --from-literal=puppet.conf="`cat config/puppet-${environment}.conf |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" -n ${PROJECT}
+
+      oc create configmap hiera-cloud.yaml --from-file=hiera.yaml=./config/hiera-cloud.yaml -n ${PROJECT}
+
+      oc create configmap puppet-ca-${environment} --from-file=ca.cfg=./config/ca-${environment}.cfg -n ${PROJECT}
+      oc create configmap puppetserver-configuration-${environment} \
+          --from-literal=metrics.conf="`cat config/puppetserver/metrics.conf |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" \
+          --from-file=web-routes.conf=config/puppetserver/web-routes.conf \
+          --from-file=global.conf=config/puppetserver/global.conf \
+          --from-file=ca.conf=config/puppetserver/ca.conf \
+          --from-file=webserver.conf=config/puppetserver/webserver.conf \
+          --from-file=puppetserver.conf=config/puppetserver/puppetserver.conf \
+          --from-file=auth.conf=config/puppetserver/auth.conf \
+          --from-file=logback.xml=config/puppetserver/logback.xml
+          --from-file=registration_credentials.yaml=config/puppetserver/registration_credentials.yamll
+
+      oc process -f config/templates/puppetmaster-${environment}.template -p ENVIRONMENT=${environment} -p ZONE=${ZONE} -p PROJECT=${PROJECT} | oc create -f - -n ${PROJECT}
+  fi
   echo "Create a DNS records for ${environment}.${ZONE}"
 done
 
