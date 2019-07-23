@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/opt/puppetlabs/bin/puppetserver ruby
 STDOUT.sync = true
 require 'rubygems'
 require 'mysql'
