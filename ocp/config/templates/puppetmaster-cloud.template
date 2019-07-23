@@ -100,6 +100,10 @@ objects:
           secret:
             defaultMode: 420
             secretName: puppetmaster-certificates
+        - name: ${ENVIRONMENT}-ca-pem
+          secret:
+            defaultMode: 420
+            secretName: ${ENVIRONMENT}-ca-pem
         - name: configuration-volume
           projected:
             defaultMode: 420
@@ -146,10 +150,6 @@ objects:
             defaultMode: 509
             name: puppet-ca-${ENVIRONMENT}
           name: puppet-ca-${ENVIRONMENT}
-        - name: ${ENVIRONMENT}-ca-pem
-          secret:
-            defaultMode: 420
-            secretName: ${ENVIRONMENT}-ca-pem
     test: false
     triggers:
     - imageChangeParams:
