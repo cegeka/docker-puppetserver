@@ -64,6 +64,9 @@ do
       oc create configmap hiera-cloud.yaml --from-file=hiera.yaml=./config/hiera-cloud.yaml -n ${PROJECT}
 
       oc create configmap puppet-ca-${environment} --from-file=ca.cfg=./config/ca-${environment}.cfg -n ${PROJECT}
+      #first set up CA certificates in templates/cloud-ca-pem.template
+      oc create -f config/templates/cloud-ca-pem.template -n ${PROJECT}
+
       oc create configmap puppetserver-configuration-${environment} \
           --from-literal=metrics.conf="`cat config/puppetserver/metrics.conf |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" \
           --from-file=web-routes.conf=config/puppetserver/web-routes.conf \
