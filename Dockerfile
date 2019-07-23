@@ -62,6 +62,7 @@ RUN /opt/puppetlabs/server/bin/puppetserver gem install soap4r-ng \
     && /opt/puppetlabs/server/bin/puppetserver gem install msgpack \
     && /opt/puppetlabs/server/bin/puppetserver gem install CFPropertyList \
     && /opt/puppetlabs/server/bin/puppetserver gem install httpclient -v '>= 2.4.0' \
+    && /opt/puppetlabs/server/bin/puppetserver gem install mysql \
     && rm /etc/puppetlabs/puppetserver/conf.d/* \
     && chmod og+w /etc/puppetlabs/puppetserver/conf.d
 
