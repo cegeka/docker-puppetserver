@@ -10,7 +10,7 @@ def quote (str)
 end
 
 hostname = ARGV[0]
-DEFAULT_CREDENTIALS = YAML::load( File.open( File.join(File.dirname(__FILE__), 'registration_credentials.yaml' ) ) )
+DEFAULT_CREDENTIALS = YAML::load( File.open('/usr/local/scripts/registration_credentials.yaml'))
 
 @mysql = {
   :host   => DEFAULT_CREDENTIALS['mysql_host'],

@@ -76,7 +76,7 @@ objects:
             name: foreman
           - mountPath: /etc/puppetlabs/puppet
             name: configuration-volume
-          - mountPath: /tmp/scripts/
+          - mountPath: /tmp/puppet-scripts/
             name: puppetserver-configuration-${ENVIRONMENT}
         dnsPolicy: ClusterFirst
         restartPolicy: Always
