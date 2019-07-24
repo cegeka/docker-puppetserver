@@ -76,7 +76,7 @@ do
           --from-file=puppetserver.conf=config/puppetserver/puppetserver.conf \
           --from-file=auth.conf=config/puppetserver/auth.conf \
           --from-file=logback.xml=config/puppetserver/logback.xml
-          --from-file=registration_credentials.yaml=config/puppetserver/registration_credentials.yamll
+          --from-file=registration_credentials.yaml=config/registration_credentials.yaml
 
       oc process -f config/templates/puppetmaster-${environment}.template -p ENVIRONMENT=${environment} -p ZONE=${ZONE} -p PROJECT=${PROJECT} | oc create -f - -n ${PROJECT}
   fi
