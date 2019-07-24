@@ -26,7 +26,6 @@ RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet \
     && mkdir -p /etc/puppetlabs/code \
     && mkdir -p /tmp/puppet-scripts \
     && mkdir -p /tmp/ca-certs \
-    && mkdir -p /etc/puppetlabs/ssl \
     && mkdir -p /etc/puppetlabs/ssl/ca \
     && mkdir -p /etc/puppetlabs/code/environments/production/manifests \
     && touch /var/log/puppetlabs/puppetserver/masterhttp.log
@@ -61,7 +60,7 @@ RUN /opt/puppetlabs/server/bin/puppetserver gem install soap4r-ng \
     && /opt/puppetlabs/server/bin/puppetserver gem install filecache \
     && /opt/puppetlabs/server/bin/puppetserver gem install msgpack \
     && /opt/puppetlabs/server/bin/puppetserver gem install CFPropertyList \
-    && /opt/puppetlabs/server/bin/puppetserver gem install httpclient -v '>= 2.4.0' \
+    && /opt/puppetlabs/server/bin/puppetserver gem install httpclient:2.4.0 \
     && /opt/puppetlabs/server/bin/puppetserver gem install activerecord-jdbcmysql-adapter:1.3.25 \
     && rm /etc/puppetlabs/puppetserver/conf.d/* \
     && chmod og+w /etc/puppetlabs/puppetserver/conf.d
