@@ -1,0 +1,12 @@
+apiVersion: v1
+data:
+  ca_crl.pem: QUFBCg==
+  ca_crt.pem: QUFBCg==
+  ca_key.pem: QUFBCg==
+  inventory.txt: QUFBCg==
+  serial: QUFBCg==
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: cloud-ca-pem
+type: Opaque

@@ -20,4 +20,4 @@ hierarchy:
   - name: "Operating system level"
     path: "5_os/%{facts.operatingsystem}/%{facts.operatingsystemmajrelease}.yaml"
   - name: "Global level"
-    path: "6_common.yaml"
+    path: "6_common_cloud.yaml"

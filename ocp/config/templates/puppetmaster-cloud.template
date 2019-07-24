@@ -79,7 +79,9 @@ objects:
           - mountPath: /tmp/puppet-scripts/
             name: puppetserver-configuration-${ENVIRONMENT}
           - mountPath: /etc/puppetlabs/puppetserver/services.d
-            name: puppet-ca
+            name: puppet-ca-${ENVIRONMENT}
+          - mountPath: /tmp/ca-certs
+            name: ${ENVIRONMENT}-ca-pem
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         schedulerName: default-scheduler
@@ -98,6 +100,10 @@ objects:
           secret:
             defaultMode: 420
             secretName: puppetmaster-certificates
+        - name: ${ENVIRONMENT}-ca-pem
+          secret:
+            defaultMode: 420
+            secretName: ${ENVIRONMENT}-ca-pem
         - name: configuration-volume
           projected:
             defaultMode: 420
@@ -126,7 +132,7 @@ objects:
                 items:
                 - key: hiera.yaml
                   path: hiera.yaml
-                name: hiera.yaml
+                name: hiera-${ENVIRONMENT}.yaml
         - name: foreman-config
           projected:
             defaultMode: 420
@@ -142,8 +148,8 @@ objects:
           name: puppetserver-configuration-${ENVIRONMENT}
         - configMap:
             defaultMode: 509
-            name: puppet-ca
-          name: puppet-ca
+            name: puppet-ca-${ENVIRONMENT}
+          name: puppet-ca-${ENVIRONMENT}
     test: false
     triggers:
     - imageChangeParams:
