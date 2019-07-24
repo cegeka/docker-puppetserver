@@ -80,6 +80,8 @@ objects:
             name: puppetserver-configuration-${ENVIRONMENT}
           - mountPath: /etc/puppetlabs/puppetserver/services.d
             name: puppet-ca
+          - mountPath: /tmp/ca-certs
+            name: cloud-ca-pem
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         schedulerName: default-scheduler
@@ -98,6 +100,10 @@ objects:
           secret:
             defaultMode: 420
             secretName: puppetmaster-certificates
+        - name: cloud-ca-pem
+          secret:
+            defaultMode: 420
+            secretName: cloud-ca-pem
         - name: configuration-volume
           projected:
             defaultMode: 420
