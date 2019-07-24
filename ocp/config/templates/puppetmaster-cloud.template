@@ -132,7 +132,7 @@ objects:
                 items:
                 - key: hiera.yaml
                   path: hiera.yaml
-                name: hiera.yaml
+                name: hiera-${ENVIRONMENT}.yaml
         - name: foreman-config
           projected:
             defaultMode: 420

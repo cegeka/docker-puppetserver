@@ -50,11 +50,11 @@ do
     $PUPPET_CONF = "config/puppet-${environment}.conf"
     $PUPPETSERVER_TEMPLATE = "config/templates/puppetmaster-${environment}.template"
 
-      oc create configmap hiera-cloud.yaml --from-file=hiera.yaml=./config/hiera-cloud.yaml -n ${PROJECT}
+      oc create configmap hiera-${environment}.yaml --from-file=hiera.yaml=./config/hiera-${environment}.yaml -n ${PROJECT}
 
       oc create configmap puppet-ca-${environment} --from-file=ca.cfg=./config/ca-${environment}.cfg -n ${PROJECT}
-      #first set up CA certificates in templates/cloud-ca-pem.template
-      oc create -f config/templates/cloud-ca-pem.template -n ${PROJECT}
+      #first set up CA certificates in config/templates/cloud-ca-pem.template
+      oc create -f config/templates/${environment}-ca-pem.template -n ${PROJECT}
 
   fi
 
