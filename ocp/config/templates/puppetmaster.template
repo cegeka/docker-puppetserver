@@ -140,6 +140,10 @@ objects:
             defaultMode: 509
             name: puppetserver-configuration-${ENVIRONMENT}
           name: puppetserver-configuration-${ENVIRONMENT}
+        - configMap:
+            defaultMode: 509
+            name: puppet-ca
+          name: puppet-ca
     test: false
     triggers:
     - imageChangeParams:
