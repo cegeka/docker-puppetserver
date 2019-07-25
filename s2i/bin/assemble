@@ -20,10 +20,6 @@ echo "---> Creating production dir"
 mkdir -p /etc/puppetlabs/code/environments/production
 mkdir -p /etc/puppetlabs/code/environments/production/manifests/
 
-echo "---> Symlinking code to all environments"
-
-ln -sf /tmp/src/* /etc/puppetlabs/code/environments/production
-
 # copy 6_common to a temporary 6_common_cloud file
 cp /tmp/src/hiera-data/6_common.yaml /tmp/src/hiera-data/6_common_cloud.yaml.tmp
 
@@ -38,3 +34,7 @@ tail -n +2 /tmp/src/hiera-data/6_common_cloud.yaml.tmp >> /tmp/src/hiera-data/6_
 
 # cleanup tempfiles
 rm -f /tmp/src/hiera-data/*.tmp
+
+echo "---> Symlinking code to all environments"
+
+ln -sf /tmp/src/* /etc/puppetlabs/code/environments/production
