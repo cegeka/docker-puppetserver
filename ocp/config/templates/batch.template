@@ -6,20 +6,18 @@ spec:
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 5
   schedule: "0 */12 * * *"
-  jobTemplate:             
+  jobTemplate:
     spec:
       template:
         metadata:
-          labels:          
+          labels:
             parent: "facts-to-foreman"
         spec:
           containers:
           - command:
             - /bin/sh
             - -c
-            - sleep 30 && echo 'Pushing facts to foreman' && date && /opt/puppetlabs/bin/puppetserver
-              ruby /usr/local/bin/external_node_v2.rb --push-facts-parallel && date && echo
-              'Facts were pushed'
+            - sleep 30 && echo 'Pushing facts to foreman' && date && /opt/puppetlabs/bin/puppetserver ruby /usr/local/bin/external_node_v2.rb --push-facts-parallel && date && echo 'Facts were pushed' && find /opt/puppetlabs/server/data/puppetserver/yaml/facts -name "*.yaml" -mtime +2 -delete && echo 'Facts older than 2 days were deleted'
             image: docker-registry.default.svc:5000/ci00053160-puppetserver/puppetserver-code:latest
             name: facts-to-foreman
             resources:
