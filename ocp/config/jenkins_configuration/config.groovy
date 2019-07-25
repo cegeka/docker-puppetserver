@@ -42,7 +42,7 @@ try {
         new BranchDiscoveryTrait(3),
         new ForkPullRequestDiscoveryTrait(2,new ForkPullRequestDiscoveryTrait.TrustContributors()),
         new OriginPullRequestDiscoveryTrait(2), // Take only head
-        new RefSpecsSCMSourceTrait('+master:+refs/remotes/origin/master')
+        new RefSpecsSCMSourceTrait('+refs/heads/master:refs/remotes/@{remote}/master')
     ]
 
     folder.navigators.replace(navigator)
