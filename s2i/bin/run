@@ -10,7 +10,6 @@ if [ `id -u` -ge 10000 ]; then
     rm /tmp/passwd
 fi
 
-chown -R puppet:root /opt/puppetlabs/server/data
 cp /tmp/puppet-scripts/* /etc/puppetlabs/puppetserver/conf.d/ &&  \
   sed -i "s/puppetserver_.*/${HOSTNAME}/" /etc/puppetlabs/puppetserver/conf.d/metrics.conf && \
   cp /tmp/ca-certs/* /etc/puppetlabs/ssl/ca/
