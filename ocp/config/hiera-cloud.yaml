@@ -18,6 +18,6 @@ hierarchy:
   - name: "Global role level"
     path: "4_role/%{facts.customerappl}.yaml"
   - name: "Operating system level"
-    path: "5_os/%{facts.operatingsystem}/%{facts.operatingsystemmajrelease}.yaml"
+    path: "5_os/%{facts.operatingsystem}/cloud/%{facts.operatingsystemmajrelease}.yaml"
   - name: "Global level"
     path: "6_common_cloud.yaml"
