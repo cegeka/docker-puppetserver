@@ -77,7 +77,13 @@ do
   echo "Create a DNS records for ${environment}.${ZONE}"
 done
 
+#Build cronjob container
+oc new-build -D $'FROM rhel7:latest\n
+      USER root\n
+      RUN yum-config-manager --enable rhel-server-rhscl-7-rpms \
+        && yum -y install rh-ruby25 \
+        && yum clean all && mkdir -p /opt/puppetlabs/server/data/puppetserver/yaml/ && mkdir /etc/puppet && gem install facter &&  yum -y install hostname' \
+ --name=puppet-facts -e=PATH=\$PATH:/opt/rh/rh-ruby25/root/usr/bin -e=LD_LIBRARY_PATH=/opt/rh/rh-ruby25/root/usr/lib64 --to docker-registry.default.svc:5000/ci00053160-puppetserver/rhel7:latest -n ${PROJECT}
+
 #Create cronjob to push facts
-
-
 oc create -f config/templates/batch.template -n ${PROJECT}
