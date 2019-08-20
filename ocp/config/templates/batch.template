@@ -17,8 +17,12 @@ spec:
           - command:
             - /bin/sh
             - -c
-            - sleep 30 && echo 'Pushing facts to foreman' && date && /opt/puppetlabs/bin/puppetserver ruby /usr/local/bin/external_node_v2.rb --push-facts-parallel && date && echo 'Facts were pushed' && find /opt/puppetlabs/server/data/puppetserver/yaml/facts -name "*.yaml" -mtime +2 -delete && echo 'Facts older than 2 days were deleted'
-            image: docker-registry.default.svc:5000/ci00053160-puppetserver/puppetserver-code:latest
+            - echo 'Pushing facts to foreman' && date
+              && ruby /usr/local/bin/external-node-v2.rb --push-facts-parallel &&
+              date && echo 'Facts were pushed' && find /opt/puppetlabs/server/data/puppetserver/yaml/facts
+              -name "*.yaml" -mtime +2 -delete && echo 'Facts older than 2 days
+              were deleted'
+            image: docker-registry.default.svc:5000/ci00053160-puppetserver/puppet-facts:latest
             name: facts-to-foreman
             resources:
               limits:
@@ -39,6 +43,8 @@ spec:
               name: foreman-config
             - mountPath: /etc/puppetlabs/puppetserver/conf.d
               name: puppetserver-configuration-dev
+            - mountPath: /usr/local/bin/
+              name: external-node-v2
           volumes:
           - name: puppetserver-foreman-facts
             persistentVolumeClaim:
@@ -62,4 +68,8 @@ spec:
               defaultMode: 509
               name: puppetserver-configuration-dev
             name: puppetserver-configuration-dev
+          - configMap:
+              defaultMode: 420
+              name: external-node-v2
+            name: external-node-v2
           restartPolicy: OnFailure
