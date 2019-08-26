@@ -2,5 +2,5 @@ unclassified:
   gitHubPluginConfig:
     configs:
       - credentialsId: "${PROJECT}-github-api-token"
-        manageHooks: false
+        manageHooks: true
         name: "Github"
