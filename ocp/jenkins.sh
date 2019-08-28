@@ -50,7 +50,7 @@ oc set env dc/jenkins DISABLE_ADMINISTRATIVE_MONITORS=true
 oc set env dc/jenkins INSTALL_PLUGINS="${JENKINS_PLUGINS}"
 oc set env dc/jenkins CASC_JENKINS_CONFIG="/var/lib/jenkins/init.groovy.d/casc_jenkins.yaml"
 oc set env dc/jenkins PATH="/opt/rh/rh-git29/root/usr/bin:/opt/rh/rh-ruby25/root/usr/local/bin:/opt/rh/rh-ruby25/root/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-oc set env dc/jenkins LD_LIBRARY_PATH="/opt/rh/rh-ruby25/root/usr/lib64"
+oc set env dc/jenkins LD_LIBRARY_PATH="/opt/rh/rh-ruby25/root/usr/lib64:/opt/rh/httpd24/root/usr/lib64"
 
 oc set volumes dc/jenkins --add --configmap-name=jenkins-configuration --mount-path='/var/lib/jenkins/init.groovy.d/' --name "jenkins-config"
 oc set volumes dc/jenkins --add --configmap-name=jenkins-configuration --mount-path='/var/lib/jenkins/.config/yamllint' --name "yamllint-config"
