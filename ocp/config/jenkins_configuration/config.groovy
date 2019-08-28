@@ -41,7 +41,7 @@ try {
         new jenkins.scm.impl.trait.RegexSCMHeadFilterTrait('(^PR-.*)|master'), // we're only interested in PR branches, nothing else
         new BranchDiscoveryTrait(3),
         new ForkPullRequestDiscoveryTrait(2,new ForkPullRequestDiscoveryTrait.TrustContributors()),
-        new OriginPullRequestDiscoveryTrait(2), // Take only head
+        new OriginPullRequestDiscoveryTrait(1), // Merge pull request with the target branch
         new RefSpecsSCMSourceTrait('+refs/heads/master:refs/remotes/@{remote}/master')
     ]
 
