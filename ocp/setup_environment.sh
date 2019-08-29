@@ -43,12 +43,12 @@ do
   if ${environment} != 'cloud'
   then
 
-    $PUPPET_CONF="config/puppet.conf"
-    $PUPPETSERVER_TEMPLATE = "config/templates/puppetmaster.template"
+    PUPPET_CONF="config/puppet.conf"
+    PUPPETSERVER_TEMPLATE="config/templates/puppetmaster.template"
 
   else
-    $PUPPET_CONF = "config/puppet-${environment}.conf"
-    $PUPPETSERVER_TEMPLATE = "config/templates/puppetmaster-${environment}.template"
+    PUPPET_CONF="config/puppet-${environment}.conf"
+    PUPPETSERVER_TEMPLATE="config/templates/puppetmaster-${environment}.template"
 
       oc create configmap hiera-${environment}.yaml --from-file=hiera.yaml=./config/hiera-${environment}.yaml -n ${PROJECT}
 
@@ -70,7 +70,7 @@ do
       --from-file=registration_credentials.yaml=config/registration_credentials.yaml
 
   oc create configmap puppet-conf-${environment} \
-    --from-literal=puppet.conf="`cat ${$PUPPET_CONF} |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" -n ${PROJECT}
+    --from-literal=puppet.conf="`cat ${PUPPET_CONF} |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" -n ${PROJECT}
 
   oc process -f $PUPPETSERVER_TEMPLATE -p ENVIRONMENT=${environment} -p ZONE=${ZONE} -p PROJECT=${PROJECT} | oc create -f - -n ${PROJECT}
 
