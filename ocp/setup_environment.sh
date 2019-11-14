@@ -42,7 +42,6 @@ do
 
   if ${environment} != 'cloud'
   then
-
     PUPPET_CONF="config/puppet.conf"
     PUPPETSERVER_TEMPLATE="config/templates/puppetmaster.template"
 
@@ -50,12 +49,11 @@ do
     PUPPET_CONF="config/puppet-${environment}.conf"
     PUPPETSERVER_TEMPLATE="config/templates/puppetmaster-${environment}.template"
 
-      oc create configmap hiera-${environment}.yaml --from-file=hiera.yaml=./config/hiera-${environment}.yaml -n ${PROJECT}
+    oc create configmap hiera-${environment}.yaml --from-file=hiera.yaml=./config/hiera-${environment}.yaml -n ${PROJECT}
 
-      oc create configmap puppet-ca-${environment} --from-file=ca.cfg=./config/ca-${environment}.cfg -n ${PROJECT}
-      #first set up CA certificates in config/templates/cloud-ca-pem.template
-      oc create -f config/templates/${environment}-ca-pem.template -n ${PROJECT}
-
+    oc create configmap puppet-ca-${environment} --from-file=ca.cfg=./config/ca-${environment}.cfg -n ${PROJECT}
+    #first set up CA certificates in config/templates/cloud-ca-pem.template
+    oc create -f config/templates/${environment}-ca-pem.template -n ${PROJECT}
   fi
 
   oc create configmap puppetserver-configuration-${environment} \
@@ -72,7 +70,37 @@ do
   oc create configmap puppet-conf-${environment} \
     --from-literal=puppet.conf="`cat ${PUPPET_CONF} |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" -n ${PROJECT}
 
-  oc process -f $PUPPETSERVER_TEMPLATE -p ENVIRONMENT=${environment} -p ZONE=${ZONE} -p PROJECT=${PROJECT} | oc create -f - -n ${PROJECT}
+  case "$environment" in
+    dev)
+        MINREPLICAS=1
+        MAXREPLICAS=3
+        ;;
+
+    acc)
+        MINREPLICAS=1
+        MAXREPLICAS=3
+        ;;
+
+    prd)
+        MINREPLICAS=2
+        MAXREPLICAS=4
+        ;;
+
+    drp)
+        MINREPLICAS=1
+        MAXREPLICAS=3
+        ;;
+
+    cloud)
+        MINREPLICAS=1
+        MAXREPLICAS=2
+        ;;
+    *)
+        echo "Supported environment are: dev, acc, prd, drp, cloud"
+        exit 1
+  esac
+
+  oc process -f $PUPPETSERVER_TEMPLATE -p ENVIRONMENT=${environment} -p ZONE=${ZONE} -p PROJECT=${PROJECT} -p MINREPLICAS=${MINREPLICAS} -p MAXREPLICAS=${MAXREPLICAS}  | oc create -f - -n ${PROJECT}
 
   echo "Create a DNS records for ${environment}.${ZONE}"
 done

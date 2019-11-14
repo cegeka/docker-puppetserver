@@ -217,8 +217,8 @@ objects:
       name: puppetserver-code-${ENVIRONMENT}
       apiVersion: apps.openshift.io/v1
       subresource: scale
-    minReplicas: 1
-    maxReplicas: 3
+    minReplicas: ${MINREPLICAS}
+    maxReplicas: ${MAXREPLICAS}
     targetCPUUtilizationPercentage: 90
 parameters:
 - description: Puppetmaster DNS ZONE
@@ -227,3 +227,7 @@ parameters:
   name: ENVIRONMENT
 - description: Project for imagestream
   name: PROJECT
+- description: Minimum number of pods
+  name: MINREPLICAS
+- description: Maximum number of pods
+  name: MAXREPLICAS
