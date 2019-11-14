@@ -57,7 +57,7 @@ objects:
             timeoutSeconds: 30
           resources:
             limits:
-              cpu: '1'
+              cpu: '2'
               memory: 2304Mi
             requests:
               cpu: 200m
@@ -207,6 +207,19 @@ objects:
     type: ClusterIP
   status:
     loadBalancer: {}
+- apiVersion: autoscaling/v1
+  kind: HorizontalPodAutoscaler
+  metadata:
+    name: puppetserver-code-${ENVIRONMENT}
+  spec:
+    scaleTargetRef:
+      kind: DeploymentConfig
+      name: puppetserver-code-${ENVIRONMENT}
+      apiVersion: apps.openshift.io/v1
+      subresource: scale
+    minReplicas: ${MINREPLICAS}
+    maxReplicas: ${MAXREPLICAS}
+    targetCPUUtilizationPercentage: 200
 parameters:
 - description: Puppetmaster DNS ZONE
   name: ZONE
@@ -214,3 +227,7 @@ parameters:
   name: ENVIRONMENT
 - description: Project for imagestream
   name: PROJECT
+- description: Minimum number of pods
+  name: MINREPLICAS
+- description: Maximum number of pods
+  name: MAXREPLICAS
