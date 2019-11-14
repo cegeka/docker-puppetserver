@@ -219,7 +219,7 @@ objects:
       subresource: scale
     minReplicas: ${MINREPLICAS}
     maxReplicas: ${MAXREPLICAS}
-    targetCPUUtilizationPercentage: 90
+    targetCPUUtilizationPercentage: 200
 parameters:
 - description: Puppetmaster DNS ZONE
   name: ZONE
