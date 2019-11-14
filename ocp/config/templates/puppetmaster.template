@@ -207,6 +207,19 @@ objects:
     type: ClusterIP
   status:
     loadBalancer: {}
+- apiVersion: autoscaling/v1
+  kind: HorizontalPodAutoscaler
+  metadata:
+    name: puppetserver-code-${ENVIRONMENT}
+  spec:
+    scaleTargetRef:
+      kind: DeploymentConfig
+      name: puppetserver-code-${ENVIRONMENT}
+      apiVersion: apps.openshift.io/v1
+      subresource: scale
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 90
 parameters:
 - description: Puppetmaster DNS ZONE
   name: ZONE
