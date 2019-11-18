@@ -4,9 +4,10 @@ PROJECT=$1
 ZONE=$2
 DOCKERREPO=$3
 MONOREPO=$4
-if [ $# -ne 4 ]
+METRICSSERVER=$5
+if [ $# -ne 5 ]
 then
-  echo "4 parameters - > project should be \$1, DNS Zone \$2, docker puppetserver repo \$3, monorepo \$4"
+  echo "5 parameters - > project should be \$1, DNS Zone \$2, docker puppetserver repo \$3, monorepo \$4, metricsserver \$5"
   exit 100
 fi
 
@@ -57,7 +58,7 @@ do
   fi
 
   oc create configmap puppetserver-configuration-${environment} \
-      --from-literal=metrics.conf="`cat config/puppetserver/metrics.conf |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" \
+      --from-literal=metrics.conf="`cat config/puppetserver/metrics.conf |sed -e "s/\\${METRICSSERVER_HOST}/${METRICSSERVER}/g"|sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" \
       --from-file=web-routes.conf=config/puppetserver/web-routes.conf \
       --from-file=global.conf=config/puppetserver/global.conf \
       --from-file=ca.conf=config/puppetserver/ca.conf \

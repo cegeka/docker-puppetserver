@@ -19,7 +19,7 @@ oc create -f ocp/config/secrets.template
 * Setup environments
 
 ```
-cd ocp; ./setup_environment.sh $PROJECT $ENVIRONMENT $CUSTOMER $DOCKERREPO $MONOREPO
+cd ocp; ./setup_environment.sh $PROJECT $ENVIRONMENT $CUSTOMER $DOCKERREPO $MONOREPO $METRICSSERVER
 ```
 
 * Setup Jenkins
