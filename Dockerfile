@@ -1,6 +1,5 @@
 # Puppetserver docker file
-#FROM registry.redhat.io/rhel7:latest
-FROM centos:7
+FROM registry.redhat.io/rhel7:latest
 LABEL maintainer="Thomas Meeus <thomas.meeus@cegeka.com>"
 
 # TODO: Rename the builder environment variable to inform users about application you provide them
@@ -20,7 +19,7 @@ COPY ./s2i/bin/ /usr/libexec/s2i
 ## Install Puppetserver & create Puppet code directory
 
 RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet \
-    && yum-config-manager --add-repo https://yum.puppet.com/puppet5/el/7/x86_64/ \
+    && yum-config-manager --add-repo https://yum.puppet.com/puppet6/el/7/x86_64/ \
     && yum -y install puppetserver \
     && yum clean all -y \
     && mkdir -p /etc/puppetlabs/code \
