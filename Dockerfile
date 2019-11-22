@@ -1,6 +1,6 @@
 # Puppetserver docker file
-FROM registry.redhat.io/rhel7:latest
-
+#FROM registry.redhat.io/rhel7:latest
+FROM centos:7
 LABEL maintainer="Thomas Meeus <thomas.meeus@cegeka.com>"
 
 # TODO: Rename the builder environment variable to inform users about application you provide them
@@ -61,6 +61,7 @@ RUN /opt/puppetlabs/server/bin/puppetserver gem install soap4r-ng \
     && /opt/puppetlabs/server/bin/puppetserver gem install msgpack \
     && /opt/puppetlabs/server/bin/puppetserver gem install CFPropertyList \
     && /opt/puppetlabs/server/bin/puppetserver gem install httpclient:2.4.0 \
+    && /opt/puppetlabs/server/bin/puppetserver gem install minitest:5.12.0 \
     && /opt/puppetlabs/server/bin/puppetserver gem install activerecord-jdbcmysql-adapter:1.3.25 \
     && rm /etc/puppetlabs/puppetserver/conf.d/* \
     && chmod og+w /etc/puppetlabs/puppetserver/conf.d
