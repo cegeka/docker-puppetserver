@@ -20,7 +20,7 @@ COPY ./s2i/bin/ /usr/libexec/s2i
 
 RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet \
     && yum-config-manager --add-repo https://yum.puppet.com/puppet6/el/7/x86_64/ \
-    && yum -y install puppetserver \
+    && yum -y install puppetserver puppetdb-termini\
     && yum clean all -y \
     && mkdir -p /etc/puppetlabs/code \
     && mkdir -p /tmp/puppet-scripts \
