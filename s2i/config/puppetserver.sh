@@ -6,8 +6,11 @@ LOG_APPENDER="-Dlogappender=STDOUT"
 
 source /etc/sysconfig/puppetserver
 
-/usr/bin/java ${JAVA_ARGS} ${LOG_APPENDER} \
-         -cp ${INSTALL_DIR}/puppet-server-release.jar:${INSTALL_DIR}/jruby-9k.jar:${INSTALL_DIR}/jars/* \
-         clojure.main -m puppetlabs.trapperkeeper.main \
-         --config ${CONFIG} --bootstrap-config ${BOOTSTRAP_CONFIG} \
-         ${@}
+/usr/bin/java ${JAVA_ARGS} \
+  -XX:OnOutOfMemoryError="kill -9 %p" \
+  -cp ${INSTALL_DIR}/puppet-server-release.jar \
+  clojure.main \
+  -m puppetlabs.trapperkeeper.main \
+  --config "${CONFIG}" \
+  --bootstrap-config "${BOOTSTRAP_CONFIG}"  \
+  ${@}
