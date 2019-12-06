@@ -58,7 +58,7 @@ objects:
           resources:
             limits:
               cpu: '1'
-              memory: 2304Mi
+              memory: 2700Mi
             requests:
               cpu: 200m
               memory: 64Mi
@@ -133,15 +133,6 @@ objects:
                 - key: hiera.yaml
                   path: hiera.yaml
                 name: hiera-${ENVIRONMENT}.yaml
-        - name: foreman-config
-          projected:
-            defaultMode: 420
-            sources:
-            - configMap:
-                items:
-                - key: foreman.yaml
-                  path: foreman.yaml
-                name: foreman.yaml
         - configMap:
             defaultMode: 509
             name: puppetserver-configuration-${ENVIRONMENT}
