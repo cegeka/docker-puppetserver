@@ -43,7 +43,7 @@ oc process openshift//jenkins-persistent -p JENKINS_IMAGE_STREAM_TAG=puppet-jenk
 oc rollout pause dc jenkins
 
 ## Up memory & cpu to get a responsive Jenkins
-oc patch dc jenkins -p '{"spec":{"template":{"spec":{"containers":[{"name":"jenkins","resources":{"requests":{"cpu":"1","memory":"1Gi"},"limits":{"cpu":"1","memory":"1Gi"}}}]}}}}'
+oc patch dc jenkins -p '{"spec":{"template":{"spec":{"containers":[{"name":"jenkins","resources":{"requests":{"cpu":"1","memory":"1Gi"},"limits":{"cpu":"2","memory":"4Gi"}}}]}}}}'
 oc set env dc/jenkins MEMORY_LIMIT=1Gi
 
 oc set env dc/jenkins DISABLE_ADMINISTRATIVE_MONITORS=true
