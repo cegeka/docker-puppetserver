@@ -1,0 +1,747 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 34,
+  "iteration": 1576240155320,
+  "links": [],
+  "panels": [
+    {
+      "aliasColors": {},
+      "annotate": {
+        "enable": false
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "metrics.cegeka.be",
+      "description": "* `num jrubies`: number of JRuby instances (constant)\n* `num free jrubies`: number of JRuby instances free\n* `average free jrubies`: average free JRubies over time\n* `average requested jrubies`: average requested JRubies over time",
+      "editable": true,
+      "fill": 0,
+      "grid": {
+        "max": null,
+        "min": 0
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "loadingEditor": false,
+      "nullPointMode": "connected",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "resolution": 100,
+      "scale": 1,
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "refCount": 0,
+          "refId": "A",
+          "target": "aliasByNode(puppetlabs.puppetserver-code-[[environment]]*.jruby.num-jrubies, 1, 3)"
+        },
+        {
+          "refCount": 0,
+          "refId": "B",
+          "target": "aliasByNode(puppetlabs.puppetserver-code-[[environment]]*.jruby.num-free-jrubies, 1, 3)"
+        },
+        {
+          "refCount": 0,
+          "refId": "C",
+          "target": "aliasByNode(puppetlabs.puppetserver-code-[[environment]]*.jruby.free-jrubies-histo.mean, 1, 3)"
+        },
+        {
+          "refCount": 0,
+          "refId": "D",
+          "target": "aliasByNode(puppetlabs.puppetserver-code-[[environment]]*jruby.requested-jrubies-histo, 1, 3)"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": "30m",
+      "timeRegions": [],
+      "timeShift": "30m",
+      "title": "JRuby Usage",
+      "tooltip": {
+        "query_as_alias": true,
+        "shared": true,
+        "sort": 0,
+        "value_type": "cumulative"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "show": true
+        },
+        {
+          "format": "short",
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      },
+      "zerofill": true
+    },
+    {
+      "aliasColors": {},
+      "annotate": {
+        "enable": false
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "metrics.cegeka.be",
+      "description": "* `borrow time`: average time a JRuby is borrowed for\n* `wait time`: average time Puppet Server spends waiting to borrow a JRuby to service a request\n* `lock held time`: average time the lock on the JRuby pool is held\n* `lock wait time`: average time Puppet Server spends waiting to acquire the lock",
+      "editable": true,
+      "fill": 0,
+      "grid": {
+        "max": null,
+        "min": null
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 0
+      },
+      "id": 2,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "loadingEditor": false,
+      "nullPointMode": "connected",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "resolution": 100,
+      "scale": 1,
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "refCount": 0,
+          "refId": "A",
+          "target": "aliasByNode(puppetlabs.puppetserver-code-[[environment]]*.jruby.borrow-timer.mean, 1, 3, 4)"
+        },
+        {
+          "refCount": 0,
+          "refId": "B",
+          "target": "aliasByNode(puppetlabs.puppetserver-code-[[environment]]*.jruby.wait-timer.mean, 1, 3, 4)"
+        },
+        {
+          "refCount": 0,
+          "refId": "C",
+          "target": "aliasByNode(puppetlabs.puppetserver-code-[[environment]]*.jruby.lock-held-timer.mean, 1, 3, 4)"
+        },
+        {
+          "refCount": 0,
+          "refId": "D",
+          "target": "aliasByNode(puppetlabs.puppetserver-code-[[environment]]*.jruby.lock-wait-timer.mean, 1, 3, 4)"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": "30m",
+      "timeRegions": [],
+      "timeShift": "30m",
+      "title": "JRuby Pool Timers",
+      "tooltip": {
+        "query_as_alias": true,
+        "shared": true,
+        "sort": 0,
+        "value_type": "cumulative"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "ms",
+          "show": true
+        },
+        {
+          "format": "short",
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      },
+      "zerofill": true
+    },
+    {
+      "aliasColors": {},
+      "annotate": {
+        "enable": false
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "metrics.cegeka.be",
+      "description": "Heap and non-heap memory used, number of cpus available.",
+      "editable": true,
+      "fill": 0,
+      "grid": {
+        "max": null,
+        "min": null
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 0
+      },
+      "id": 3,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "loadingEditor": false,
+      "nullPointMode": "connected",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "resolution": 100,
+      "scale": 1,
+      "seriesOverrides": [
+        {
+          "alias": "num cpus",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "refCount": 0,
+          "refId": "A",
+          "target": "aliasByNode(puppetlabs.puppetserver-code-[[environment]]*.memory.heap.used, 1, 3, 4)"
+        },
+        {
+          "refCount": 0,
+          "refId": "B",
+          "target": "aliasByNode(puppetlabs.puppetserver-code-[[environment]]*.memory.non-heap.used, 1, 3, 4)"
+        },
+        {
+          "refCount": 0,
+          "refId": "C",
+          "target": "aliasByNode(puppetlabs.puppetserver-code-[[environment]]*.num-cpus, 1, 2)"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": "30m",
+      "timeRegions": [],
+      "timeShift": "30m",
+      "title": "JVM metrics",
+      "tooltip": {
+        "query_as_alias": true,
+        "shared": true,
+        "sort": 0,
+        "value_type": "cumulative"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "bytes",
+          "label": "Memory",
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": "CPUs",
+          "logBase": 1,
+          "min": "0",
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      },
+      "zerofill": true
+    },
+    {
+      "aliasColors": {},
+      "annotate": {
+        "enable": false
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "metrics.cegeka.be",
+      "description": "Number of active requests and average number of active requests (over ~ 5 minutes).",
+      "editable": true,
+      "fill": 0,
+      "grid": {
+        "max": null,
+        "min": null
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 8
+      },
+      "id": 8,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "loadingEditor": false,
+      "nullPointMode": "connected",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "resolution": 100,
+      "scale": 1,
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "refCount": 0,
+          "refId": "A",
+          "target": "aliasByNode(puppetlabs.puppetserver-code-[[environment]]-*.http.active-requests.count, 1, 3, 4)"
+        },
+        {
+          "refCount": 0,
+          "refId": "B",
+          "target": "aliasByNode(puppetlabs.puppetserver-code-[[environment]]-*.http.active-histo.mean, 1, 3, 4)"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": "30m",
+      "timeRegions": [],
+      "timeShift": "30m",
+      "title": "Active Requests",
+      "tooltip": {
+        "query_as_alias": true,
+        "shared": true,
+        "sort": 0,
+        "value_type": "cumulative"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "show": true
+        },
+        {
+          "format": "short",
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      },
+      "zerofill": true
+    },
+    {
+      "aliasColors": {},
+      "annotate": {
+        "enable": false
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "metrics.cegeka.be",
+      "description": "Average request time by type - time the server spends serving each type of request, including time waiting to acquire a JRuby",
+      "editable": true,
+      "fill": 0,
+      "grid": {
+        "max": null,
+        "min": null
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 8
+      },
+      "id": 4,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "loadingEditor": false,
+      "nullPointMode": "connected",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "resolution": 100,
+      "scale": 1,
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "refCount": 0,
+          "refId": "A",
+          "target": "aliasByNode(puppetlabs.puppetserver-code-[[environment]]*.http.puppet-v3-catalog-.*.-requests.mean, 1, 3)"
+        },
+        {
+          "refCount": 0,
+          "refId": "B",
+          "target": "aliasByNode(puppetlabs.puppetserver-code-[[environment]]*.http.puppet-v3-report-.*.-requests.mean, 1, 3)"
+        },
+        {
+          "refCount": 0,
+          "refId": "C",
+          "target": "aliasByNode(puppetlabs.puppetserver-code-[[environment]]*.http.puppet-v3-node-.*.-requests.mean, 1, 3)"
+        },
+        {
+          "refCount": 0,
+          "refId": "D",
+          "target": "aliasByNode(puppetlabs.puppetserver-code-[[environment]]*.http.puppet-v3-file_metadatas-.*.-requests.mean, 1, 3)"
+        },
+        {
+          "refCount": 0,
+          "refId": "E",
+          "target": "aliasByNode(puppetlabs.puppetserver-code-[[environment]]*.http.puppet-v3-file_metadata-.*.-requests.mean, 1, 3)"
+        },
+        {
+          "refCount": 0,
+          "refId": "F",
+          "target": "aliasByNode(puppetlabs.puppetserver-code-[[environment]]*.http.puppet-v3-file_content-.*.-requests.mean, 1, 3)"
+        },
+        {
+          "refCount": 0,
+          "refId": "H",
+          "target": "aliasByNode(puppetlabs.puppetserver-code-[[environment]]*.http.total-requests.mean, 1, 3)"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": "30m",
+      "timeRegions": [],
+      "timeShift": "30m",
+      "title": "Request Durations",
+      "tooltip": {
+        "query_as_alias": true,
+        "shared": true,
+        "sort": 0,
+        "value_type": "cumulative"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "ms",
+          "show": true
+        },
+        {
+          "format": "short",
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      },
+      "zerofill": true
+    },
+    {
+      "aliasColors": {},
+      "annotate": {
+        "enable": false
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "metrics.cegeka.be",
+      "description": "Percentage of requests handled of each type.",
+      "editable": true,
+      "fill": 0,
+      "grid": {
+        "max": null,
+        "min": null
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 8
+      },
+      "id": 7,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "loadingEditor": false,
+      "nullPointMode": "connected",
+      "percentage": true,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "resolution": 100,
+      "scale": 1,
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "refCount": 0,
+          "refId": "A",
+          "target": "aliasByNode(scale(puppetlabs.puppetserver-code-[[environment]]*.http.puppet-v3-catalog-.*.-requests.mean, 100), 1, 3)"
+        },
+        {
+          "refCount": 0,
+          "refId": "B",
+          "target": "aliasByNode(scale(puppetlabs.puppetserver-code-[[environment]]*.http.puppet-v3-report-.*.-requests.mean, 100), 1, 3)"
+        },
+        {
+          "refCount": 0,
+          "refId": "C",
+          "target": "aliasByNode(scale(puppetlabs.puppetserver-code-[[environment]]*.http.puppet-v3-node-.*.-requests.mean, 100), 1, 3)"
+        },
+        {
+          "refCount": 0,
+          "refId": "D",
+          "target": "aliasByNode(scale(puppetlabs.puppetserver-code-[[environment]]*.http.puppet-v3-file_metadatas-.*.-requests.mean, 100), 1, 3)"
+        },
+        {
+          "refCount": 0,
+          "refId": "E",
+          "target": "aliasByNode(scale(puppetlabs.puppetserver-code-[[environment]]*.http.puppet-v3-file_metadata-.*.-requests.mean, 100), 1, 3)"
+        },
+        {
+          "refCount": 0,
+          "refId": "F",
+          "target": "aliasByNode(scale(puppetlabs.puppetserver-code-[[environment]]*.http.puppet-v3-file_content-.*.-requests.mean, 100), 1, 3)"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": "30m",
+      "timeRegions": [],
+      "timeShift": "30m",
+      "title": "Request Ratios",
+      "tooltip": {
+        "query_as_alias": true,
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "ms",
+          "label": "Percentage of Requests",
+          "logBase": 1,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      },
+      "zerofill": true
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 16,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "tags": [],
+          "text": "dev",
+          "value": "dev"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "environment",
+        "options": [
+          {
+            "selected": true,
+            "text": "dev",
+            "value": "dev"
+          },
+          {
+            "selected": false,
+            "text": "acc",
+            "value": "acc"
+          },
+          {
+            "selected": false,
+            "text": "prd",
+            "value": "prd"
+          },
+          {
+            "selected": false,
+            "text": "drp",
+            "value": "drp"
+          }
+        ],
+        "query": "dev,acc,prd,drp",
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  },
+  "timezone": "",
+  "title": "Openshift Puppetmaster 2",
+  "uid": "0I-OGgBWz",
+  "version": 47
+}
