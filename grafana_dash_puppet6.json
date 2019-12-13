@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 34,
-  "iteration": 1576240506109,
+  "iteration": 1576241140324,
   "links": [],
   "panels": [
     {
@@ -89,9 +89,9 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": "30m",
+      "timeFrom": "5m",
       "timeRegions": [],
-      "timeShift": "30m",
+      "timeShift": "5m",
       "title": "JRuby Usage",
       "tooltip": {
         "query_as_alias": true,
@@ -193,9 +193,9 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": "30m",
+      "timeFrom": "5m",
       "timeRegions": [],
-      "timeShift": "30m",
+      "timeShift": "5m",
       "title": "JRuby Pool Timers",
       "tooltip": {
         "query_as_alias": true,
@@ -307,9 +307,9 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": "30m",
+      "timeFrom": "5m",
       "timeRegions": [],
-      "timeShift": "30m",
+      "timeShift": "5m",
       "title": "JVM metrics",
       "tooltip": {
         "query_as_alias": true,
@@ -406,9 +406,9 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": "30m",
+      "timeFrom": "5m",
       "timeRegions": [],
-      "timeShift": "30m",
+      "timeShift": "5m",
       "title": "Active Requests",
       "tooltip": {
         "query_as_alias": true,
@@ -525,9 +525,9 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": "30m",
+      "timeFrom": "5m",
       "timeRegions": [],
-      "timeShift": "30m",
+      "timeShift": "5m",
       "title": "Request Durations",
       "tooltip": {
         "query_as_alias": true,
@@ -640,9 +640,9 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": "30m",
+      "timeFrom": "5m",
       "timeRegions": [],
-      "timeShift": "30m",
+      "timeShift": "5m",
       "title": "Request Ratios",
       "tooltip": {
         "query_as_alias": true,
@@ -689,8 +689,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
-          "tags": [],
+          "selected": true,
           "text": "dev",
           "value": "dev"
         },
@@ -759,5 +758,5 @@
   "timezone": "",
   "title": "Openshift Puppetmaster",
   "uid": "0I-OGgBWz",
-  "version": 52
+  "version": 53
 }
