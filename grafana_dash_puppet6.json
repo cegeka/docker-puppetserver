@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 34,
-  "iteration": 1576240155320,
+  "iteration": 1576240260212,
   "links": [],
   "panels": [
     {
@@ -741,7 +741,7 @@
     ]
   },
   "timezone": "",
-  "title": "Openshift Puppetmaster 2",
+  "title": "Openshift Puppetmaster",
   "uid": "0I-OGgBWz",
-  "version": 47
+  "version": 48
 }
