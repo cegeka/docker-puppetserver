@@ -41,6 +41,7 @@
         "x": 0,
         "y": 0
       },
+      "hideTimeOverride": true,
       "id": 1,
       "legend": {
         "avg": false,
@@ -144,6 +145,7 @@
         "x": 8,
         "y": 0
       },
+      "hideTimeOverride": true,
       "id": 2,
       "legend": {
         "avg": false,
@@ -247,6 +249,7 @@
         "x": 16,
         "y": 0
       },
+      "hideTimeOverride": true,
       "id": 3,
       "legend": {
         "avg": false,
@@ -365,6 +368,7 @@
         "x": 0,
         "y": 8
       },
+      "hideTimeOverride": true,
       "id": 8,
       "legend": {
         "avg": false,
@@ -458,6 +462,7 @@
         "x": 8,
         "y": 8
       },
+      "hideTimeOverride": true,
       "id": 4,
       "legend": {
         "avg": false,
@@ -576,6 +581,7 @@
         "x": 16,
         "y": 8
       },
+      "hideTimeOverride": true,
       "id": 7,
       "legend": {
         "avg": false,
@@ -753,5 +759,5 @@
   "timezone": "",
   "title": "Openshift Puppetmaster",
   "uid": "0I-OGgBWz",
-  "version": 51
+  "version": 52
 }
