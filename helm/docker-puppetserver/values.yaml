@@ -1,5 +1,4 @@
 ---
-
 environments:
   - dev
   - acc
@@ -9,3 +8,7 @@ graphite_host: 212.113.90.40
 graphite_port: 2013
 jmx_enabled: false
 graphite_enabled: false
+jruby_instances: 2
+jruby_profiler_enabled: false
+ssl_cert_name: puppetmaster-cloud.cegeka.be
+thycotic_wsdl: https://pim.cegeka.com/SecretServer/webservices/SSWebService.asmx?WSDL
