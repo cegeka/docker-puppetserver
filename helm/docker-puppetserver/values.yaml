@@ -1,0 +1,11 @@
+---
+
+environments:
+  - dev
+  - acc
+  - prd
+  - drp
+graphite_host: 212.113.90.40
+graphite_port: 2013
+jmx_enabled: false
+graphite_enabled: false
