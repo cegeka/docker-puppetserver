@@ -8,11 +8,11 @@ metadata:
   name: "{{$.Chart.Name}}-config-{{.}}"
 data:
   fileserver.conf: |
-{{ tpl ($.Files.Get "files/fileserver.conf") $ | indent 4 }} ## indention has to be like this, otherwhise parse errors
+{{ tpl ($.Files.Get "files/puppet/fileserver.conf") $ | indent 4 }} ## indention has to be like this, otherwhise parse errors
   puppet.conf: |
-{{ tpl ($.Files.Get "files/puppet.conf") $ | indent 4 }}
+{{ tpl ($.Files.Get "files/puppet/puppet.conf") $ | indent 4 }}
   metrics.conf: |
-{{ tpl ($.Files.Get "files/metrics.conf") $ | indent 4 }}
+{{ tpl ($.Files.Get "files/puppet/metrics.conf") $ | indent 4 }}
 ---
 {{- end }}
 
@@ -24,18 +24,40 @@ metadata:
   name: "{{.Chart.Name}}-global-config"
 data:
   auth.conf: |
-{{ .Files.Get "files/auth.conf" | indent 4 }}
+{{ .Files.Get "files/puppet/auth.conf" | indent 4 }}
   ca.conf: |
-{{ .Files.Get "files/ca.conf" | indent 4 }}
+{{ .Files.Get "files/puppet/ca.conf" | indent 4 }}
   global.conf: |
-{{ .Files.Get "files/global.conf" | indent 4 }}
+{{ .Files.Get "files/puppet/global.conf" | indent 4 }}
   logback.xml: |
-{{ .Files.Get "files/logback.xml" | indent 4 }}
+{{ .Files.Get "files/puppet/logback.xml" | indent 4 }}
   puppetserver.conf: |
-{{ tpl ($.Files.Get "files/puppetserver.conf" ) $ | indent 4 }}
+{{ tpl ($.Files.Get "files/puppet/puppetserver.conf") $ | indent 4 }}
   web-routes.conf: |
-{{ tpl ($.Files.Get "files/web-routes.conf" ) $ | indent 4 }}
+{{ tpl ($.Files.Get "files/puppet/web-routes.conf") $ | indent 4 }}
   webserver.conf: |
-{{ tpl ($.Files.Get "files/webserver.conf" ) $ | indent 4 }}
+{{ tpl ($.Files.Get "files/puppet/webserver.conf") $ | indent 4 }}
   thyocotic.conf: |
-{{ tpl ($.Files.Get "files/thycotic.conf" ) $ | indent 4 }}
+{{ tpl ($.Files.Get "files/puppet/thycotic.conf") $ | indent 4 }}
+  foreman.yaml: |
+{{ tpl ($.Files.Get "files/puppet/foreman.yaml") $ | indent 4 }}
+  hiera.yaml: |
+{{ tpl ($.Files.Get "files/puppet/hiera.yaml") $ | indent 4 }}
+{{ if .Values.cloud_env_enabled}}
+{{- $_ := set $ "cloud" true }}
+  hiera-cloud.yaml: |
+{{ tpl ($.Files.Get "files/puppet/hiera.yaml") $ | indent 4 }}
+{{ end }}
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{.Chart.Name}}-jenkins-config"
+data:
+  casc.yaml: |
+{{ tpl ($.Files.Get "files/jenkins/casc.yaml") $ | indent 4 }}
+  config.groovy: |
+{{ tpl ($.Files.Get "files/jenkins/config.groovy") $ | indent 4 }}
+  yamllint.conf: |
+{{ .Files.Get "files/jenkins/yamllint.conf" | indent 4 }}

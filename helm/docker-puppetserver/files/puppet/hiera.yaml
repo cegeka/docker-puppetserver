@@ -1,0 +1,37 @@
+---
+version: 5
+defaults:
+  datadir: "/etc/puppetlabs/code/environments/production/hiera-data"
+  data_hash: yaml_data
+
+hierarchy:
+  - name: "Node level"
+    path: "0_nodes/%{trusted.certname}.yaml"
+  - name: "Customer - Environment - Application level - Customer subdivision"
+    mapped_paths:
+      - facts.customerappl
+      - appl
+      - "1_customer_env_client/%{facts.customer}/%{facts.customerenv}/%{facts.division}/%{appl}.yaml"
+  - name: "Customer - Environment - Application level"
+    mapped_paths:
+      - facts.customerappl
+      - appl
+      - "1_customer_env_client/%{facts.customer}/%{facts.customerenv}/%{appl}.yaml"
+  - name: "Customer - Environment level"
+    path: "2_customer_env/%{facts.customer}/%{facts.customerenv}.yaml"
+  - name: "Customer level"
+    path: "3_customer/%{facts.customer}.yaml"
+  - name: "Global role level"
+    mapped_paths:
+      - facts.customerappl
+      - appl
+      - "4_role/%{appl}.yaml"
+  - name: "Operating system level"
+    path: "5_os/%{facts.operatingsystem}/%{facts.operatingsystemmajrelease}.yaml"
+    {{if .cloud -}}
+  - name: "Global level"
+    path: "6_common_cloud.yaml"
+    {{else -}}
+  - name: "Global level"
+    path: "6_common.yaml"
+    {{end}}

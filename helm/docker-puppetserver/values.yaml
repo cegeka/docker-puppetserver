@@ -12,3 +12,7 @@ jruby_instances: 2
 jruby_profiler_enabled: false
 ssl_cert_name: puppetmaster-cloud.cegeka.be
 thycotic_wsdl: https://pim.cegeka.com/SecretServer/webservices/SSWebService.asmx?WSDL
+jenkins_url: http://puppetserver-jenkins.apps.openshift.cegeka.com
+github_orgranization: cegeka
+repository: puppet-monorepo
+cloud_env_enabled: false

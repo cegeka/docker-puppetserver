@@ -1,0 +1,14 @@
+# Update for your Foreman and Puppet master hostname(s)
+:url: "{{.Values.foreman_url}}"
+# :ssl_ca: "/certs/foreman-ca-cert"
+:ssl_cert: "/certs/{{.Values.ssl_cert_name}}.crt"
+:ssl_key: "/certs/{{.Values.ssl_cert_name}}.key"
+
+# Advanced settings
+:user: "{{.Values.foreman_username}}"
+:password: "{{.Values.foreman_password}}"
+:puppetdir: "/opt/puppetlabs/server/data/puppetserver"
+:puppetuser: "puppet"
+:facts: true
+:timeout: 30
+:threads: null

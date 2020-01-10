@@ -1,0 +1,7 @@
+---
+unclassified:
+  gitHubPluginConfig:
+    configs:
+      - credentialsId: "{{.Release.Namespace}}-github-api-token"
+        manageHooks: true
+        name: "Github"
