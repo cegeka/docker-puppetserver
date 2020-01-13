@@ -1,0 +1,45 @@
+---
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  labels:
+    build: puppet-facts
+  name: puppet-facts
+  resourceVersion: '133719671'
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector:
+    node-role.kubernetes.io/compute: "true"
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'puppet-facts:latest'
+  runPolicy: Serial
+  source:
+    dockerfile: |-
+      FROM rhel7:latest
+      USER root
+      RUN yum-config-manager --enable rhel-server-rhscl-7-rpms \
+        && yum -y install rh-ruby25 hostname \
+        && mkdir -p /opt/puppetlabs/server/data/puppetserver/yaml/  \
+        && mkdir /etc/puppet && gem install facter \
+        && yum clean all
+    type: Dockerfile
+  strategy:
+    dockerStrategy:
+      env:
+        - name: LD_LIBRARY_PATH
+          value: /opt/rh/rh-ruby25/root/usr/lib64
+        - name: PATH
+          value: '$PATH:/opt/rh/rh-ruby25/root/usr/bin'
+      from:
+        kind: ImageStreamTag
+        name: 'rhel7:latest'
+    type: Docker
+  successfulBuildsHistoryLimit: 5
+  triggers:
+    - imageChange:
+      type: ImageChange
+    - type: ConfigChange
+status:
+  lastVersion: 7

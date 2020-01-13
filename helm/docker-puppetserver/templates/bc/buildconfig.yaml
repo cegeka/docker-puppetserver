@@ -20,21 +20,18 @@ spec:
   source:
     dockerfile: >-
       FROM jenkins-2-rhel7:latest
-          USER root
-      RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet &&
-      yum-config-manager --add-repo https://yum.puppet.com/puppet6/el/7/x86_64/
-      && yum -y install puppet-agent && yum install -y
-      https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm &&
-      yum install -y python-setuptools gcc zlib-devel gcc-c++ &&
-      yum-config-manager --enable rhel-server-rhscl-7-rpms  && yum install -y
-      rh-ruby25-ruby-devel && yum clean all && easy_install pip && pip install
-      yamllint && gem install --no-ri --no-rdoc bundler -v '2.0.1' --source
-      'https://rubygems.org/'  && gem install json --no-ri --no-rdoc json
-      --source 'https://rubygems.org/' && gem install --no-ri --no-rdoc
-      puppet-lint --source 'https://rubygems.org/'
-
+      USER root
+      RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet \
+      && yum-config-manager --add-repo https://yum.puppet.com/puppet6/el/7/x86_64/
+      && yum -y install puppet-agent https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
+      && yum install -y python-setuptools gcc zlib-devel gcc-c++ \
+      && yum-config-manager --enable rhel-server-rhscl-7-rpms \
+      && yum install -y rh-ruby25-ruby-devel && yum clean all \
+      && easy_install pip && pip install yamllint \
+      && gem install --no-ri --no-rdoc bundler -v '2.0.1' --source 'https://rubygems.org/' \
+      && gem install json --no-ri --no-rdoc json --source 'https://rubygems.org/' \
+      && gem install --no-ri --no-rdoc puppet-lint --source 'https://rubygems.org/'
       USER jenkins
-
       WORKDIR /var/lib/jenkins
     type: Dockerfile
   strategy:
