@@ -6,6 +6,7 @@ metadata:
     app: puppet-jenkins
   name: puppet-jenkins
 spec:
+  replicas: 1
   selector:
     name: puppet-jenkins
   template:
@@ -91,6 +92,6 @@ spec:
         from:
           kind: ImageStreamTag
           name: puppet-jenkins:latest
-          namespace: openshift
+          namespace: {{.Release.Namespace}}
       type: ImageChange
     - type: ConfigChange
