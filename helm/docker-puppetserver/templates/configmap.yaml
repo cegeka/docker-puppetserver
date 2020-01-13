@@ -8,11 +8,12 @@ metadata:
   name: "{{$.Chart.Name}}-config-{{.}}"
 data:
   fileserver.conf: |
-{{ tpl ($.Files.Get "files/puppet/fileserver.conf") $ | indent 4 }} ## indention has to be like this, otherwhise parse errors
+{{ tpl ($.Files.Get "files/puppet/fileserver.conf") $ | indent 4 }}
+# indention has to be like this, otherwhise parse errors
   puppet.conf: |
 {{ tpl ($.Files.Get "files/puppet/puppet.conf") $ | indent 4 }}
   metrics.conf: |
-{{ tpl ($.Files.Get "files/puppet/metrics.conf") $ | indent 4 }}
+{{ tpl ($.Files.Get "files/puppetserver/conf.d/metrics.conf") $ | indent 4 }}
 ---
 {{- end }}
 
@@ -24,29 +25,33 @@ metadata:
   name: "{{.Chart.Name}}-global-config"
 data:
   auth.conf: |
-{{ .Files.Get "files/puppet/auth.conf" | indent 4 }}
+{{ .Files.Get "files/puppetserver/conf.d/auth.conf" | indent 4 }}
   ca.conf: |
-{{ .Files.Get "files/puppet/ca.conf" | indent 4 }}
+{{ .Files.Get "files/puppetserver/conf.d/ca.conf" | indent 4 }}
   global.conf: |
-{{ .Files.Get "files/puppet/global.conf" | indent 4 }}
+{{ .Files.Get "files/puppetserver/conf.d/global.conf" | indent 4 }}
   logback.xml: |
-{{ .Files.Get "files/puppet/logback.xml" | indent 4 }}
+{{ .Files.Get "files/puppetserver/logback.xml" | indent 4 }}
   puppetserver.conf: |
-{{ tpl ($.Files.Get "files/puppet/puppetserver.conf") $ | indent 4 }}
+{{ tpl ($.Files.Get "files/puppetserver/conf.d/puppetserver.conf") $ | indent 4 }}
   web-routes.conf: |
-{{ tpl ($.Files.Get "files/puppet/web-routes.conf") $ | indent 4 }}
+{{ tpl ($.Files.Get "files/puppetserver/conf.d/web-routes.conf") $ | indent 4 }}
   webserver.conf: |
-{{ tpl ($.Files.Get "files/puppet/webserver.conf") $ | indent 4 }}
+{{ tpl ($.Files.Get "files/puppetserver/conf.d/webserver.conf") $ | indent 4 }}
   thyocotic.conf: |
 {{ tpl ($.Files.Get "files/puppet/thycotic.conf") $ | indent 4 }}
   foreman.yaml: |
 {{ tpl ($.Files.Get "files/puppet/foreman.yaml") $ | indent 4 }}
   hiera.yaml: |
 {{ tpl ($.Files.Get "files/puppet/hiera.yaml") $ | indent 4 }}
+  ca.cfg: |
+{{ tpl ($.Files.Get "files/puppetserver/services.d/ca.cfg") $ | indent 4 }}
 {{ if .Values.cloud_env_enabled}}
 {{- $_ := set $ "cloud" true }}
   hiera-cloud.yaml: |
 {{ tpl ($.Files.Get "files/puppet/hiera.yaml") $ | indent 4 }}
+  ca-cloud.cfg: |
+{{ tpl ($.Files.Get "files/puppetserver/services.d/ca.cfg") $ | indent 4 }}
 {{ end }}
 ---
 
