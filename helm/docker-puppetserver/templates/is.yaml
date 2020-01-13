@@ -13,18 +13,6 @@ status:
 ---
 {{- end }}
 
-apiVersion: image.openshift.io/v1
-kind: ImageStream
-metadata:
-  generation: 1
-  name: puppetserver-code
-spec:
-  lookupPolicy:
-    local: false
-status:
-  dockerImageRepository: ""
----
-
 {{- range .Values.environments }}
 apiVersion: image.openshift.io/v1
 kind: ImageStream
