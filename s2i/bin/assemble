@@ -20,21 +20,6 @@ echo "---> Creating production dir"
 mkdir -p /etc/puppetlabs/code/environments/production
 mkdir -p /etc/puppetlabs/code/environments/production/manifests/
 
-# copy 6_common to a temporary 6_common_cloud file
-cp /tmp/src/hiera-data/6_common.yaml /tmp/src/hiera-data/6_common_cloud.yaml.tmp
-
-# remove all config beginning with 'not_in_common_cloud' from tempfile and replace sslclient(cert|key) path with a variable
-sed -i -e '/# not_in_common_cloud/,/^$/ d' -e 's/\/etc\/cegeka\/ssl/%{puppet_ssldir}/' /tmp/src/hiera-data/6_common_cloud.yaml.tmp
-
-# add values only required in common_cloud to 6_common_cloud.yaml file
-cat /tmp/src/hiera-data/6_common_cloud_header.yaml > /tmp/src/hiera-data/6_common_cloud.yaml
-
-# add filtered 6_common values to 6_common_cloud.yaml file but skip the first line (yaml document start)
-tail -n +2 /tmp/src/hiera-data/6_common_cloud.yaml.tmp >> /tmp/src/hiera-data/6_common_cloud.yaml
-
-# cleanup tempfiles
-rm -f /tmp/src/hiera-data/*.tmp
-
 echo "---> Symlinking code to all environments"
 
 ln -sf /tmp/src/* /etc/puppetlabs/code/environments/production
