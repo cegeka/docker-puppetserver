@@ -28,10 +28,5 @@ hierarchy:
       - "4_role/%{appl}.yaml"
   - name: "Operating system level"
     path: "5_os/%{facts.operatingsystem}/%{facts.operatingsystemmajrelease}.yaml"
-    {{if .cloud -}}
-  - name: "Global level"
-    path: "6_common_cloud.yaml"
-    {{else -}}
   - name: "Global level"
     path: "6_common.yaml"
-    {{end}}

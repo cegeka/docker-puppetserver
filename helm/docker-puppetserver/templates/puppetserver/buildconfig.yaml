@@ -1,0 +1,69 @@
+---
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  labels:
+    app: build-puppetserver-docker-image
+  name: build-puppetserver-docker-image
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector:
+    node-role.kubernetes.io/compute: "true"
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'puppetserver:latest'
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    git:
+      ref: master
+      uri: 'https://github.com/cegeka/docker-puppetserver.git'
+    type: Git
+  strategy:
+    dockerStrategy:
+      from:
+        kind: DockerImage
+        name: 'registry.access.redhat.com/ubi8-minimal:latest'
+    type: Docker
+  successfulBuildsHistoryLimit: 5
+  triggers: []
+status:
+  lastVersion: 46
+
+---
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  labels:
+    app: build-puppetserver-code
+  name: build-puppetserver-code
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector:
+    node-role.kubernetes.io/compute: "true"
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'puppetserver-code:latest'
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    git:
+      ref: master
+      uri: 'git@github.com:cegeka/puppet-monorepo.git'
+    sourceSecret:
+      name: github-deploy-key
+    type: Git
+  strategy:
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        name: 'puppetserver:latest'
+    type: Source
+  successfulBuildsHistoryLimit: 5
+  triggers: []
+status:
+  lastVersion: 1144

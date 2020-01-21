@@ -1,0 +1,75 @@
+{{- range $key, $value := .Values.puppetserver_settings }}
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: puppetserver-code-{{$key}}
+    deploymentconfig: puppetserver-code-{{$key}}
+    env: {{$key}}
+  name: puppetserver-code-{{$key}}
+spec:
+  selector:
+    app: puppetserver-code-{{$key}}
+    deploymentconfig: puppetserver-code-{{$key}}
+    env: {{$key}}
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: puppetserver-code-{{$key}}
+        deploymentconfig: puppetserver-code-{{$key}}
+        env: {{$key}}
+    spec:
+      containers:
+        - imagePullPolicy: Always
+          name: puppetserver-code-{{$key}}
+          ports:
+            - containerPort: 8140
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 10
+            httpGet:
+              path: /status/v1/services
+              port: 8140
+              scheme: HTTPS
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 30
+          resources:
+            limits:
+              cpu: {{$value.limits.cpu | quote}}
+              memory: {{$value.limits.memory | quote}}
+            requests:
+              cpu: 200m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  test: false
+  triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - puppetserver-code-{{$key}}
+        from:
+          kind: ImageStreamTag
+          name: 'puppetserver-code-{{$key}}:latest'
+      type: ImageChange
+    - type: ConfigChange
+---
+{{- end }}

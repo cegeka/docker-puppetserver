@@ -1,0 +1,20 @@
+{{- range $key, $value := .Values.puppetserver_settings }}
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  creationTimestamp: null
+  labels:
+    app: puppetserver-code-{{$key}}
+    deploymentconfig: puppetserver-code-{{$key}}
+    env: {{$key}}
+  name: puppetserver-code-{{$key}}
+spec:
+  maxReplicas: {{$value.hpa.max_replicas}}
+  minReplicas: {{$value.hpa.min_replicas}}
+  scaleTargetRef:
+    apiVersion: v1
+    kind: DeploymentConfig
+    name: puppetserver-code-{{$key}}
+  targetCPUUtilizationPercentage: {{$value.hpa.cpu_request}}
+---
+{{- end }}

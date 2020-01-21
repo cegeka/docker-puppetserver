@@ -1,9 +1,4 @@
 ---
-environments:
-  - dev
-  - acc
-  - prd
-  - drp
 graphite_host: 212.113.90.40
 graphite_port: 2013
 jmx_enabled: false
@@ -24,3 +19,21 @@ image_streams:
   - puppet-jenkins
   - puppetserver-code
   - puppet-facts
+
+puppetserver_settings:
+  dev:
+    hpa:
+      min_replicas: 2
+      max_replicas: 5
+      cpu_request: 200
+    limits:
+      cpu: 2
+      memory: 2500Mi
+  acc:
+    hpa:
+      min_replicas: 3
+      max_replicas: 5
+      cpu_request: 200
+    limits:
+      cpu: 2
+      memory: 2500Mi
