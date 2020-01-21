@@ -1,0 +1,26 @@
+{{- range $key, $value := .Values.puppetserver_settings.environments }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app: puppetserver-code-{{$key}}
+  name: puppetserver-code-{{$key}}
+spec:
+  host: {{$key}}{{$.Values.puppetserver_settings.domain_suffix}}
+  port:
+    targetPort: 443-tcp
+  tls:
+    termination: passthrough
+  to:
+    kind: Service
+    name: puppetserver-code-{{$key}}
+    weight: 100
+  wildcardPolicy: None
+status:
+  ingress:
+    - conditions:
+        - lastTransitionTime: '2019-06-11T13:00:24Z'
+          status: 'True'
+          type: Admitted
+---
+{{- end }}

@@ -2,6 +2,6 @@
 unclassified:
   gitHubPluginConfig:
     configs:
-      - credentialsId: "{{.Release.Namespace}}-github-api-token"
+      - credentialsId: "{{.Chart.Name}}-github-api-token"
         manageHooks: true
         name: "Github"

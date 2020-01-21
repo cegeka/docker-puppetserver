@@ -49,7 +49,7 @@ try {
 
 
     def jenkinsLocationConfiguration = JenkinsLocationConfiguration.get()
-    jenkinsLocationConfiguration.setUrl('{{.Values.jenkins_url}}' )
+    jenkinsLocationConfiguration.setUrl('https://{{.Values.jenkins_url}}' )
     jenkinsLocationConfiguration.save()
 
 

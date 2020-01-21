@@ -18,7 +18,7 @@ spec:
   runPolicy: Serial
   source:
     git:
-      ref: master
+      ref: {{.Values.branch}}
       uri: 'https://github.com/cegeka/docker-puppetserver.git'
     type: Git
   strategy:

@@ -1,4 +1,4 @@
-{{- range $key, $value := .Values.puppetserver_settings }}
+{{- range $key, $value := .Values.puppetserver_settings.environments }}
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:

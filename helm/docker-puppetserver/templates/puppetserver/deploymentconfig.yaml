@@ -1,4 +1,4 @@
-{{- range $key, $value := .Values.puppetserver_settings }}
+{{- range $key, $value := .Values.puppetserver_settings.environments }}
 apiVersion: apps.openshift.io/v1
 kind: DeploymentConfig
 metadata:
@@ -8,6 +8,7 @@ metadata:
     env: {{$key}}
   name: puppetserver-code-{{$key}}
 spec:
+  replicas: 1
   selector:
     app: puppetserver-code-{{$key}}
     deploymentconfig: puppetserver-code-{{$key}}
@@ -55,11 +56,42 @@ spec:
               memory: 64Mi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /tmp/thycotic
+              name: thycotic-cache
+            - mountPath: /opt/puppetlabs/server/data/puppetserver/yaml/facts
+              name: foreman-facts
+            - mountPath: /etc/puppetlabs/puppetserver/conf.d/
+              name: {{$.Chart.Name}}-global-config
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30
+      volumes:
+        - name: thycotic-cache
+          persistentVolumeClaim:
+            claimName: thycotic-cache
+        - name: foreman-facts
+          persistentVolumeClaim:
+            claimName: foreman-facts
+        - configMap:
+            defaultMode: 420
+            items:
+              - key: auth.conf
+                path: auth.conf
+              - key: ca.conf
+                path: ca.conf
+              - key: global.conf
+                path: global.conf
+              - key: puppetserver.conf
+                path: puppetserver.conf
+              - key: web-routes.conf
+                path: web-routes.conf
+              - key: webserver.conf
+                path: webserver.conf
+            name: {{$.Chart.Name}}-global-config
+          name: {{$.Chart.Name}}-global-config
   test: false
   triggers:
     - imageChangeParams:

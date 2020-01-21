@@ -1,5 +1,5 @@
 ---
-{{- range $key, $value := .Values.puppetserver_settings }}
+{{- range $key, $value := .Values.puppetserver_settings.environments }}
 {{- $_ := set $ "env" $key }} # see https://github.com/helm/helm/issues/5979#issuecomment-518231758
 
 apiVersion: v1

@@ -1,0 +1,21 @@
+{{- range $key, $value := .Values.puppetserver_settings.environments }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: puppetserver-code-{{$key}}
+  name: puppetserver-code-{{$key}}
+spec:
+  ports:
+    - name: 443-tcp
+      port: 443
+      protocol: TCP
+      targetPort: 8140
+  selector:
+    deploymentconfig: puppetserver-code-{{$key}}
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
+---
+{{- end }}

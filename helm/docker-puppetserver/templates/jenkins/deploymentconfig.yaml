@@ -76,6 +76,13 @@ spec:
             privileged: false
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /var/lib/jenkins
+              name: jenkins-volume
+            - mountPath: /var/lib/jenkins/.config
+              name: yamllint-config
+            - mountPath: /var/lib/jenkins/init.groovy.d/
+              name: jenkins-config
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -83,6 +90,26 @@ spec:
       serviceAccount: jenkins
       serviceAccountName: jenkins
       terminationGracePeriodSeconds: 30
+      volumes:
+        - name: jenkins-volume
+          persistentVolumeClaim:
+            claimName: jenkins
+        - configMap:
+            defaultMode: 420
+            items:
+              - key: casc.yaml
+                path: casc_jenkins.yaml
+              - key: config.groovy
+                path: config.groovy
+            name: {{.Chart.Name}}-jenkins-config
+          name: jenkins-config
+        - configMap:
+            defaultMode: 420
+            items:
+              - key: yamllint.conf
+                path: yamllint
+            name: {{.Chart.Name}}-jenkins-config
+          name: yamllint-config
   test: false
   triggers:
     - imageChangeParams:

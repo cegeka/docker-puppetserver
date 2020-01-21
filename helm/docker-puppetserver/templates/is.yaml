@@ -13,7 +13,7 @@ status:
 ---
 {{- end }}
 
-{{- range $key, $value := .Values.puppetserver_settings }}
+{{- range $key, $value := .Values.puppetserver_settings.environments }}
 apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:

@@ -3,9 +3,9 @@ kind: Route
 metadata:
   labels:
     app: puppet-jenkins
-  name: puppetserver-jenkins-test.apps.openshift.cegeka.com
+  name: {{.Values.jenkins_url}}
 spec:
-  host: puppetserver-jenkins-test.apps.openshift.cegeka.com
+  host: {{.Values.jenkins_url}}
   tls:
     insecureEdgeTerminationPolicy: Redirect
     termination: edge
