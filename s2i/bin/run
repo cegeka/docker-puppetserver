@@ -10,5 +10,5 @@ if [ `id -u` -ge 10000 ]; then
     rm /tmp/passwd
 fi
 
-#cp /tmp/ca-certs/* /etc/puppetlabs/ssl/ca/
+cp /tmp/ca-certs/* /etc/puppetlabs/ssl/ca/
 exec /usr/local/bin/start-puppet-server
