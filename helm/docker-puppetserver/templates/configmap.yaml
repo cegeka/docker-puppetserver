@@ -1,24 +1,3 @@
----
-{{- range $key, $value := .Values.puppetserver_settings.environments }}
-{{- $_ := set $ "env" $key }} # see https://github.com/helm/helm/issues/5979#issuecomment-518231758
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: "{{$.Chart.Name}}-config-{{$key}}"
-data:
-  fileserver.conf: |
-{{ tpl ($.Files.Get "files/puppet/fileserver.conf") $ | indent 4 }}
-# indention has to be like this, otherwhise parse errors
-  puppet.conf: |
-{{ tpl ($.Files.Get "files/puppet/puppet.conf") $ | indent 4 }}
-  metrics.conf: |
-{{ tpl ($.Files.Get "files/puppetserver/conf.d/metrics.conf") $ | indent 4 }}
----
-{{- end }}
-
----
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -28,10 +7,6 @@ data:
 {{ .Files.Get "files/puppetserver/conf.d/auth.conf" | indent 4 }}
   ca.conf: |
 {{ .Files.Get "files/puppetserver/conf.d/ca.conf" | indent 4 }}
-  global.conf: |
-{{ .Files.Get "files/puppetserver/conf.d/global.conf" | indent 4 }}
-  logback.xml: |
-{{ .Files.Get "files/puppetserver/logback.xml" | indent 4 }}
   puppetserver.conf: |
 {{ tpl ($.Files.Get "files/puppetserver/conf.d/puppetserver.conf") $ | indent 4 }}
   web-routes.conf: |
@@ -51,6 +26,18 @@ data:
   ca-cloud.cfg: |
 {{ tpl ($.Files.Get "files/puppetserver/services.d/ca.cfg") $ | indent 4 }}
 {{ end }}
+
+{{- range $key, $value := .Values.puppetserver_settings.environments }}
+{{- $_ := set $ "env" $key }} # see https://github.com/helm/helm/issues/5979#issuecomment-518231758
+  fileserver-{{$key}}.conf: |
+{{ tpl ($.Files.Get "files/puppet/fileserver.conf") $ | indent 4 }}
+# indention has to be like this, otherwhise parse errors
+  puppet-{{$key}}.conf: |
+{{ tpl ($.Files.Get "files/puppet/puppet.conf") $ | indent 4 }}
+  metrics-{{$key}}.conf: |
+{{ tpl ($.Files.Get "files/puppetserver/conf.d/metrics.conf") $ | indent 4 }}
+{{- end }}
+
 ---
 
 apiVersion: v1

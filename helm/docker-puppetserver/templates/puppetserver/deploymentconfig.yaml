@@ -57,6 +57,8 @@ spec:
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
+            - mountPath: /tmp/ca-certs/
+              name: certificates
             - mountPath: /tmp/thycotic
               name: thycotic-cache
             - mountPath: /opt/puppetlabs/server/data/puppetserver/yaml/facts
@@ -82,16 +84,31 @@ spec:
                 path: auth.conf
               - key: ca.conf
                 path: ca.conf
-              - key: global.conf
-                path: global.conf
               - key: puppetserver.conf
                 path: puppetserver.conf
               - key: web-routes.conf
                 path: web-routes.conf
               - key: webserver.conf
                 path: webserver.conf
+              - key: fileserver-{{$key}}.conf
+                path: puppet-{{$key}}.conf
+              - key: puppet-{{$key}}.conf
+                path: puppet-{{$key}}.conf
+              - key: metrics-{{$key}}.conf
+                path: puppet-{{$key}}.conf
             name: {{$.Chart.Name}}-global-config
           name: {{$.Chart.Name}}-global-config
+        - name: certificates
+          secret:
+            defaultMode: 420
+            items:
+              - key: puppetmaster.cegeka.be.crt
+                path: puppetmaster.cegeka.be.crt
+              - key: puppetmaster.cegeka.be.key
+                path: puppetmaster.cegeka.be.key
+              - key: puppetmaster.cegeka.be.ca_crt
+                path: puppetmaster.cegeka.be_ca.crt
+            secretName: certificates
   test: false
   triggers:
     - imageChangeParams:
