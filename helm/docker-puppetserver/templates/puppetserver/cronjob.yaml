@@ -1,0 +1,54 @@
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: push-facts-to-foreman
+spec:
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 5
+  schedule: "0 */12 * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            parent: "push-facts-to-foreman"
+        spec:
+          containers:
+            - command:
+                - /bin/sh
+                - -c
+                - echo 'Pushing facts to foreman' && date
+                  && ruby /usr/local/bin/external-node-v2.rb --push-facts-parallel &&
+                  date && echo 'Facts were pushed' && find /opt/puppetlabs/server/data/puppetserver/yaml/facts
+                  -name "*.yaml" -mtime +2 -delete && echo 'Facts older than 2 days were deleted'
+              image: puppet-facts:latest
+              name: push-facts-to-foreman
+              resources:
+                limits:
+                  cpu: 500m
+                requests:
+                  cpu: 100m
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              volumeMounts:
+                - mountPath: /tmp/ca-certs/
+                  name: certificates
+                - mountPath: /opt/puppetlabs/server/data/puppetserver/yaml/facts
+                  name: puppetserver-foreman-facts
+          volumes:
+            - name: puppetserver-foreman-facts
+              persistentVolumeClaim:
+                claimName: foreman-facts
+            - name: certificates
+              secret:
+                defaultMode: 420
+                items:
+                  - key: puppetmaster.cegeka.be.crt
+                    path: puppetmaster.cegeka.be.crt
+                  - key: puppetmaster.cegeka.be.key
+                    path: puppetmaster.cegeka.be.key
+                  - key: puppetmaster.cegeka.be.ca_crt
+                    path: puppetmaster.cegeka.be_ca.crt
+                secretName: certificates
+          restartPolicy: OnFailure

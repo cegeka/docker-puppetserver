@@ -65,6 +65,10 @@ spec:
               name: foreman-facts
             - mountPath: /etc/puppetlabs/puppetserver/conf.d/
               name: {{$.Chart.Name}}-global-config
+            - mountPath: /etc/puppetlabs/puppet/
+              name: {{$.Chart.Name}}-puppet-config
+            - mountPath: /etc/puppetlabs/puppetserver/services.d/
+              name: {{$.Chart.Name}}-ca-config
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -90,14 +94,23 @@ spec:
                 path: web-routes.conf
               - key: webserver.conf
                 path: webserver.conf
-              - key: fileserver-{{$key}}.conf
-                path: puppet-{{$key}}.conf
-              - key: puppet-{{$key}}.conf
-                path: puppet-{{$key}}.conf
               - key: metrics-{{$key}}.conf
-                path: puppet-{{$key}}.conf
+                path: metrics-{{$key}}.conf
             name: {{$.Chart.Name}}-global-config
           name: {{$.Chart.Name}}-global-config
+        - configMap:
+            defaultMode: 420
+            items:
+              - key: foreman.yaml
+                path: foreman.yaml
+              - key: hiera.yaml
+                path: hiera.yaml
+              - key: puppet-{{$key}}.conf
+                path: puppet.conf
+              - key: fileserver-{{$key}}.conf
+                path: fileserver-{{$key}}.conf
+            name: {{$.Chart.Name}}-global-config
+          name: {{$.Chart.Name}}-puppet-config
         - name: certificates
           secret:
             defaultMode: 420
@@ -109,6 +122,13 @@ spec:
               - key: puppetmaster.cegeka.be.ca_crt
                 path: puppetmaster.cegeka.be_ca.crt
             secretName: certificates
+        - configMap:
+            defaultMode: 420
+            items:
+              - key: ca.cfg
+                path: ca.cfg
+            name: {{$.Chart.Name}}-global-config
+          name: {{$.Chart.Name}}-ca-config
   test: false
   triggers:
     - imageChangeParams:

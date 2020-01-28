@@ -18,7 +18,7 @@ data:
   foreman.yaml: |
 {{ tpl ($.Files.Get "files/puppet/foreman.yaml") $ | indent 4 }}
   hiera.yaml: |
-{{ tpl ($.Files.Get "files/puppet/hiera.yaml") $ | indent 4 }}
+{{ .Files.Get "files/puppet/hiera.yaml" | indent 4 }}
   ca.cfg: |
 {{ tpl ($.Files.Get "files/puppetserver/services.d/ca.cfg") $ | indent 4 }}
 {{ if .Values.cloud_env_enabled}}
