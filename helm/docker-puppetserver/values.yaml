@@ -6,14 +6,13 @@ graphite_enabled: false
 jruby_instances: 2
 jruby_profiler_enabled: false
 ssl_cert_name: puppetmaster.cegeka.be
-cloud_ssl_cert_name: puppetmaster-cloud.cegeka.be
 thycotic_wsdl: https://pim.cegeka.com/SecretServer/webservices/SSWebService.asmx?WSDL
 jenkins_url: puppetserver-jenkins-test.apps.openshift.cegeka.com
 foreman_url: https://foreman.cegeka.be
 github_orgranization: cegeka
 repository: puppet-monorepo
 branch: helm_chart
-cloud_env_enabled: false
+cloud_env_enabled: true
 jenkins_plugins: |
   ace-editor:1.1,apache-httpcomponents-client-4-api:4.5.10-2.0,authentication-tokens:1.3,blueocean-autofavorite:1.2.4,blueocean-bitbucket-pipeline:1.21.0,blueocean-commons:1.21.0,blueocean-config:1.21.0,blueocean-core-js:1.21.0,blueocean-dashboard:1.21.0,blueocean-display-url:2.3.0,blueocean-events:1.21.0,blueocean-github-pipeline:1.21.0,blueocean-git-pipeline:1.21.0,blueocean:1.21.0,blueocean-i18n:1.21.0,blueocean-jira:1.21.0,blueocean-jwt:1.21.0,blueocean-personalization:1.21.0,blueocean-pipeline-api-impl:1.21.0,blueocean-pipeline-editor:1.21.0,blueocean-pipeline-scm-api:1.21.0,blueocean-rest:1.21.0,blueocean-rest-impl:1.21.0,blueocean-web:1.21.0,branch-api:2.5.5,cloudbees-bitbucket-branch-source:2.6.0,cloudbees-folder:6.11,conditional-buildstep:1.3.6,config-file-provider:3.6.3,credentials-binding:1.20,credentials:2.3.1,display-url-api:2.3.2,docker-commons:1.16,docker-workflow:1.21,durable-task:1.33,favorite:2.3.2,git-client:3.1.1,git:4.1.1,github-api:1.95,github-branch-source:2.5.8,github:1.29.5,github-organization-folder:1.6,git-server:1.9,handlebars:1.1.1,handy-uri-templates-2-api:2.1.8-1.0,htmlpublisher:1.21,jackson2-api:2.10.2,jenkins-design-language:1.21.0,jira:3.0.11,job-dsl:1.76,jquery-detached:1.2.1,jsch:0.1.55.1,kubernetes:1.19.3,lockable-resources:2.7,mailer:1.30,mapdb-api:1.0.9.0,matrix-auth:2.5,matrix-project:1.14,mercurial:2.8,momentjs:1.1.1,openshift-client:1.0.32,openshift-login:1.0.22,openshift-sync:1.0.44,parameterized-trigger:2.36,pipeline-build-step:2.11,pipeline-github-lib:1.0,pipeline-graph-analysis:1.10,pipeline-input-step:2.11,pipeline-milestone-step:1.3.1,pipeline-model-api:1.5.0,pipeline-model-declarative-agent:1.1.1,pipeline-model-definition:1.5.0,pipeline-model-extensions:1.5.0,pipeline-rest-api:2.12,pipeline-stage-step:2.3,pipeline-stage-tags-metadata:1.5.0,pipeline-stage-view:2.12,pipeline-utility-steps:2.4.0,plain-credentials:1.5,pubsub-light:1.13,run-condition:1.2,scm-api:2.6.3,script-security:1.68,sse-gateway:1.20,ssh-credentials:1.17.4,structs:1.20,subversion:2.13.0,token-macro:2.10,variant:1.3,workflow-aggregator:2.6,workflow-api:2.38,workflow-basic-steps:2.19,workflow-cps-global-lib:2.15,workflow-cps:2.78,workflow-durable-task-step:2.35,workflow-job:2.36,workflow-multibranch:2.21,workflow-remote-loader:1.5,workflow-scm-step:2.10,workflow-step-api:2.22,workflow-support:3.4,ansicolor:0.6.2,bouncycastle-api:2.18,extended-choice-parameter:0.78,ghprb:1.42.0,jdk-tool:1.4,jquery:1.12.4-1,junit:1.28,kubernetes-credentials:0.6.0,openshift-pipeline:1.0.56,pipeline-github:2.5,windows-slaves:1.6,antisamy-markup-formatter:1.8,ant:1.11,external-monitor-job:1.7,ldap:1.21,pam-auth:1.6,javadoc:1.5,resource-disposer:0.14,ws-cleanup:0.38,oauth-credentials:0.4,google-oauth-plugin:1.0.0,kubernetes-client-api:4.6.4-2,command-launcher:1.4,maven-plugin:3.4,timestamper:1.10
 
@@ -38,6 +37,14 @@ puppetserver_settings:
     acc:
       hpa:
         min_replicas: 3
+        max_replicas: 5
+        cpu_request: 200
+      limits:
+        cpu: 2
+        memory: 2500Mi
+    cloud:
+      hpa:
+        min_replicas: 2
         max_replicas: 5
         cpu_request: 200
       limits:
