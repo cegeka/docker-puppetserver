@@ -10,6 +10,7 @@ LABEL io.k8s.description="Container which will push Puppet facts to foreman" \
       io.k8s.display-name="Openshift-puppetserver-facts-pusher" \
       io.openshift.tags="openshift,docker,puppet,puppetserver,image,builder"
 
+USER root
 
 RUN dnf -y install hostname \
         && yum clean all \
