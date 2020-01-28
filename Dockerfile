@@ -32,7 +32,6 @@ RUN rpm -i https://yum.puppet.com/puppet6/el/8/x86_64/puppet6-release-6.0.0-5.el
 ## Copy all required config files
 COPY ./s2i/config/puppetserver.sh /usr/local/bin/start-puppet-server
 COPY ./s2i/config/foreman.rb /opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet/reports/foreman.rb
-COPY ./s2i/config/external_node_v2.rb /usr/local/bin/external_node_v2.rb
 COPY ./s2i/config/cloud_registration.rb /usr/local/bin/cloud_registration.rb
 COPY ./s2i/config/sysconfig/puppetserver /etc/sysconfig/puppetserver
 
