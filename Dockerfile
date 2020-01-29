@@ -63,7 +63,8 @@ RUN /opt/puppetlabs/server/bin/puppetserver gem install soap4r-ng \
     && /opt/puppetlabs/server/bin/puppetserver gem install activerecord-jdbcmysql-adapter:1.3.25 \
     && rm /etc/puppetlabs/puppetserver/conf.d/* \
     && chmod og+w /etc/puppetlabs/puppetserver/conf.d \
-    && echo "thycotic_configpath=/root/thycotic" > /opt/puppetlabs/facter/facts.d/thycotic.txt
+    && mkdir -p /opt/puppetlabs/server/data/puppetserver/.puppetlabs/opt/puppet/cache/facts \
+    && echo "thycotic_configpath=/root/thycotic" > /opt/puppetlabs/server/data/puppetserver/.puppetlabs/opt/puppet/cache/facts
 
 ## Copy over /etc/puppetlabs/code/ for the next builds
 #ONBUILD COPY /tmp/src/ /etc/puppetlabs/code/
