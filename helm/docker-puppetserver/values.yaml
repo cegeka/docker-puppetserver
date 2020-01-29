@@ -26,7 +26,7 @@ image_streams:
 puppetserver_settings:
   domain_suffix: '.openshift-puppetmaster.cegeka.be'
   environments:
-    test:
+    prd:
       hpa:
         min_replicas: 1
         max_replicas: 1

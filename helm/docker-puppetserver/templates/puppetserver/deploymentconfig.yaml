@@ -32,9 +32,6 @@ spec:
         env: {{$key}}
     spec:
       containers:
-        - env:
-            - name: FACTER_thycotic_configpath
-              value: /thycotic
         - imagePullPolicy: Always
           name: puppetserver-code-{{$key}}
           ports:
@@ -74,6 +71,8 @@ spec:
               name: {{$.Chart.Name}}-ca-config
             - mountPath: /thycotic
               name: thycotic
+            - mountPath: /.facter/facts.d/
+              name: custom-facts
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -100,7 +99,7 @@ spec:
               - key: webserver.conf
                 path: webserver.conf
               - key: metrics-{{$key}}.conf
-                path: metrics-{{$key}}.conf
+                path: metrics.conf
             name: {{$.Chart.Name}}-global-config
           name: {{$.Chart.Name}}-global-config
         - configMap:
@@ -113,7 +112,7 @@ spec:
               - key: puppet-{{$key}}.conf
                 path: puppet.conf
               - key: fileserver-{{$key}}.conf
-                path: fileserver-{{$key}}.conf
+                path: fileserver.conf
             name: {{$.Chart.Name}}-global-config
           name: {{$.Chart.Name}}-puppet-config
         - name: certificates
@@ -141,6 +140,12 @@ spec:
                 path: ca.cfg
             name: {{$.Chart.Name}}-global-config
           name: {{$.Chart.Name}}-ca-config
+        - configMap:
+            name: {{$.Chart.Name}}-global-config
+            items:
+              - key: custom-facts.txt
+                path: custom-facts.txt
+          name: custom-facts
   test: false
   triggers:
     - imageChangeParams:
