@@ -134,7 +134,11 @@ spec:
         - configMap:
             defaultMode: 420
             items:
+{{- if $.Values.puppetserver_settings.environments.cloud }}
+              - key: ca-cloud.cfg
+{{- else }}
               - key: ca.cfg
+{{- end }}
                 path: ca.cfg
             name: {{$.Chart.Name}}-global-config
           name: {{$.Chart.Name}}-ca-config
