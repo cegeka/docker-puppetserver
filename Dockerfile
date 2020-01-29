@@ -50,7 +50,8 @@ RUN chmod +x /usr/local/bin/start-puppet-server \
     && mkdir /tmp/thycotic \
     && chmod 0775 /etc/puppetlabs/ssl/ca \
     && chmod -R 0771 /etc/puppetlabs/ssl \
-    && chmod 755 /usr/local/bin/cloud_registration.rb
+    && chmod 755 /usr/local/bin/cloud_registration.rb \
+    && chmod -R 775 /opt/puppetlabs/facter/
 
 ## Install dependencies for puppet-thycotic module
 RUN /opt/puppetlabs/server/bin/puppetserver gem install soap4r-ng \
