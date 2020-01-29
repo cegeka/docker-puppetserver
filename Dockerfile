@@ -27,10 +27,7 @@ RUN rpm -i https://yum.puppet.com/puppet6/el/8/x86_64/puppet6-release-6.0.0-5.el
     && mkdir -p /etc/puppetlabs/ssl/ca \
     && mkdir -p /etc/puppetlabs/code/environments/production/manifests \
     && mkdir -p /var/log/puppetlabs/puppetserver/ \
-    && touch /var/log/puppetlabs/puppetserver/masterhttp.log \
-    && mkdir -p /opt/puppetlabs/server/data/puppetserver/.puppetlabs/opt/puppet/cache/ \
-    && echo "thycotic_configpath=/root/thycotic" > /opt/puppetlabs/server/data/puppetserver/.puppetlabs/opt/puppet/cache/facts \
-    && chmod -R 771 /opt/puppetlabs/server/data/puppetserver/.puppetlabs/opt/puppet/cache/facts
+    && touch /var/log/puppetlabs/puppetserver/masterhttp.log
 
 ## Copy all required config files
 COPY ./s2i/config/puppetserver.sh /usr/local/bin/start-puppet-server
@@ -64,8 +61,7 @@ RUN /opt/puppetlabs/server/bin/puppetserver gem install soap4r-ng \
     && /opt/puppetlabs/server/bin/puppetserver gem install httpclient:2.4.0 \
     && /opt/puppetlabs/server/bin/puppetserver gem install minitest:5.12.0 \
     && /opt/puppetlabs/server/bin/puppetserver gem install activerecord-jdbcmysql-adapter:1.3.25 \
-    && rm /etc/puppetlabs/puppetserver/conf.d/* \
-    && chmod og+w /etc/puppetlabs/puppetserver/conf.d
+    && rm /etc/puppetlabs/puppetserver/conf.d/*
 
 ## Copy over /etc/puppetlabs/code/ for the next builds
 #ONBUILD COPY /tmp/src/ /etc/puppetlabs/code/
