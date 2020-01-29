@@ -32,6 +32,9 @@ spec:
         env: {{$key}}
     spec:
       containers:
+        - env:
+            - name: FACTER_thycotic_configpath
+              value: /thycotic
         - imagePullPolicy: Always
           name: puppetserver-code-{{$key}}
           ports:
@@ -69,6 +72,8 @@ spec:
               name: {{$.Chart.Name}}-puppet-config
             - mountPath: /etc/puppetlabs/puppetserver/services.d/
               name: {{$.Chart.Name}}-ca-config
+            - mountPath: /thycotic
+              name: thycotic
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -122,6 +127,13 @@ spec:
               - key: puppetmaster.cegeka.be.ca_crt
                 path: puppetmaster.cegeka.be_ca.crt
             secretName: certificates
+        - name: thycotic
+          secret:
+            defaultMode: 420
+            items:
+              - key: thycotic.conf
+                path: thycotic.conf
+            secretName: thycotic.conf
         - configMap:
             defaultMode: 420
             items:
