@@ -61,7 +61,9 @@ RUN /opt/puppetlabs/server/bin/puppetserver gem install soap4r-ng \
     && /opt/puppetlabs/server/bin/puppetserver gem install httpclient:2.4.0 \
     && /opt/puppetlabs/server/bin/puppetserver gem install minitest:5.12.0 \
     && /opt/puppetlabs/server/bin/puppetserver gem install activerecord-jdbcmysql-adapter:1.3.25 \
-    && rm /etc/puppetlabs/puppetserver/conf.d/*
+    && rm /etc/puppetlabs/puppetserver/conf.d/* \
+    && mkdir -p /.facter/facts.d/ \
+    && echo "thycotic_configpath=/thycotic/" > /.facter/facts.d/thycotic_configpath.txt
 
 ## Copy over /etc/puppetlabs/code/ for the next builds
 #ONBUILD COPY /tmp/src/ /etc/puppetlabs/code/
