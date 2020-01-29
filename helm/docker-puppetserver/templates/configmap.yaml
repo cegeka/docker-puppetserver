@@ -21,7 +21,7 @@ data:
 {{ .Files.Get "files/puppet/hiera.yaml" | indent 4 }}
   ca.cfg: |
 {{ tpl ($.Files.Get "files/puppetserver/services.d/ca.cfg") $ | indent 4 }}
-{{ if .Values.cloud_env_enabled}}
+{{ if .Values.puppetserver_settings.environments.cloud}}
 {{- $_ := set $ "cloud" true }}
   ca-cloud.cfg: |
 {{ tpl ($.Files.Get "files/puppetserver/services.d/ca.cfg") $ | indent 4 }}
