@@ -71,8 +71,6 @@ spec:
               name: {{$.Chart.Name}}-ca-config
             - mountPath: /thycotic
               name: thycotic
-            - mountPath: /.facter/facts.d/
-              name: custom-facts
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -140,12 +138,6 @@ spec:
                 path: ca.cfg
             name: {{$.Chart.Name}}-global-config
           name: {{$.Chart.Name}}-ca-config
-        - configMap:
-            name: {{$.Chart.Name}}-global-config
-            items:
-              - key: custom-facts.txt
-                path: custom-facts.txt
-          name: custom-facts
   test: false
   triggers:
     - imageChangeParams:

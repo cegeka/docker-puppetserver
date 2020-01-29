@@ -37,8 +37,6 @@ data:
   metrics-{{$key}}.conf: |
 {{ tpl ($.Files.Get "files/puppetserver/conf.d/metrics.conf") $ | indent 4 }}
 {{- end }}
-  custom-facts.txt: |
-    thycotic_configpath=/thycotic/
 ---
 
 apiVersion: v1
