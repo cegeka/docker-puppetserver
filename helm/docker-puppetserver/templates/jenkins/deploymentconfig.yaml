@@ -107,7 +107,7 @@ spec:
             defaultMode: 420
             items:
               - key: yamllint.conf
-                path: yamllint
+                path: yamllint/config
             name: {{.Chart.Name}}-jenkins-config
           name: yamllint-config
   test: false
