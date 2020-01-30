@@ -126,10 +126,12 @@ spec:
               - key: puppetmaster.cegeka.be.ca_crt
                 path: puppetmaster.cegeka.be_ca.crt
 {{if eq $key "cloud" }}
-              - key: cloud.puppetmaster.cegeka.be.crt
+              - key: puppetmaster.cegeka.be.ca_crt
                 path: ca_crt.pem
               - key: cloud.puppetmaster.cegeka.be.ca_key
                 path: ca_key.pem
+              - key: cloud.puppetmaster.cegeka.be.ca_crl
+                path: ca_crl.pem
 {{end}}
             secretName: certificates
         - name: thycotic

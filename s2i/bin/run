@@ -12,5 +12,5 @@ fi
 
 cp /tmp/ca-certs/* /etc/puppetlabs/ssl/ca/
 touch /etc/puppetlabs/ssl/ca/inventory.txt
-touch /etc/puppetlabs/ssl/ca/serial
+echo "001" > /etc/puppetlabs/ssl/ca/serial
 exec /usr/local/bin/start-puppet-server
