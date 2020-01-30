@@ -136,7 +136,7 @@ spec:
         - name: autosigning
           secret:
             defaultMode: 420
-            secretName: autosigning
+            secretName: autosigning-credentials.yaml
         - configMap:
             defaultMode: 420
             items:

@@ -10,17 +10,16 @@ def quote (str)
 end
 
 hostname = ARGV[0]
-config = '/autosigning/autosigning-credentials.yaml'
-DEFAULT_CREDENTIALS = YAML::load( File.open(config))
+DEFAULT_CREDENTIALS = YAML::load( File.open('/autosigning/autosigning-credentials.yaml'))
+
 @mysql = {
-  :host   => DEFAULT_CREDENTIALS['MYSQL_HOST'],
-  :user   => DEFAULT_CREDENTIALS['MYSQL_USER'],
-  :passwd => DEFAULT_CREDENTIALS['MYSQL_PASSWORD'],
-  :db     => DEFAULT_CREDENTIALS['MYSQL_DATABASE'],
-  :port   => DEFAULT_CREDENTIALS['MYSQL_PORT'],
-  :flag   => DEFAULT_CREDENTIALS['MYSQL_FLAG']
+  :host   => DEFAULT_CREDENTIALS['mysql_host'],
+  :user   => DEFAULT_CREDENTIALS['mysql_user'],
+  :passwd => DEFAULT_CREDENTIALS['mysql_passwd'],
+  :db     => DEFAULT_CREDENTIALS['mysql_db'],
+  :port   => DEFAULT_CREDENTIALS['mysql_port'],
+  :flag   => DEFAULT_CREDENTIALS['mysql_flag'],
 }
-end
 
 puts "Initialising MySQL connection"
 begin
