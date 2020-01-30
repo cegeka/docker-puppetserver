@@ -32,18 +32,7 @@ spec:
         env: {{$key}}
     spec:
       containers:
-        - env:
-            - name: AUTOSIGNING_MYSQL_HOST
-              value: {{ $.Values.mysql_host | quote }}
-            - name: AUTOSIGNING_MYSQL_USER
-              value: {{ $.Values.mysql_user | quote}}
-            - name: AUTOSIGNING_MYSQL_PASSWORD
-              value: {{ $.Values.mysql_password | quote}}
-            - name: AUTOSIGNING_MYSQL_DATABASE
-              value: {{ $.Values.mysql_database | quote}}
-            - name: AUTOSIGNING_MYSQL_PORT
-              value: {{ $.Values.mysql_port | quote}}
-          imagePullPolicy: Always
+        - imagePullPolicy: Always
           name: puppetserver-code-{{$key}}
           ports:
             - containerPort: 8140
@@ -82,6 +71,8 @@ spec:
               name: {{$.Chart.Name}}-ca-config
             - mountPath: /thycotic
               name: thycotic
+            - mountPath: /autosigning
+              name: autosigning
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -142,6 +133,10 @@ spec:
               - key: thycotic.conf
                 path: thycotic.conf
             secretName: thycotic.conf
+        - name: autosigning
+          secret:
+            defaultMode: 420
+            secretName: autosigning
         - configMap:
             defaultMode: 420
             items:

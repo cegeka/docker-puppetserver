@@ -10,26 +10,16 @@ def quote (str)
 end
 
 hostname = ARGV[0]
-config = '/etc/puppetlabs/puppetserver/conf.d/registration_credentials.yaml'
-if File.exists?(config)
-    DEFAULT_CREDENTIALS = YAML::load( File.open(config))
-    @mysql = {
-      :host   => DEFAULT_CREDENTIALS['MYSQL_HOST'],
-      :user   => DEFAULT_CREDENTIALS['MYSQL_USER'],
-      :passwd => DEFAULT_CREDENTIALS['MYSQL_PASSWORD'],
-      :db     => DEFAULT_CREDENTIALS['MYSQL_DATABASE'],
-      :port   => DEFAULT_CREDENTIALS['MYSQL_PORT'],
-      :flag   => DEFAULT_CREDENTIALS['MYSQL_FLAG']
-    }
-else
-    @mysql = {
-      :host   => ENV['AUTOSIGNING_MYSQL_HOST'],
-      :user   => ENV['AUTOSIGNING_MYSQL_USER'],
-      :passwd => ENV['AUTOSIGNING_MYSQL_PASSWORD'],
-      :db     => ENV['AUTOSIGNING_MYSQL_DATABASE'],
-      :port   => ENV['AUTOSIGNING_MYSQL_PORT'],
-      :flag   => ENV['AUTOSIGNING_MYSQL_FLAG']
-    }
+config = '/autosigning/autosigning-credentials.yaml'
+DEFAULT_CREDENTIALS = YAML::load( File.open(config))
+@mysql = {
+  :host   => DEFAULT_CREDENTIALS['MYSQL_HOST'],
+  :user   => DEFAULT_CREDENTIALS['MYSQL_USER'],
+  :passwd => DEFAULT_CREDENTIALS['MYSQL_PASSWORD'],
+  :db     => DEFAULT_CREDENTIALS['MYSQL_DATABASE'],
+  :port   => DEFAULT_CREDENTIALS['MYSQL_PORT'],
+  :flag   => DEFAULT_CREDENTIALS['MYSQL_FLAG']
+}
 end
 
 puts "Initialising MySQL connection"
