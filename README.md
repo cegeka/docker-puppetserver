@@ -8,32 +8,14 @@ Todo: create a build-pipeline with promotion towards different environments.
 
 ## Usage
 
-* Copy ocp/secrets.template to ocp/secrets.yaml and configure your certificates & deploy key in the base64 format. The certificates are used to configure the Puppetserver CA. The public key of the deploy key should be added to the git-repo containing all the puppet code.
-
-* Deploy the secrets
-
-```
-oc create -f ocp/config/secrets.template
-```
-
-* Setup environments
-
-```
-cd ocp; ./setup_environment.sh $PROJECT $ENVIRONMENT $CUSTOMER $DOCKERREPO $MONOREPO $METRICSSERVER
-```
-
-* Setup Jenkins
-
-```
-cd ocp; ./jenkins.sh $PROJECT
-```
+See the helm-chart in docker-puppetserver/helm.
 
 ## Contents
 
 The following modules will be configured within your Openshift project:
 
 * Imagestreams for:
-    - The RHEL7 base image
+    - The RHEL8 base image
     - The puppetserver base image
     - All subsequent puppetserver images containing puppet code
 
@@ -50,7 +32,7 @@ The following modules will be configured within your Openshift project:
 
 * Route for:
     - Exposing the service to the internet with a custom hostname
-    
+
 ## Tips
 
 Deployment pipelines can be created in openshift itself, see this video for more information on how to do this:
