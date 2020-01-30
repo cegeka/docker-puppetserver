@@ -32,7 +32,18 @@ spec:
         env: {{$key}}
     spec:
       containers:
-        - imagePullPolicy: Always
+        - env:
+            - name: AUTOSIGNING_MYSQL_HOST
+              value: {{ $.Values.mysql_host | quote }}
+            - name: AUTOSIGNING_MYSQL_USER
+              value: {{ $.Values.mysql_user | quote}}
+            - name: AUTOSIGNING_MYSQL_PASSWORD
+              value: {{ $.Values.mysql_password | quote}}
+            - name: AUTOSIGNING_MYSQL_DATABASE
+              value: {{ $.Values.mysql_database | quote}}
+            - name: AUTOSIGNING_MYSQL_PORT
+              value: {{ $.Values.mysql_port | quote}}
+          imagePullPolicy: Always
           name: puppetserver-code-{{$key}}
           ports:
             - containerPort: 8140
