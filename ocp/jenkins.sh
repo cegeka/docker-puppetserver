@@ -8,7 +8,7 @@ then
   exit 100
 fi
 ## Use latest Jenkins container to fix credential-sync-plugin
-oc import-image jenkins-2-rhel7 --from=registry.access.redhat.com/openshift3/jenkins-2-rhel7:v3.11.82-4 --confirm
+oc import-image jenkins-2-rhel7 --from=registry.access.redhat.com/openshift3/jenkins-2-rhel7:v3.11.317-3 --confirm
 
 ## Customize the the image imported above with all the build tools we need
 oc new-build -D $'FROM jenkins-2-rhel7:latest\n
@@ -23,9 +23,6 @@ oc new-build -D $'FROM jenkins-2-rhel7:latest\n
         && gem install --source "https://rubygems.org" --no-ri --no-rdoc bundler:2.0.1 json puppet-lint
       USER jenkins\n
       WORKDIR /var/lib/jenkins' --name=puppet-jenkins -e=PATH=\$PATH:/opt/rh/rh-ruby25/root/usr/bin -e=LD_LIBRARY_PATH=/opt/rh/rh-ruby25/root/usr/lib64
-
-oc set env bc/puppet-jenkins PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/rh/rh-ruby25/root/usr/bin"
-oc set env bc/puppet-jenkins LD_LIBRARY_PATH="/opt/rh/rh-ruby25/root/usr/lib64"
 
 ## Define Jenkins customization in config map
 oc create configmap jenkins-configuration \
@@ -44,7 +41,7 @@ oc rollout pause dc jenkins
 
 ## Up memory & cpu to get a responsive Jenkins
 oc patch dc jenkins -p '{"spec":{"template":{"spec":{"containers":[{"name":"jenkins","resources":{"requests":{"cpu":"1","memory":"1Gi"},"limits":{"cpu":"2","memory":"4Gi"}}}]}}}}'
-oc set env dc/jenkins MEMORY_LIMIT=1Gi
+oc set env dc/jenkins MEMORY_LIMIT=2Gi
 
 oc set env dc/jenkins DISABLE_ADMINISTRATIVE_MONITORS=true
 oc set env dc/jenkins INSTALL_PLUGINS="${JENKINS_PLUGINS}"

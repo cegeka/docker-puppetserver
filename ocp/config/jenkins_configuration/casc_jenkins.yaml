@@ -1,6 +1,7 @@
+---
 unclassified:
   gitHubPluginConfig:
     configs:
-      - credentialsId: "${PROJECT}-github-api-token"
+      - credentialsId: "github-credentials-for-webhooks"
         manageHooks: true
         name: "Github"

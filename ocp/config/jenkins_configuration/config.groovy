@@ -33,7 +33,7 @@ try {
     def folder = jenkins.items.isEmpty() ? jenkins.createProject(OrganizationFolder, 'Cegeka') : jenkins.items[0]
     // Set up GitHub source.
     def navigator = new GitHubSCMNavigator(githubOrg)
-    navigator.credentialsId = '${PROJECT}-github-credentials' // Loaded above in the GitHub section.
+    navigator.credentialsId = 'github-credentials-for-cloning' // Loaded above in the GitHub section.
 
     navigator.traits = [
         // Too many repos to scan everything. This trims to a svelte 265 repos at the time of writing.
