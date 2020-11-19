@@ -57,7 +57,7 @@ objects:
         ref: master
         uri: ${MONOREPO}
       sourceSecret:
-        name: github-deploy-key
+        name: github-deploy-key-for-building
       type: Git
     strategy:
       sourceStrategy:
