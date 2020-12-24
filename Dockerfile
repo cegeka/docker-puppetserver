@@ -1,5 +1,5 @@
 # Puppetserver docker file
-FROM registry.access.redhat.com/ubi8-minimal:latest
+FROM registry.access.redhat.com/ubi8/ubi-minimal:latest
 LABEL maintainer="Thomas Meeus <thomas.meeus@cegeka.com>"
 
 # TODO: Rename the builder environment variable to inform users about application you provide them
@@ -11,7 +11,6 @@ LABEL io.k8s.description="Platform for building Puppet Server images" \
       io.openshift.expose-services="8140:https" \
       io.openshift.tags="openshift,docker,puppet,puppetserver,image,builder"
 
-
 ## Add the s2i scripts.
 LABEL io.openshift.s2i.scripts-url=image:///usr/libexec/s2i
 COPY ./s2i/bin/ /usr/libexec/s2i
@@ -19,6 +18,7 @@ COPY ./s2i/bin/ /usr/libexec/s2i
 ## Install Puppetserver & create Puppet code directory
 
 RUN rpm -i https://yum.puppet.com/puppet7/el/8/x86_64/puppet7-release-7.0.0-1.el8.noarch.rpm \
+    && microdnf -y update \
     && microdnf -y install puppetserver puppetdb-termini\
     && microdnf clean all -y \
     && mkdir -p /etc/puppetlabs/code \
