@@ -18,7 +18,7 @@ COPY ./s2i/bin/ /usr/libexec/s2i
 
 ## Install Puppetserver & create Puppet code directory
 
-RUN rpm -i https://yum.puppet.com/puppet6/el/8/x86_64/puppet6-release-6.0.0-5.el8.noarch.rpm \
+RUN rpm -i https://yum.puppet.com/puppet7/el/8/x86_64/puppet7-release-7.0.0-1.el8.noarch.rpm \
     && microdnf -y install puppetserver puppetdb-termini\
     && microdnf clean all -y \
     && mkdir -p /etc/puppetlabs/code \

@@ -8,15 +8,15 @@ then
   exit 100
 fi
 ## Use latest Jenkins container to fix credential-sync-plugin
-oc import-image jenkins-2-rhel7 --from=registry.access.redhat.com/openshift3/jenkins-2-rhel7:v3.11.317-3 --confirm
+oc import-image jenkins-2-rhel7 --from=registry.access.redhat.com/openshift3/jenkins-2-rhel7:v3.11.346-2 --confirm
 
 ## Customize the the image imported above with all the build tools we need
 oc new-build -D $'FROM jenkins-2-rhel7:latest\n
       USER root\n
       RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet \
-        && yum-config-manager --add-repo https://yum.puppet.com/puppet5/el/7/x86_64/ \
         && yum-config-manager --enable rhel-server-rhscl-7-rpms \
-        && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
+        && yum -y install https://yum.puppet.com/puppet7/el/7/x86_64/puppet7-release-7.0.0-1.el7.noarch.rpm \
+        && yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
         && yum -y install puppet-agent gcc zlib-devel gcc-c++ rh-ruby25-ruby-devel rh-git29 python36-pip \
         && yum clean all \
         && pip3 install yamllint \

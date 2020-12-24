@@ -19,7 +19,8 @@ oc create -f ocp/config/secrets.template
 * Setup environments
 
 ```
-cd ocp; ./setup_environment.sh $PROJECT $ENVIRONMENT $CUSTOMER $DOCKERREPO $MONOREPO $METRICSSERVER
+#cd ocp; ./setup_environment.sh $PROJECT $ENVIRONMENT $CUSTOMER $DOCKERREPO $MONOREPO $METRICSSERVER
+cd ocp; ./setup_environment.sh $PROJECT $ZONE $DOCKERREPO $MONOREPO $METRICSSERVER
 ```
 
 * Setup Jenkins
@@ -50,7 +51,7 @@ The following modules will be configured within your Openshift project:
 
 * Route for:
     - Exposing the service to the internet with a custom hostname
-    
+
 ## Tips
 
 Deployment pipelines can be created in openshift itself, see this video for more information on how to do this:
