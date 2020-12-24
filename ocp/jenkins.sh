@@ -11,7 +11,7 @@ fi
 oc import-image jenkins-2-rhel7 --from=registry.access.redhat.com/openshift3/jenkins-2-rhel7:v3.11.346-2 --confirm
 
 ## Customize the the image imported above with all the build tools we need
-oc new-build -D $'FROM jenkins-2-rhel7:latest\n
+oc new-build -n ${PROJECT} -D $'FROM jenkins-2-rhel7:latest\n
       USER root\n
       RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet \
         && yum-config-manager --enable rhel-server-rhscl-7-rpms \
@@ -25,7 +25,7 @@ oc new-build -D $'FROM jenkins-2-rhel7:latest\n
       WORKDIR /var/lib/jenkins' --name=puppet-jenkins -e=PATH=\$PATH:/opt/rh/rh-ruby25/root/usr/bin -e=LD_LIBRARY_PATH=/opt/rh/rh-ruby25/root/usr/lib64
 
 ## Define Jenkins customization in config map
-oc create configmap jenkins-configuration \
+oc create -n ${PROJECT} configmap jenkins-configuration \
     --from-literal=casc_jenkins.yaml="`cat config/jenkins_configuration/casc_jenkins.yaml |sed -e "s/\\${PROJECT}/${PROJECT}/g"`" \
     --from-literal=config.groovy="`cat config/jenkins_configuration/config.groovy |sed -e "s/\\${PROJECT}/${PROJECT}/g" -e "s/\\${GITHUBORG}/${GITHUBORG}/g"`" \
     --from-file=yamllint.conf=config/jenkins_configuration/yamllint.conf
@@ -37,22 +37,22 @@ JENKINS_PLUGINS=`cat config/jenkins_configuration/jenkins.plugins`
 oc process openshift//jenkins-persistent -p JENKINS_IMAGE_STREAM_TAG=puppet-jenkins:latest NAMESPACE=${PROJECT} -p VOLUME_CAPACITY=10Gi | oc create -f -
 
 ## Pause rollouts to proceed with additional configuration
-oc rollout pause dc jenkins
+oc rollout -n ${PROJECT} pause dc jenkins
 
 ## Up memory & cpu to get a responsive Jenkins
-oc patch dc jenkins -p '{"spec":{"template":{"spec":{"containers":[{"name":"jenkins","resources":{"requests":{"cpu":"1","memory":"1Gi"},"limits":{"cpu":"2","memory":"4Gi"}}}]}}}}'
+oc patch -n ${PROJECT}  dc jenkins -p '{"spec":{"template":{"spec":{"containers":[{"name":"jenkins","resources":{"requests":{"cpu":"1","memory":"1Gi"},"limits":{"cpu":"2","memory":"4Gi"}}}]}}}}'
 oc set env dc/jenkins MEMORY_LIMIT=2Gi
 
-oc set env dc/jenkins DISABLE_ADMINISTRATIVE_MONITORS=true
-oc set env dc/jenkins INSTALL_PLUGINS="${JENKINS_PLUGINS}"
-oc set env dc/jenkins CASC_JENKINS_CONFIG="/var/lib/jenkins/init.groovy.d/casc_jenkins.yaml"
-oc set env dc/jenkins PATH="/opt/rh/rh-git29/root/usr/bin:/opt/rh/rh-ruby25/root/usr/local/bin:/opt/rh/rh-ruby25/root/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-oc set env dc/jenkins LD_LIBRARY_PATH="/opt/rh/rh-ruby25/root/usr/lib64:/opt/rh/httpd24/root/usr/lib64"
+oc set env -n ${PROJECT} dc/jenkins DISABLE_ADMINISTRATIVE_MONITORS=true
+oc set env -n ${PROJECT} dc/jenkins INSTALL_PLUGINS="${JENKINS_PLUGINS}"
+oc set env -n ${PROJECT} dc/jenkins CASC_JENKINS_CONFIG="/var/lib/jenkins/init.groovy.d/casc_jenkins.yaml"
+oc set env -n ${PROJECT} dc/jenkins PATH="/opt/rh/rh-git29/root/usr/bin:/opt/rh/rh-ruby25/root/usr/local/bin:/opt/rh/rh-ruby25/root/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+oc set env -n ${PROJECT} dc/jenkins LD_LIBRARY_PATH="/opt/rh/rh-ruby25/root/usr/lib64:/opt/rh/httpd24/root/usr/lib64"
 
-oc set volumes dc/jenkins --add --configmap-name=jenkins-configuration --mount-path='/var/lib/jenkins/init.groovy.d/' --name "jenkins-config"
-oc set volumes dc/jenkins --add --configmap-name=jenkins-configuration --mount-path='/var/lib/jenkins/.config/yamllint' --name "yamllint-config"
+oc set volumes -n ${PROJECT} dc/jenkins --add --configmap-name=jenkins-configuration --mount-path='/var/lib/jenkins/init.groovy.d/' --name "jenkins-config"
+oc set volumes -n ${PROJECT} dc/jenkins --add --configmap-name=jenkins-configuration --mount-path='/var/lib/jenkins/.config/yamllint' --name "yamllint-config"
 
-oc patch dc jenkins -p '{"spec":{"template":{"spec":{"volumes":[{"configMap":{"items":[{"key":"yamllint.conf","path":"config"}],"name":"jenkins-configuration"},"name":"yamllint-config"}]}}}}'
-oc patch dc jenkins -p '{"spec":{"revisionHistoryLimit": 2}}'
+oc patch dc -n ${PROJECT} jenkins -p '{"spec":{"template":{"spec":{"volumes":[{"configMap":{"items":[{"key":"yamllint.conf","path":"config"}],"name":"jenkins-configuration"},"name":"yamllint-config"}]}}}}'
+oc patch dc -n ${PROJECT} jenkins -p '{"spec":{"revisionHistoryLimit": 2}}'
 
-oc rollout resume dc jenkins
+oc rollout -n ${PROJECT} resume dc jenkins
