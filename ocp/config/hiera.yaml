@@ -36,3 +36,5 @@ hierarchy:
     path: "6_provider/%{facts.provider}.yaml"
   - name: "Global level"
     path: "10_common.yaml"
+  - name: "Thycotic backend"
+    lookup_key: "thycotic_lookup_secret"
