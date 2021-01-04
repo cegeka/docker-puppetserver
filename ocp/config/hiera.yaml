@@ -5,4 +5,34 @@ defaults:
   data_hash: yaml_data
 
 hierarchy:
-PLACEHOLDER
+  - name: "Node level"
+    path: "0_nodes/%{trusted.certname}.yaml"
+  - name: "Customer - Environment - Application level - Customer subdivision"
+    mapped_paths:
+      - facts.customerappl
+      - appl
+      - "1_customer_env_client/%{facts.customer}/%{facts.customerenv}/%{facts.division}/%{appl}.yaml"
+  - name: "Customer - Environment - Application level"
+    mapped_paths:
+      - facts.customerappl
+      - appl
+      - "1_customer_env_client/%{facts.customer}/%{facts.customerenv}/%{appl}.yaml"
+  - name: "Customer - Environment level"
+    path: "2_customer_env/%{facts.customer}/%{facts.customerenv}.yaml"
+  - name: "Customer level"
+    path: "3_customer/%{facts.customer}.yaml"
+  - name: "Global role level"
+    mapped_paths:
+      - facts.customerappl
+      - appl
+      - "4_role/%{appl}.yaml"
+  - name: "Operating system level"
+    path: "5_os/%{facts.operatingsystem}/%{facts.operatingsystemmajrelease}.yaml"
+  - name: "Provider, region and availability zone"
+    path: "6_provider/%{facts.provider}/%{facts.region}/%{facts.zone}.yaml"
+  - name: "Provider and region"
+    path: "6_provider/%{facts.provider}/%{facts.region}.yaml"
+  - name: "Provider"
+    path: "6_provider/%{facts.provider}.yaml"
+  - name: "Global level"
+    path: "10_common.yaml"
