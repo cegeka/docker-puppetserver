@@ -8,10 +8,10 @@ then
   exit 100
 fi
 ## Use latest Jenkins container to fix credential-sync-plugin
-oc import-image jenkins-2-rhel7 --from=registry.access.redhat.com/openshift3/jenkins-2-rhel7:v3.11.346-2 --confirm
+# oc import-image jenkins-2-rhel7 --from=registry.access.redhat.com/openshift3/jenkins-2-rhel7:v3.11.346-2 --confirm
 
 ## Customize the the image imported above with all the build tools we need
-oc new-build -n ${PROJECT} -D $'FROM jenkins-2-rhel7:latest\n
+oc new-build -n ${PROJECT} -D $'FROM registry.access.redhat.com/openshift3/jenkins-2-rhel7:latest\n
       USER root\n
       RUN rpm --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet \
         && yum-config-manager --enable rhel-server-rhscl-7-rpms \
