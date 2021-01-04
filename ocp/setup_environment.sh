@@ -36,7 +36,8 @@ oc process -f config/templates/bc_puppetmaster.template -p DOCKERREPO=${DOCKERRE
 ENVIRONMENTS='dev acc prd drp cloud'
 for environment in $ENVIRONMENTS
 do
-  oc create is puppetserver-code-${environment} -n ${PROJECT}
+  oc create -n ${PROJECT} is puppetserver-code-${environment}
+  oc tag -n ${PROJECT} is puppetserver-code-${environment}:latest
 
   oc create configmap fileserver-${environment} \
     --from-literal=fileserver.conf="`cat config/fileserver.conf |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" -n ${PROJECT}
