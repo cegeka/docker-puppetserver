@@ -69,7 +69,7 @@ do
       #--from-file=registration_credentials.yaml=config/registration_credentials.yaml
 
   oc create configmap puppet-conf-${environment} \
-    --from-literal=puppet.conf="`cat ${PUPPET_CONF} |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" -n ${PROJECT}
+    --from-literal=puppet.conf="`cat ${PUPPET_CONF} |sed -e "s/\${ENVIRONMENT}/${environment}/g"`" -n ${PROJECT}
 
   case "$environment" in
     dev)
