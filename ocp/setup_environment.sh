@@ -18,14 +18,14 @@ fi
 # ocp/config/secrets.template
 #
 
-oc create -f config/templates/secrets.template
+oc create -f config/secrets.yaml
 
 oc create configmap foreman.yaml --from-file=foreman.yaml=./config/foreman.yaml -n ${PROJECT}
 oc create configmap puppet-ca --from-file=ca.cfg=./config/ca.cfg -n ${PROJECT}
-oc create configmap thycotic.conf --from-file=thycotic.conf=./config/thycotic.conf -n ${PROJECT}
+oc create configmap thycotic --from-file=thycotic.conf=./config/thycotic.conf -n ${PROJECT}
 oc create configmap hiera.yaml --from-file=hiera.yaml=./config/hiera.yaml -n ${PROJECT}
-cat ./config/templates/thycotic_pvc.yaml | oc create -f -n ${PROJECT}
-cat ./config/templates/puppetmaster_facts_pvc.yaml | oc create -f -n ${PROJECT}
+cat ./config/templates/thycotic_pvc.yaml | oc create -n ${PROJECT} -f -
+cat ./config/templates/puppetmaster_facts_pvc.yaml | oc create -n ${PROJECT} -f -
 
 #Create ImageStreams
 oc create is puppetserver -n ${PROJECT}
@@ -36,25 +36,25 @@ oc process -f config/templates/bc_puppetmaster.template -p DOCKERREPO=${DOCKERRE
 ENVIRONMENTS='dev acc prd drp cloud'
 for environment in $ENVIRONMENTS
 do
-  oc create is puppetserver-code-${environment} -n ${PROJECT}
+  oc create -n ${PROJECT} is puppetserver-code-${environment}
+  oc tag -n ${PROJECT} is puppetserver-code-${environment}:latest
 
   oc create configmap fileserver-${environment} \
     --from-literal=fileserver.conf="`cat config/fileserver.conf |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" -n ${PROJECT}
 
-  if ${environment} != 'cloud'
+  if [[ "${environment}" == 'cloud' ]]
   then
-    PUPPET_CONF="config/puppet.conf"
-    PUPPETSERVER_TEMPLATE="config/templates/puppetmaster.template"
-
-  else
     PUPPET_CONF="config/puppet-${environment}.conf"
     PUPPETSERVER_TEMPLATE="config/templates/puppetmaster-${environment}.template"
 
-    oc create configmap hiera-${environment}.yaml --from-file=hiera.yaml=./config/hiera-${environment}.yaml -n ${PROJECT}
+    oc create configmap puppet-ca-cloud --from-file=ca.cfg=./config/ca-cloud.cfg -n ${PROJECT}
+    oc create configmap hiera-cloud.yaml --from-file=hiera.yaml=./config/hiera-cloud.yaml -n ${PROJECT}
 
-    oc create configmap puppet-ca-${environment} --from-file=ca.cfg=./config/ca-${environment}.cfg -n ${PROJECT}
     #first set up CA certificates in config/templates/cloud-ca-pem.template
-    oc create -f config/templates/${environment}-ca-pem.template -n ${PROJECT}
+    oc create -f config/templates/cloud-ca-pem.template -n ${PROJECT}
+  else
+    PUPPET_CONF="config/puppet.conf"
+    PUPPETSERVER_TEMPLATE="config/templates/puppetmaster.template"
   fi
 
   oc create configmap puppetserver-configuration-${environment} \
@@ -66,10 +66,10 @@ do
       --from-file=puppetserver.conf=config/puppetserver/puppetserver.conf \
       --from-file=auth.conf=config/puppetserver/auth.conf \
       --from-file=logback.xml=config/puppetserver/logback.xml
-      --from-file=registration_credentials.yaml=config/registration_credentials.yaml
+      #--from-file=registration_credentials.yaml=config/registration_credentials.yaml
 
   oc create configmap puppet-conf-${environment} \
-    --from-literal=puppet.conf="`cat ${PUPPET_CONF} |sed -e "s/\\${ENVIRONMENT}/${environment}/g"`" -n ${PROJECT}
+    --from-literal=puppet.conf="$(cat ${PUPPET_CONF} | sed -e "s/\${ENVIRONMENT}/${environment}/g")"
 
   case "$environment" in
     dev)
@@ -106,8 +106,11 @@ do
   echo "Create a DNS records for ${environment}.${ZONE}"
 done
 
+oc create configmap puppet-ca --from-file=ca.cfg=./config/ca.cfg -n ${PROJECT}
+oc create configmap hiera-thycotic.yaml --from-file=hiera.yaml=./config/hiera-thycotic.yaml -n ${PROJECT}
+
 #Build cronjob container
-oc new-build -D $'FROM rhel7:latest\n
+oc new-build -D $'FROM registry.access.redhat.com/rhel7/rhel:latest\n
       USER root\n
       RUN yum-config-manager --enable rhel-server-rhscl-7-rpms \
         && yum -y install rh-ruby25 \

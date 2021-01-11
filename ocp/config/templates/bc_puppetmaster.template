@@ -31,7 +31,7 @@ objects:
       dockerStrategy:
         from:
           kind: DockerImage
-          name: registry.access.redhat.com/rhel7:latest
+          name: registry.access.redhat.com/ubi8/ubi-minimal:latest
       type: Docker
     successfulBuildsHistoryLimit: 5
     triggers: []

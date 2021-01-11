@@ -58,10 +58,10 @@ objects:
           resources:
             limits:
               cpu: '2'
-              memory: 2700mi
+              memory: '2700Mi'
             requests:
-              cpu: 200m
-              memory: 64Mi
+              cpu: '200m'
+              memory: '64Mi'
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
