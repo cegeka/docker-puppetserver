@@ -30,7 +30,8 @@ cat ./config/templates/puppetmaster_facts_pvc.yaml | oc create -n ${PROJECT} -f 
 #Create ImageStreams
 oc create is puppetserver -n ${PROJECT}
 oc create is puppetserver-code -n ${PROJECT}
-
+oc create is puppetserver-facts -n ${PROJECT}
+oc tag -n ${PROJECT} is puppetserver-facts:latest
 oc process -f config/templates/bc_puppetmaster.template -p DOCKERREPO=${DOCKERREPO} -p MONOREPO=${MONOREPO} | oc create -f - -n ${PROJECT}
 
 ENVIRONMENTS='dev acc prd drp cloud'
@@ -65,7 +66,8 @@ do
       --from-file=webserver.conf=config/puppetserver/webserver.conf \
       --from-file=puppetserver.conf=config/puppetserver/puppetserver.conf \
       --from-file=auth.conf=config/puppetserver/auth.conf \
-      --from-file=logback.xml=config/puppetserver/logback.xml
+      --from-file=logback.xml=config/puppetserver/logback.xml \
+      --from-file=routes.yaml=config/puppetserver/routes.yaml
       #--from-file=registration_credentials.yaml=config/registration_credentials.yaml
 
   oc create configmap puppet-conf-${environment} \
@@ -101,9 +103,13 @@ do
         exit 1
   esac
 
+  echo "Create certificate stores"
+  oc process -f config/templates/certificates.template -p ENVIRONMENT=${environment} | oc create -f - -n ${PROJECT}
+
+  echo "Create deployment config, services and routes"
   oc process -f $PUPPETSERVER_TEMPLATE -p ENVIRONMENT=${environment} -p ZONE=${ZONE} -p PROJECT=${PROJECT} -p MINREPLICAS=${MINREPLICAS} -p MAXREPLICAS=${MAXREPLICAS}  | oc create -f - -n ${PROJECT}
 
-  echo "Create a DNS records for ${environment}.${ZONE}"
+  echo "Create a DNS record for ${environment}.${ZONE}"
 done
 
 oc create configmap puppet-ca --from-file=ca.cfg=./config/ca.cfg -n ${PROJECT}
@@ -115,7 +121,10 @@ oc new-build -D $'FROM registry.access.redhat.com/rhel7/rhel:latest\n
       RUN yum-config-manager --enable rhel-server-rhscl-7-rpms \
         && yum -y install rh-ruby25 \
         && yum clean all && mkdir -p /opt/puppetlabs/server/data/puppetserver/yaml/ && mkdir /etc/puppet && gem install facter &&  yum -y install hostname' \
- --name=puppet-facts -e=PATH=\$PATH:/opt/rh/rh-ruby25/root/usr/bin -e=LD_LIBRARY_PATH=/opt/rh/rh-ruby25/root/usr/lib64 --to docker-registry.default.svc:5000/ci00053160-puppetserver/rhel7:latest -n ${PROJECT}
+ --name=puppet-facts -e=PATH=\$PATH:/opt/rh/rh-ruby25/root/usr/bin -e=LD_LIBRARY_PATH=/opt/rh/rh-ruby25/root/usr/lib64 --to docker-registry.default.svc:5000/ci00053160-puppetserver/puppetserver-facts:latest -n ${PROJECT}
+
+#Create configmap that contains foreman-fact-push script
+oc create -f ocp/config/external-node-v2.yaml -n ${PROJECT}
 
 #Create cronjob to push facts
 oc create -f config/templates/batch.template -n ${PROJECT}

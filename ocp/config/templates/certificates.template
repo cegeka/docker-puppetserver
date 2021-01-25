@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: List
+metadata:
+  name: secrets
+items:
+  - apiVersion: v1
+    kind: Secret
+    type: Opaque
+    metadata:
+      name: puppetmaster-certificates-${ENVIRONMENT}
+    data:
+      ca-cert:
+      crl:
+      foreman-cert:
+      foreman-cert-key:
+      foreman-chain:
+      puppetmaster-cloud.cegeka.be.crt:
+      puppetmaster-cloud.cegeka.be.key:

@@ -1,7 +1,9 @@
 # Update for your Foreman and Puppet master hostname(s)
-:url: "AABBCC"  
-:ssl_cert: "/certs/AABBCC.crt"
-:ssl_key: "/certs/AABBCC.key"
+:url: "https://foreman.domain.tld"
+:ssl_verify: false
+:ssl_ca: "/certs/foreman-chain"
+:ssl_cert: "/certs/foreman-cert"
+:ssl_key: "/certs/foreman-cert-key"
 
 # Advanced settings
 :user: "AABBCC"
@@ -9,5 +11,5 @@
 :puppetdir: "/opt/puppetlabs/server/data/puppetserver"
 :puppetuser: "puppet"
 :facts: true
-:timeout: 10
+:timeout: 30
 :threads: null

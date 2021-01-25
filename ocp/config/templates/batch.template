@@ -22,7 +22,7 @@ spec:
               date && echo 'Facts were pushed' && find /opt/puppetlabs/server/data/puppetserver/yaml/facts
               -name "*.yaml" -mtime +2 -delete && echo 'Facts older than 2 days
               were deleted'
-            image: docker-registry.default.svc:5000/ci00053160-puppetserver/puppet-facts:latest
+            image: docker-registry.default.svc:5000/ci00053160-puppetserver/puppetserver-facts:latest
             name: facts-to-foreman
             resources:
               limits:
@@ -52,7 +52,7 @@ spec:
           - name: cert-volume
             secret:
               defaultMode: 420
-              secretName: puppetmaster-certificates
+              secretName: puppetmaster-certificates-dev
           - emptyDir: {}
             name: foreman
           - name: foreman-config

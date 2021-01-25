@@ -133,6 +133,11 @@ objects:
                 - key: hiera.yaml
                   path: hiera.yaml
                 name: hiera.yaml
+            - configMap:
+                items:
+                - key: routes.yaml
+                  path: routes.yaml
+                name: puppetserver-configuration-${ENVIRONMENT}
         - configMap:
             defaultMode: 509
             name: puppetserver-configuration-${ENVIRONMENT}
