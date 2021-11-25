@@ -54,14 +54,14 @@ RUN chmod +x /usr/local/bin/start-puppet-server \
     && chmod 755 /usr/local/bin/cloud_registration.rb
 
 ## Install dependencies for puppet-thycotic module
-RUN /opt/puppetlabs/server/bin/puppetserver gem install soap4r-ng \
-    && /opt/puppetlabs/server/bin/puppetserver gem install parseconfig \
-    && /opt/puppetlabs/server/bin/puppetserver gem install filecache \
-    && /opt/puppetlabs/server/bin/puppetserver gem install msgpack \
-    && /opt/puppetlabs/server/bin/puppetserver gem install CFPropertyList \
-    && /opt/puppetlabs/server/bin/puppetserver gem install httpclient:2.4.0 \
-    && /opt/puppetlabs/server/bin/puppetserver gem install minitest:5.12.0 \
-    && /opt/puppetlabs/server/bin/puppetserver gem install activerecord-jdbcmysql-adapter:1.3.25 \
+RUN /opt/puppetlabs/server/bin/puppetserver gem install --no-document soap4r-ng \
+    && /opt/puppetlabs/server/bin/puppetserver gem install --no-document parseconfig \
+    && /opt/puppetlabs/server/bin/puppetserver gem install --no-document filecache \
+    && /opt/puppetlabs/server/bin/puppetserver gem install --no-document msgpack \
+    && /opt/puppetlabs/server/bin/puppetserver gem install --no-document CFPropertyList \
+    && /opt/puppetlabs/server/bin/puppetserver gem install --no-document httpclient \
+    && /opt/puppetlabs/server/bin/puppetserver gem install --no-document minitest:5.12.0 \
+    && /opt/puppetlabs/server/bin/puppetserver gem install --no-document activerecord-jdbcmysql-adapter:1.3.25 \
     && rm /etc/puppetlabs/puppetserver/conf.d/* \
     && chmod og+w /etc/puppetlabs/puppetserver/conf.d
 
