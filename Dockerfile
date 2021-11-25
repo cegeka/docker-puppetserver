@@ -19,7 +19,7 @@ COPY ./s2i/bin/ /usr/libexec/s2i
 
 RUN rpm -i https://yum.puppet.com/puppet7/el/8/x86_64/puppet7-release-7.0.0-2.el8.noarch.rpm \
     && microdnf -y update \
-    && microdnf -y install puppetserver puppetdb-termini\
+    && microdnf -y install vim openssl wget nmap puppetserver puppetdb-termini\
     && microdnf clean all -y \
     && mkdir -p /etc/puppetlabs/code \
     && mkdir -p /tmp/puppet-scripts \
