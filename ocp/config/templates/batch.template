@@ -5,7 +5,8 @@ metadata:
 spec:
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 5
-  schedule: "0 */12 * * *"
+  schedule: "0 */1 * * *"
+  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:
@@ -19,10 +20,9 @@ spec:
             - -c
             - echo 'Pushing facts to foreman' && date
               && ruby /usr/local/bin/external-node-v2.rb --push-facts-parallel &&
-              date && echo 'Facts were pushed' && find /opt/puppetlabs/server/data/puppetserver/yaml/facts
-              -name "*.yaml" -mtime +2 -delete && echo 'Facts older than 2 days
-              were deleted'
-            image: docker-registry.default.svc:5000/ci00053160-puppetserver/puppet-facts:latest
+              date && echo 'Facts were pushed' && find /opt/puppetlabs/server/data/puppetserver/yaml/facts/*.yaml
+              -mtime +2 -delete && echo 'Facts older than 2 days were deleted'
+            image: docker-registry.default.svc:5000/ci00053160-puppetserver/puppetserver-facts:latest
             name: facts-to-foreman
             resources:
               limits:
@@ -52,7 +52,7 @@ spec:
           - name: cert-volume
             secret:
               defaultMode: 420
-              secretName: puppetmaster-certificates
+              secretName: puppetmaster-certificates-dev
           - emptyDir: {}
             name: foreman
           - name: foreman-config
@@ -72,4 +72,4 @@ spec:
               defaultMode: 420
               name: external-node-v2
             name: external-node-v2
-          restartPolicy: OnFailure
+          restartPolicy: Never
