@@ -32,6 +32,7 @@ RUN rpm -i https://yum.puppet.com/puppet7/el/8/x86_64/puppet7-release-7.0.0-2.el
 ## Copy all required config files
 COPY ./s2i/config/puppetserver.sh /usr/local/bin/start-puppet-server
 COPY ./s2i/config/foreman.rb /opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet/reports/foreman.rb
+COPY ./s2i/config/foreman2.rb /opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet/reports/foreman2.rb
 COPY ./s2i/config/external_node_v2.rb /usr/local/bin/external_node_v2.rb
 COPY ./s2i/config/cloud_registration.rb /usr/local/bin/cloud_registration.rb
 COPY ./s2i/config/sysconfig/puppetserver /etc/sysconfig/puppetserver
