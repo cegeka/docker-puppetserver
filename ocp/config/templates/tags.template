@@ -26,7 +26,7 @@ objects:
               - name: prune-imagestream-tags
                 image: openshift3/ose-cli
                 command:
-                  - for tag in $(oc get imagestreamtag -n ${PROJECT} -o   jsonpath='{range   .items[*]}{.metadata.creationTimestamp}{"\t"}{.metadata.name}{"\n"}{end}' |   awk -v dt="$(date '--date= -6 month' +%Y-%m-%dT%H:%M:%SZ)" '{if($1<dt && /  puppetserver-code/ && !/latest/){print $2}}'); do oc delete -n   ${PROJECT} imagestreamtag $tag; done
+                  - for tag in $(oc get imagestreamtag -n ${PROJECT} -o jsonpath='{range   .items[*]}{.metadata.creationTimestamp}{"\t"}{.metadata.name}{"\n"}{end}' | awk -v dt="$(date '--date= -6 month' +%Y-%m-%dT%H:%M:%SZ)" '{if($1<dt && /puppetserver-code/ && !/latest/){print $2}}'); do oc delete -n ${PROJECT} imagestreamtag $tag; done
                 resources:
                   limits:
                      cpu: 500m
