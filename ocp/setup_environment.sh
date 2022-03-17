@@ -128,3 +128,6 @@ oc create -f ocp/config/external-node-v2.yaml -n ${PROJECT}
 
 #Create cronjob to push facts
 oc create -f config/templates/batch.template -n ${PROJECT}
+
+#Create cronjob to prune imagestream tags
+oc process -f config/templates/tags.template -p PROJECT=${PROJECT} | oc create -f - -n ${PROJECT}
