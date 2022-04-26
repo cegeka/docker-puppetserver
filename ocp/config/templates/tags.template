@@ -41,7 +41,7 @@ objects:
     successfulJobsHistoryLimit: 3
     failedJobsHistoryLimit: 1
     schedule: 0 1 * * *
-    concurrencyPolicy: Allow
+    concurrencyPolicy: Forbid
     jobTemplate:
       spec:
         template:
