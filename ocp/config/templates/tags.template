@@ -5,6 +5,34 @@ metadata:
   annotations:
     description: "Prune imagestream tags template"
 objects:
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: imagestreamtag-pruner
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    name: imagestreamtag-pruner
+  rules:
+    - verbs:
+        - get
+        - list
+        - delete
+      apiGroups:
+        - image.openshift.io
+      resources:
+        - imagestreamtags
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: RoleBinding
+  metadata:
+    name: imagestreamtag-pruner
+  subjects:
+    - kind: ServiceAccount
+      name: imagestreamtag-pruner
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: Role
+    name: imagestreamtag-pruner
 - apiVersion: batch/v1beta1
   kind: CronJob
   metadata:
@@ -13,7 +41,7 @@ objects:
     successfulJobsHistoryLimit: 3
     failedJobsHistoryLimit: 1
     schedule: 0 1 * * *
-    concurrencyPolicy: Allow
+    concurrencyPolicy: Forbid
     jobTemplate:
       spec:
         template:
@@ -22,11 +50,14 @@ objects:
             activeDeadlineSeconds: 1800
             terminationGracePeriodSeconds: 30
             dnsPolicy: ClusterFirst
+            serviceAccount: imagestreamtag-pruner
             containers:
               - name: prune-imagestream-tags
                 image: openshift3/ose-cli
                 command:
-                  - for tag in $(oc get imagestreamtag -n ${PROJECT} -o jsonpath='{range .items[*]}{.metadata.creationTimestamp}{"\t"}{.metadata.name}{"\n"}{end}' | awk -v dt="$(date '--date= -6 month' +%Y-%m-%dT%H:%M:%SZ)" '{if($1<dt && /puppetserver-code/ && !/latest/){print $2}}'); do oc delete -n ${PROJECT} imagestreamtag $tag; done
+                  - /bin/sh
+                  - '-c'
+                  - for tag in $(oc get imagestreamtag -n ${PROJECT} -o jsonpath="{range.items[*]}{.metadata.creationTimestamp}{'\t'}{.metadata.name}{'\n'}{end}" | awk -v dt=$(date '--date= -6 month' +%Y-%m-%dT%H:%M:%SZ) '{if($1<dt && /puppetserver-code/ && !/latest/){print $2}}'); do oc delete -n ${PROJECT} imagestreamtag $tag; done
                 resources:
                   limits:
                      cpu: 500m
