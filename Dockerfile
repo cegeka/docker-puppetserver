@@ -71,6 +71,7 @@ RUN /opt/puppetlabs/server/bin/puppetserver gem install --no-document soap4r-ng 
 
 ## Make /etc/passwd writable for root to be able to adjust the puppet userid. Required for Thycotic module
 RUN chmod g+w /etc/passwd
+    && chmod g+w /etc/group
 
 USER 1001
 

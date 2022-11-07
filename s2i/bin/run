@@ -4,10 +4,13 @@
 
 
 if [ `id -u` -ge 10000 ]; then
-    grep -v puppet /etc/passwd > /tmp/passwd
+    grep -v 'puppet' /etc/passwd > /tmp/passwd
+    grep -v 'x:99:' /etc/group > /tmp/group
     echo "puppet:x:`id -u`:`id -g`:puppetserver daemon:/opt/puppetlabs/server/data/puppetserver:/sbin/nologin" >> /tmp/passwd
+    echo "nfslocal:x:99:" >> /tmp/group
     cat /tmp/passwd > /etc/passwd
-    rm /tmp/passwd
+    cat /tmp/group > /etc/group
+    rm /tmp/passwd /tmp/group
 fi
 
 cp /tmp/puppet-scripts/* /etc/puppetlabs/puppetserver/conf.d/ &&  \
