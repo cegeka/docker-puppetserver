@@ -63,6 +63,7 @@ RUN /opt/puppetlabs/server/bin/puppetserver gem install --no-document soap4r-ng 
     && /opt/puppetlabs/server/bin/puppetserver gem install --no-document httpclient \
     && /opt/puppetlabs/server/bin/puppetserver gem install --no-document minitest:5.12.0 \
     && /opt/puppetlabs/server/bin/puppetserver gem install --no-document activerecord-jdbcmysql-adapter:1.3.25 \
+    && /opt/puppetlabs/server/bin/puppetserver gem install --no-document lookup_http \
     && rm /etc/puppetlabs/puppetserver/conf.d/* \
     && chmod og+w /etc/puppetlabs/puppetserver/conf.d
 
@@ -70,7 +71,7 @@ RUN /opt/puppetlabs/server/bin/puppetserver gem install --no-document soap4r-ng 
 #ONBUILD COPY /tmp/src/ /etc/puppetlabs/code/
 
 ## Make /etc/passwd writable for root to be able to adjust the puppet userid. Required for Thycotic module
-RUN chmod g+w /etc/passwd
+RUN chmod g+w /etc/passwd \
     && chmod g+w /etc/group
 
 USER 1001
