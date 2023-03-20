@@ -64,6 +64,7 @@ RUN /opt/puppetlabs/server/bin/puppetserver gem install --no-document soap4r-ng 
     && /opt/puppetlabs/server/bin/puppetserver gem install --no-document minitest:5.12.0 \
     && /opt/puppetlabs/server/bin/puppetserver gem install --no-document activerecord-jdbcmysql-adapter:1.3.25 \
     && /opt/puppetlabs/server/bin/puppetserver gem install --no-document lookup_http \
+    && /opt/puppetlabs/server/bin/puppetserver gem install --no-document retries \
     && rm /etc/puppetlabs/puppetserver/conf.d/* \
     && chmod og+w /etc/puppetlabs/puppetserver/conf.d
 
