@@ -27,7 +27,7 @@ hierarchy:
       - appl
       - "4_role/%{appl}.yaml"
   - name: "Operating system level"
-    path: "5_os/%{facts.operatingsystem}/%{facts.operatingsystemmajrelease}.yaml"
+    path: "5_os/%{facts.os.name}/%{facts.os.release.major}.yaml"
   - name: "Provider, region and availability zone"
     path: "6_provider/%{facts.provider}/%{facts.region}/%{facts.zone}.yaml"
   - name: "Provider and region"
