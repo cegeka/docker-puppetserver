@@ -46,6 +46,7 @@ RUN chmod +x /usr/local/bin/start-puppet-server \
     && chmod -R 771 /etc/puppetlabs/puppet/ssl \
     && chmod -R 775 /etc/puppetlabs/code \
     && chgrp -R 0 /var/log/puppetlabs \
+    && mkdir /opt/puppetlabs/server/data/puppetserver/yaml \
     && chmod 750 /var/log/puppetlabs/puppetserver \
     && chmod 660 /var/log/puppetlabs/puppetserver/masterhttp.log \
     && chmod 660 /var/log/puppetlabs/puppetserver/puppetserver-access.log \
