@@ -1,5 +1,5 @@
 # Puppetserver docker file
-FROM registry.access.redhat.com/ubi8/ubi-minimal:latest
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
 LABEL maintainer="Thomas Meeus <thomas.meeus@cegeka.com>"
 
 # TODO: Rename the builder environment variable to inform users about application you provide them
@@ -17,7 +17,7 @@ COPY ./s2i/bin/ /usr/libexec/s2i
 
 ## Install Puppetserver & create Puppet code directory
 
-RUN rpm -i https://yum.puppet.com/puppet7/el/8/x86_64/puppet7-release-7.0.0-2.el8.noarch.rpm \
+RUN rpm -i https://yum.puppet.com/puppet8/el/9/x86_64/puppet8-release-1.0.0-9.el9.noarch.rpm \
     && sed -i 's/http:/https:/g' /etc/yum.repos.d/* \
     && microdnf -y update \
     && microdnf -y install vim openssl wget nmap puppetserver puppetdb-termini\
@@ -26,9 +26,11 @@ RUN rpm -i https://yum.puppet.com/puppet7/el/8/x86_64/puppet7-release-7.0.0-2.el
     && mkdir -p /tmp/puppet-scripts \
     && mkdir -p /tmp/ca-certs \
     && mkdir -p /etc/puppetlabs/ssl/ca \
+    && mkdir -p /etc/puppetlabs/puppetserver/ca \
     && mkdir -p /etc/puppetlabs/code/environments/production/manifests \
     && mkdir -p /var/log/puppetlabs/puppetserver/ \
-    && touch /var/log/puppetlabs/puppetserver/masterhttp.log
+    && touch /var/log/puppetlabs/puppetserver/masterhttp.log \
+    && touch /var/log/puppetlabs/puppetserver/puppetserver-access.log
 
 ## Copy all required config files
 COPY ./s2i/config/puppetserver.sh /usr/local/bin/start-puppet-server
@@ -46,12 +48,14 @@ RUN chmod +x /usr/local/bin/start-puppet-server \
     && chgrp -R 0 /var/log/puppetlabs \
     && chmod 750 /var/log/puppetlabs/puppetserver \
     && chmod 660 /var/log/puppetlabs/puppetserver/masterhttp.log \
-    && mkdir /opt/puppetlabs/server/data/puppetserver/yaml \
+    && chmod 660 /var/log/puppetlabs/puppetserver/puppetserver-access.log \
     && chmod 750 /opt/puppetlabs/server/data/puppetserver/yaml \
     && mkdir /opt/puppetlabs/puppet/cache/facts.d \
     && mkdir /tmp/thycotic \
     && chmod 0775 /etc/puppetlabs/ssl/ca \
     && chmod -R 0771 /etc/puppetlabs/ssl \
+    && chmod 0775 /etc/puppetlabs/puppetserver/ca \
+    && chmod -R 0771 /etc/puppetlabs/puppetserver \
     && chmod 755 /usr/local/bin/cloud_registration.rb
 
 ## Install dependencies for puppet-thycotic module
