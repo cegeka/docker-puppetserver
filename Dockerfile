@@ -15,12 +15,11 @@ LABEL io.k8s.description="Platform for building Puppet Server images" \
 LABEL io.openshift.s2i.scripts-url=image:///usr/libexec/s2i
 COPY ./s2i/bin/ /usr/libexec/s2i
 
-## Install Puppetserver & create Puppet code directory
-
-RUN rpm -i https://yum.puppet.com/puppet8/el/9/x86_64/puppet8-release-1.0.0-9.el9.noarch.rpm \
+## Install OpenVox Puppet server & create code directory
+RUN rpm -i https://yum.voxpupuli.org/openvox8-release-el-9.noarch.rpm \
     && sed -i 's/http:/https:/g' /etc/yum.repos.d/* \
     && microdnf -y update \
-    && microdnf -y install vim openssl wget nmap puppetserver puppetdb-termini\
+    && microdnf -y install vim openssl wget nmap openvox-server openvoxdb-termini \
     && microdnf clean all -y \
     && mkdir -p /etc/puppetlabs/code \
     && mkdir -p /tmp/puppet-scripts \
