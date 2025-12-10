@@ -79,8 +79,6 @@ RUN /opt/puppetlabs/server/bin/puppetserver gem install --no-document soap4r-ng 
 RUN chmod g+w /etc/passwd \
     && chmod g+w /etc/group
 
-RUN echo "this file exists so we can trace the impact of a change to computing-puppetserver" > /opt/openvox-poc
-
 USER 1001
 
 EXPOSE 8140
