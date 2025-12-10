@@ -15,9 +15,7 @@ LABEL io.k8s.description="Platform for building Puppet Server images" \
 LABEL io.openshift.s2i.scripts-url=image:///usr/libexec/s2i
 COPY ./s2i/bin/ /usr/libexec/s2i
 
-## Install Puppetserver & create Puppet code directory
-
-# RUN rpm -i https://yum.puppet.com/puppet8/el/9/x86_64/puppet8-release-1.0.0-9.el9.noarch.rpm \
+## Install OpenVox server & create code directory
 RUN rpm -i https://yum.voxpupuli.org/openvox8-release-el-9.noarch.rpm \
     && sed -i 's/http:/https:/g' /etc/yum.repos.d/* \
     && microdnf -y update \
@@ -79,8 +77,6 @@ RUN /opt/puppetlabs/server/bin/puppetserver gem install --no-document soap4r-ng 
 ## Make /etc/passwd writable for root to be able to adjust the puppet userid. Required for Thycotic module
 RUN chmod g+w /etc/passwd \
     && chmod g+w /etc/group
-
-RUN echo "This file exists to verify if the image was was build as part of the OpenVoX PoC" > /opt/openvox-pov
 
 USER 1001
 
