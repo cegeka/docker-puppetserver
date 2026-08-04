@@ -19,7 +19,7 @@ COPY ./s2i/bin/ /usr/libexec/s2i
 RUN rpm -i https://yum.voxpupuli.org/openvox8-release-el-9.noarch.rpm \
     && sed -i 's/http:/https:/g' /etc/yum.repos.d/* \
     && microdnf -y update \
-    && microdnf -y install vim openssl wget nmap openvox-server openvoxdb-termini \
+    && microdnf -y install vim openssl wget nmap openvox-server-8.15.2-1.el9.noarch openvoxdb-termini-8.15.0-1.el9.noarch \
     && microdnf clean all -y \
     && mkdir -p /etc/puppetlabs/code \
     && mkdir -p /tmp/puppet-scripts \
